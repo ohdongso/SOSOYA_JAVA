@@ -1,6 +1,6 @@
 package sosoya.mvc.util;
 
-import java.io.FileInputStream; 
+import java.io.FileInputStream;  
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,8 +16,12 @@ public class DbUtil {
 	 * */
 	static {
 		try {
+			//외부 properties파일 로딩하기
 			proFile.load(new FileInputStream("resources/dbInfo.properties"));
+			proFile.load(new FileInputStream("resources/sosoya.properties"));
+			
 			Class.forName(proFile.getProperty("driverName"));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -49,5 +53,16 @@ public class DbUtil {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void close(Connection con, Statement st) {
+		try {
+
+			if(st != null) st.close();
+			if(con != null) con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 }
