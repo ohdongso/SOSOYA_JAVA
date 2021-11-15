@@ -44,6 +44,34 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 	
 	/**
+	 * 회원정보수정
+	 */
+	@Override
+	public int updateMember(MemberVO memberVO) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = sosoyaSql.getProperty("MEMBER.UPDATEMEMBER");
+		int result = 0;
+		
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1, memberVO.getPassword());
+			ps.setString(2, memberVO.getPhone());
+			ps.setString(3, memberVO.getEmail());
+			ps.setString(4, memberVO.getAddress());
+			ps.setString(5, memberVO.getId());
+			
+			result = ps.executeUpdate();
+		} finally {
+			DbUtil.close(con, ps);
+		}
+		
+		return result;
+	}
+	
+	/**
 	 * 회원 아이디 중복체크
 	 * */
 	@Override
@@ -162,6 +190,29 @@ public class MemberDAOImpl implements MemberDAO {
 			DbUtil.close(con, ps);
 		}
 			
+		return result;
+	}
+	
+	/**
+	 * 회원탈퇴
+	 * */
+	@Override
+	public int memberStateUpdate(String id) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = sosoyaSql.getProperty("MEMBER.UPDATEMEMBERSTATE");
+		int result = 0;
+		
+		try {			
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			
+			result = ps.executeUpdate();
+		} finally {
+			DbUtil.close(con, ps);
+		}
+		
 		return result;
 	}
 }

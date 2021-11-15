@@ -13,6 +13,20 @@ public interface MemberDAO {
 	public int insertMember(MemberVO memberVO) throws SQLException;
 	
 	/**
+	 * 회원탈퇴
+	 * @param String id
+	 * @return int result
+	 * */
+	public int memberStateUpdate(String id) throws SQLException;
+	
+	/**
+	 * 회원정보수정
+	 * @param MemberVO memberVO
+	 * @return int result
+	 * */
+	public int updateMember(MemberVO memberVO) throws SQLException;
+	
+	/**
 	 * 회원등록시 ID중복 체크
 	 * @param String id
 	 * @return boolean result

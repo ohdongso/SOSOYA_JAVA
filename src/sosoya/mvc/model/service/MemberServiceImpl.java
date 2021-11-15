@@ -25,6 +25,25 @@ public class MemberServiceImpl implements MemberService{
 	}
 	
 	/**
+	 * 아이디에 해당하는 회원검색
+	 */
+	@Override
+	public MemberVO selectByMember(String id) throws SQLException {
+		MemberVO result = memberDAO.selectByMember(id);
+		if(result == null) throw new SQLException("아이디에 해당하는 회원을 찾지 못했습니다.");
+		return result;
+	}
+
+	/**
+	 * 회원탈퇴
+	 * */
+	@Override
+	public void memberStateUpdate(String id) throws SQLException {
+		int result = memberDAO.memberStateUpdate(id);
+		if(result == 0) throw new SQLException("회원탈퇴가 되지 않았습니다.");
+	}
+	
+	/**
 	 * 로그인
 	 * */
 	@Override
@@ -34,5 +53,16 @@ public class MemberServiceImpl implements MemberService{
 			throw new NotFoundException("정보를 다시 확인해주세요.\n");
 		}
 		return memberVO;
+	}
+	
+	/**
+	 * 회원정보수정
+	 * */
+	@Override
+	public void updateMember(MemberVO memberVO) throws SQLException {
+		int result = memberDAO.updateMember(memberVO);
+		if(result == 0) {
+			throw new SQLException("회원 정보가 수정되지 않았습니다.\n");
+		}
 	}
 }

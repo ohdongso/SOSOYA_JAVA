@@ -18,6 +18,13 @@ public class MemberVO {
 	public MemberVO(String id, String password) {
 		this.id = id;
 		this.password = password;
+	}	
+	public MemberVO(String id, String password, String email, String phone, String address) {
+		this.id = id;
+		this.password = password;
+		this.email = email;
+		this.phone = phone;
+		this.address = address;
 	}
 	public MemberVO(String id, String password, String name, int purchasescount, String grade, int state, String email,
 			String phone, String address, String regdate) {
