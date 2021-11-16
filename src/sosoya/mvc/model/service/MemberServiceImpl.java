@@ -18,7 +18,7 @@ public class MemberServiceImpl implements MemberService{
 	public void inputMember(MemberVO memberVO) throws SQLException, DuplicatedException {
 		if(!memberDAO.dulicateByMember(memberVO.getId())) {
 			int result = memberDAO.insertMember(memberVO);
-			if(result == 0) throw new SQLException("회원가입에 실패했습니다.\n");
+			if(result == 0) throw new SQLException("회원가입에 실패했습니다.");
 		} else {
 			throw new DuplicatedException(memberVO.getId() + "는 이미 가입된 아이디입니다. ID를 다시 입력해주세요.\n");
 		}
@@ -50,7 +50,7 @@ public class MemberServiceImpl implements MemberService{
 	public MemberVO login(String id, String password) throws NotFoundException, SQLException {
 		MemberVO memberVO = memberDAO.login(id, password);
 		if(memberVO == null) {
-			throw new NotFoundException("정보를 다시 확인해주세요.\n");
+			throw new NotFoundException("정보를 다시 확인해주세요.");
 		}
 		return memberVO;
 	}

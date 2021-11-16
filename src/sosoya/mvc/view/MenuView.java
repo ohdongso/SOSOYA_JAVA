@@ -1,10 +1,8 @@
 package sosoya.mvc.view;
 
-import java.util.Scanner;
+import java.util.Scanner; 
 
 import sosoya.mvc.controller.MemberController;
-import sosoya.mvc.model.dao.MemberDAO;
-import sosoya.mvc.model.dao.MemberDAOImpl;
 import sosoya.mvc.model.dto.MemberVO;
 
 public class MenuView {
@@ -25,7 +23,7 @@ public class MenuView {
 				break;
 			case 3:
 				// 종료
-				System.out.println("=== SoSoYa Shopping Mall 다음에도 방문해주세요. ===");
+				System.out.println("=== SoSoYa Shopping Mall에 다음에도 방문해주세요.^^ ===");
 				System.exit(0);
 			default :
 				// 1~3번 까지 숫자를 입력해주세요.
@@ -53,9 +51,10 @@ public class MenuView {
 			System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다."   + " / 회원등급[" + memberVO.getGrade() + "] -----");
 			System.out.println("┌──────────────┐");
 			System.out.println("  	 1. 회원메뉴						    ");
-			System.out.println("  	 2. 마이페이지							");
-			System.out.println("  	 3. 미정						    ");
-			System.out.println("  	 4. 로그아웃						    ");
+			System.out.println("  	 2. 상품검색							");
+			System.out.println("  	 3. 마이페이지  					    ");
+			System.out.println("  	 4. 자주묻는질문(FAQ)					");
+			System.out.println("  	 5. 로그아웃						    ");
 			System.out.println("└──────────────┘");
 			System.out.print("선택>>");
 			
@@ -66,17 +65,24 @@ public class MenuView {
 				MemberView.printMember(memberVO);
 				break;
 			case 2:
+				// 상품검색
+				GoodsView.printGoods(memberVO);
 				break;
 			case 3:
+				// 마이페이지
 				break;
 			case 4:
+				// 자주묻는 질문 FAQ
+				FaqView.printFaq(memberVO);
+				break;
+			case 5:
 				// 로그아웃
 				System.out.println("\n=== SoSoYa Shopping Mall을 이용해 주셔서 감사합니다.^^ ===");
 				System.out.println("=== 로그아웃 완료. ===");
 				return;
 			default :
-				// 1~3번 까지 숫자를 입력해주세요.
-				System.out.println("1~4번 까지 숫자를 입력해주세요.");
+				// 1~5번 까지 숫자를 입력해주세요.
+				System.out.println("1~5번 까지 숫자를 입력해주세요.");
 				break;
 			}
 		}

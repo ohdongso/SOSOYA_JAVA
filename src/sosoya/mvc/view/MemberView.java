@@ -1,6 +1,6 @@
 package sosoya.mvc.view;
 
-import java.util.Scanner;
+import java.util.Scanner; 
 
 import sosoya.mvc.controller.MemberController;
 import sosoya.mvc.model.dao.MemberDAOImpl;
