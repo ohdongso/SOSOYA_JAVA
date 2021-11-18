@@ -51,7 +51,8 @@ public class MemberView {
 	
 	// 회원정보탈퇴
 	public static void printStateUpdate(MemberVO memberVO) {
-		System.out.println("\n=== 회원탈퇴 비밀번호 확인 ===");
+		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
+		System.out.println("=== 회원탈퇴 비밀번호 확인 ===");
 		System.out.print("비밀번호: ");
 		String passwordCheck = sc.nextLine();
 		
@@ -76,7 +77,8 @@ public class MemberView {
 	
 	// 회원정보보기
 	public static void printMemberInfo(MemberVO memberVO) {
-		System.out.println("\n=== 회원정보 ===");
+		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
+		System.out.println("=== 회원정보 ===");
 		System.out.println("아이디 : " + memberVO.getId());
 		System.out.println("구매횟수 : " + memberVO.getPurchasescount() + "회");
 		System.out.println("회원등급 : " + memberVO.getGrade());
@@ -88,7 +90,8 @@ public class MemberView {
 	
 	// 회원정보수정
 	public static void printMemberUpdate(MemberVO memberVO) {
-		System.out.println("\n=== 비밀번호확인 ===");
+		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
+		System.out.println("=== 비밀번호확인 ===");
 		System.out.print("비밀번호: ");
 		String passwordCheck = sc.nextLine();
 		

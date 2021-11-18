@@ -2,6 +2,7 @@ package sosoya.mvc.view;
 
 import java.util.List;
 
+import sosoya.mvc.model.dto.BasketVO;
 import sosoya.mvc.model.dto.FaqVO;
 import sosoya.mvc.model.dto.GoodsVO;
 
@@ -16,9 +17,18 @@ public class SuccessView {
 	/**
 	 * FAQ전체 목록 출력
 	 * */
-	public static void printSelecFaq(List<FaqVO> list) {
+	public static void printSelectFaq(List<FaqVO> list) {
 		for(FaqVO vo : list) {
 			System.out.println(vo.getFaqCategory() + ", " + vo.getFaqTitle() + " : " + vo.getFaqContent());
+		}
+	}
+	
+	/**
+	 * Basket전체 목록 출력
+	 * */
+	public static void printSelectBasket(List<BasketVO> list) {
+		for(BasketVO vo : list) {
+			System.out.println(vo);
 		}
 	}
 	
@@ -30,6 +40,4 @@ public class SuccessView {
 			System.out.println(vo);
 		}
 	}
-	
-	
 }

@@ -1,6 +1,6 @@
 package sosoya.mvc.view;
 
-import java.util.Scanner; 
+import java.util.Scanner;  
 
 import sosoya.mvc.controller.MemberController;
 import sosoya.mvc.model.dto.MemberVO;
@@ -53,15 +53,16 @@ public class MenuView {
 			System.out.println("  	 1. 회원메뉴						    ");
 			System.out.println("  	 2. 상품검색							");
 			System.out.println("  	 3. 마이페이지  					    ");
-			System.out.println("  	 4. 자주묻는질문(FAQ)					");
-			System.out.println("  	 5. 로그아웃						    ");
+			System.out.println("  	 4. (교환,환불)  					    ");
+			System.out.println("  	 5. 자주묻는질문(FAQ)					");
+			System.out.println("  	 6. 로그아웃						    ");
 			System.out.println("└──────────────┘");
 			System.out.print("선택>>");
 			
 			int menu = Integer.parseInt(sc.nextLine());
 			switch(menu) {
 			case 1:
-				// 회원정보
+				// 회원메뉴
 				MemberView.printMember(memberVO);
 				break;
 			case 2:
@@ -70,19 +71,23 @@ public class MenuView {
 				break;
 			case 3:
 				// 마이페이지
+				MyPageView.printMyPage(memberVO);
 				break;
 			case 4:
+				// (교환,환불)
+				break;
+			case 5:
 				// 자주묻는 질문 FAQ
 				FaqView.printFaq(memberVO);
 				break;
-			case 5:
+			case 6:
 				// 로그아웃
 				System.out.println("\n=== SoSoYa Shopping Mall을 이용해 주셔서 감사합니다.^^ ===");
 				System.out.println("=== 로그아웃 완료. ===");
 				return;
 			default :
-				// 1~5번 까지 숫자를 입력해주세요.
-				System.out.println("1~5번 까지 숫자를 입력해주세요.");
+				// 1~6번 까지 숫자를 입력해주세요.
+				System.out.println("1~6번 까지 숫자를 입력해주세요.");
 				break;
 			}
 		}

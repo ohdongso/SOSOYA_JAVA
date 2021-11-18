@@ -24,7 +24,7 @@ public class GoodsView {
 			case 1:
 				// 전체검색
 				GoodsController.selectAllGoods();
-				// 1,상품주문 2,장바구니
+				// 1,주문하기 2,장바구니에담기
 				printOrderBasket(memberVO);
 				break;
 			case 2:
@@ -57,11 +57,10 @@ public class GoodsView {
 			switch(menu) {
 			case 1:
 				// 주문하기
-				
 				break;
 			case 2:
 				// 장바구니에담기
-				
+				BasketView.printBasket(memberVO);
 				break;
 			case 3:
 				// 뒤로가기
@@ -72,6 +71,11 @@ public class GoodsView {
 				break;
 			}
 		}
+	}
+	
+	// 장바구니에 담기
+	public static void printBasket() {
+		
 	}
 	
 	// 부분검색

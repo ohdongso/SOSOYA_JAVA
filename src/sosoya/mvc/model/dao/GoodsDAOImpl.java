@@ -45,5 +45,36 @@ public class GoodsDAOImpl implements GoodsDAO {
 		return list;
 	}
 	
+	/**
+	 * 상품코드에 해당하는 상품가져오기
+	 */
+	@Override
+	public GoodsVO selectByGoods(int goodsCode) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = sosoyaSql.getProperty("GOODS.SELECTBYGOODS");
+		GoodsVO goodsVO = null;
 		
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			
+			ps.setInt(1, goodsCode);
+			
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				goodsVO = new GoodsVO(rs.getInt("GOODS_CODE"), rs.getString("GOODS_NAME"), rs.getInt("GOODS_PRICE"), 
+						rs.getInt("GOODS_STOCK"), rs.getString("GOODS_REGDATE"), rs.getInt("GOODS_REVIEWCOUNT"), rs.getInt("GOODS_CATEGORY"), rs.getFloat("GOODS_GRADEAVG"));
+			}
+			
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}
+		
+		return goodsVO;
+	}
+	
+	
 }

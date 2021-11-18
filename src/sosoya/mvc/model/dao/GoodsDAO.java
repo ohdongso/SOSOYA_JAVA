@@ -13,5 +13,12 @@ public interface GoodsDAO {
 	 * */
 	public List<GoodsVO> selectAllGoods() throws SQLException;
 	
+	/**
+	 * 상품코드에 해당하는 상품가져오기
+	 * @param int goodsCode
+	 * @return GoodsVO goodsVO
+	 * */
+	public GoodsVO selectByGoods(int goodsCode) throws SQLException;
+	
 	
 }

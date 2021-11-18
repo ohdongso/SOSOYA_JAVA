@@ -18,7 +18,7 @@ public class FaqController {
 	public static void selectAllFaq() {
 		try {
 			List<FaqVO> list = faqService.selectAllFaq();
-			SuccessView.printSelecFaq(list);
+			SuccessView.printSelectFaq(list);
 		} catch (SQLException e) {
 			FailView.errorMessage(e.getMessage());
 		}
@@ -30,7 +30,7 @@ public class FaqController {
 	public static void selectByFaq(int category) {
 		try {
 			List<FaqVO> list = faqService.selectByFaq(category);
-			SuccessView.printSelecFaq(list);
+			SuccessView.printSelectFaq(list);
 		} catch (Exception e) {
 			FailView.errorMessage(e.getMessage());
 		}
