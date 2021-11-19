@@ -81,18 +81,10 @@ public class MyPageView {
 				
 				break;
 			case 5:
-				// (교환,환불)
-				// 자주묻는 질문 FAQ
-				FaqView.printFaq(memberVO);
-				break;
-			case 6:
-				// 로그아웃
-				System.out.println("\n=== SoSoYa Shopping Mall을 이용해 주셔서 감사합니다.^^ ===");
-				System.out.println("=== 로그아웃 완료. ===");
 				return;
 			default :
-				// 1~6번 까지 숫자를 입력해주세요.
-				System.out.println("1~6번 까지 숫자를 입력해주세요.");
+				// 1~5번 까지 숫자를 입력해주세요.
+				System.out.println("1~5번 까지 숫자를 입력해주세요.");
 				break;
 			}
 		}

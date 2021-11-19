@@ -45,6 +45,7 @@ public class BasketController {
 			basketService.updateBasket(updateBasket, goodsCount);
 			SuccessView.printMessage("장바구니 상품 수정이 완료 되었습니다.");
 		} catch (Exception e) {
+			e.printStackTrace();
 			FailView.errorMessage(e.getMessage());
 		}
 	}

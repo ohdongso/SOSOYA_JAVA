@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import sosoya.mvc.controller.BasketController;
 import sosoya.mvc.model.dto.BasketVO;
+import sosoya.mvc.model.dto.GoodsVO;
 import sosoya.mvc.model.dto.MemberVO;
 
 public class BasketView {
@@ -50,7 +51,7 @@ public class BasketView {
 		System.out.print("구매개수 : ");
 		int goodsCount = Integer.parseInt(sc.nextLine());
 		
-		BasketVO basketVO = new BasketVO(memberVO.getId(), goodsCode, goodsCount, null);
+		BasketVO basketVO = new BasketVO(memberVO.getId(), goodsCode, goodsCount);
 		BasketController.inputBasket(basketVO);
 	}
 }

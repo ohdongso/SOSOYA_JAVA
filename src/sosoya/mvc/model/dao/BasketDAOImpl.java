@@ -36,7 +36,7 @@ public class BasketDAOImpl implements BasketDAO {
 			ps.setInt(2, basketVO.getGoodsCode());
 			
 			// 총금액 구하기
-			GoodsVO goodsVO = goodsDao.selectByGoods(basketVO.getGoodsCode());
+			GoodsVO goodsVO = basketVO.getGoodsVO();
 			MemberVO memberVO = memberDAO.selectByMember(basketVO.getId());
 			float discountRate = 0.0f;
 			
@@ -52,11 +52,10 @@ public class BasketDAOImpl implements BasketDAO {
 					break;
 			}
 			
-			int total = (int)((goodsVO.getGoodsPrice() * basketVO.getGoodsCount()) * discountRate);
+			int total = (int)((goodsVO.getGoodsPrice() * basketVO.getBasketGoodsCount()) * discountRate);
 			
 			ps.setInt(3, total);
-			ps.setInt(4, basketVO.getGoodsCount());
-			ps.setInt(5, goodsVO.getGoodsPrice());
+			ps.setInt(4, basketVO.getBasketGoodsCount());
 
 			result = ps.executeUpdate();
 		} finally {
@@ -86,19 +85,15 @@ public class BasketDAOImpl implements BasketDAO {
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				// 객체로 받았으면 편했을 건데. 일단 받아보자.
-				int goodsCode = rs.getInt("GOODS_CODE");
-				GoodsVO goodsVO = goodsDao.selectByGoods(goodsCode);
-				
+				GoodsVO goodsVO = goodsDao.selectByGoods(rs.getInt("GOODS_CODE"));
 				basketVO = new BasketVO(rs.getInt("BASKET_CODE"), rs.getString("ID"), rs.getInt("GOODS_CODE"),
-						rs.getString("BASKET_REGDATE"), rs.getInt("BASKET_TOTALPRICE"), rs.getInt("BASKET_GOODSCOUNT"), rs.getInt("BASKET_GOODSPRICE"), goodsVO.getGoodsName());
-				
+						rs.getString("BASKET_REGDATE"), rs.getInt("BASKET_TOTALPRICE"), rs.getInt("BASKET_GOODSCOUNT"), goodsVO);
+
 				list.add(basketVO);
 			}
 		} finally {
 			DbUtil.close(con, ps, rs);
 		}
-		
 		return list;
 	}
 	
@@ -126,7 +121,7 @@ public class BasketDAOImpl implements BasketDAO {
 				GoodsVO goodsVO = goodsDao.selectByGoods(goodsCode);
 				
 				basketVO = new BasketVO(rs.getInt("BASKET_CODE"), rs.getString("ID"), rs.getInt("GOODS_CODE"),
-						rs.getString("BASKET_REGDATE"), rs.getInt("BASKET_TOTALPRICE"), rs.getInt("BASKET_GOODSCOUNT"), rs.getInt("BASKET_GOODSPRICE"), goodsVO.getGoodsName());
+						rs.getString("BASKET_REGDATE"), rs.getInt("BASKET_TOTALPRICE"), rs.getInt("BASKET_GOODSCOUNT"));
 			}
 			
 		} finally {
@@ -134,7 +129,7 @@ public class BasketDAOImpl implements BasketDAO {
 		}	
 		return basketVO;
 	}
-	
+
 	/**
 	 * 장바구니 수정
 	 */

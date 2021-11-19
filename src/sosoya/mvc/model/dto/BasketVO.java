@@ -1,35 +1,43 @@
 package sosoya.mvc.model.dto;
 
 public class BasketVO {
-	// 멤버변수, 이슈(goods객체를 멤버변수로 넣을걸 그랬다.)
+	// 멤버변수
 	private int basketCode;
 	private String id;
 	private int goodsCode;
 	private String basketRegdate;
 	private int basketTotalprice;
-	private int goodsCount;
-	private int goodsPrice;
-	private String goodsName;
+	private int basketGoodsCount;
+	
+	private GoodsVO goodsVO;
 	
 	// 생성자
 	public BasketVO() {}
-	public BasketVO(String id, int goodsCode, int goodsCount, String goodsName) {
+	public BasketVO(String id, int goodsCode, int basketGoodsCount) {
 		this.id = id;
 		this.goodsCode = goodsCode;
-		this.goodsCount = goodsCount;
-		this.goodsName = goodsName;
+		this.basketGoodsCount = basketGoodsCount;
 	}
 	public BasketVO(int basketCode, String id, int goodsCode, String basketRegdate, int basketTotalprice,
-			int goodsCount, int goodsPrice, String goodsName) {
+			int basketGoodsCount) {
 		super();
 		this.basketCode = basketCode;
 		this.id = id;
 		this.goodsCode = goodsCode;
 		this.basketRegdate = basketRegdate;
 		this.basketTotalprice = basketTotalprice;
-		this.goodsCount = goodsCount;
-		this.goodsPrice = goodsPrice;
-		this.goodsName = goodsName;
+		this.basketGoodsCount = basketGoodsCount;
+	}
+	public BasketVO(int basketCode, String id, int goodsCode, String basketRegdate, int basketTotalprice,
+			int basketGoodsCount, GoodsVO goodsVO) {
+		super();
+		this.basketCode = basketCode;
+		this.id = id;
+		this.goodsCode = goodsCode;
+		this.basketRegdate = basketRegdate;
+		this.basketTotalprice = basketTotalprice;
+		this.basketGoodsCount = basketGoodsCount;
+		this.goodsVO = goodsVO;
 	}
 	
 	// getter, setter
@@ -63,30 +71,24 @@ public class BasketVO {
 	public void setBasketTotalprice(int basketTotalprice) {
 		this.basketTotalprice = basketTotalprice;
 	}
-	public int getGoodsCount() {
-		return goodsCount;
+	public int getBasketGoodsCount() {
+		return basketGoodsCount;
 	}
-	public void setGoodsCount(int goodsCount) {
-		this.goodsCount = goodsCount;
+	public void setBasketGoodsCount(int basketGoodsCount) {
+		this.basketGoodsCount = basketGoodsCount;
 	}
-	public int getGoodsPrice() {
-		return goodsPrice;
+	public GoodsVO getGoodsVO() {
+		return goodsVO;
 	}
-	public void setGoodsPrice(int goodsPrice) {
-		this.goodsPrice = goodsPrice;
-	}
-	public String getGoodsName() {
-		return goodsName;
-	}
-	public void setGoodsName(String goodsName) {
-		this.goodsName = goodsName;
+	public void setGoodsVO(GoodsVO goodsVO) {
+		this.goodsVO = goodsVO;
 	}
 	
 	// toString
 	@Override
 	public String toString() {
-		return  "상품이름:" + goodsName + " ==> [ 상품단가:" + goodsPrice + "원, 상품개수:" + goodsCount + "개, 상품총가격:" + basketTotalprice + "원, 장바구니코드:" + basketCode + " ]";
+		return  "상품이름:" + goodsVO.getGoodsName() + " ==> [ 상품단가:" + goodsVO.getGoodsPrice() + 
+		"원, 상품개수:" + basketGoodsCount + "개, 상품총가격:" + basketTotalprice + "원, 장바구니코드:" + basketCode + " ]";
 	}
-	
-	
+
 }

@@ -22,7 +22,8 @@ public class BasketServiceImpl implements BasketService {
 	@Override
 	public void insertBasket(BasketVO basketVO) throws SQLException {
 		GoodsVO goodsVO = goodsDAO.selectByGoods(basketVO.getGoodsCode());
-		if(basketVO.getGoodsCount() > goodsVO.getGoodsStock()) throw new SQLException("상품 재고량이 부족합니다. " + 
+		basketVO.setGoodsVO(goodsVO);
+		if(basketVO.getBasketGoodsCount() > basketVO.getGoodsVO().getGoodsStock()) throw new SQLException("상품 재고량이 부족합니다. " + 
 		"[ 상품이름: " + goodsVO.getGoodsName() + ", 재고량: " + goodsVO.getGoodsStock() + "개 ]");
 		
 		int result = basketDAO.insertBasket(basketVO);
