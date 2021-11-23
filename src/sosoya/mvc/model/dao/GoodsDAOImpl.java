@@ -76,5 +76,68 @@ public class GoodsDAOImpl implements GoodsDAO {
 		return goodsVO;
 	}
 	
+	/**
+	 * Name에 해당하는 상품 검색하기
+	 */
+	@Override
+	public List<GoodsVO> selectByNameGoods(String GoodsName) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = sosoyaSql.getProperty("GOODS.SELECTBYNAMEGOODS");
+		List<GoodsVO> list = new ArrayList<>();
+		GoodsVO goodsVO = null;
+		
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1, "%" + GoodsName + "%");
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				goodsVO = new GoodsVO(rs.getInt("GOODS_CODE"), rs.getString("GOODS_NAME"), rs.getInt("GOODS_PRICE"), 
+						rs.getInt("GOODS_STOCK"), rs.getString("GOODS_REGDATE"), rs.getInt("GOODS_REVIEWCOUNT"), rs.getInt("GOODS_CATEGORY"), rs.getFloat("GOODS_GRADEAVG"));
+				
+				list.add(goodsVO);
+			}		
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}
+		return list;
+	}
 	
+	/**
+	 * min, max에 해당하는 상품 검색하기
+	 */
+	@Override
+	public List<GoodsVO> SelectByPriceGoods(int min, int max) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = sosoyaSql.getProperty("GOODS.SELECTBYPRICEGOODS");
+		List<GoodsVO> list = new ArrayList<>();
+		GoodsVO goodsVO = null;
+		
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			
+			ps.setInt(1, min);
+			ps.setInt(2, max);
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				goodsVO = new GoodsVO(rs.getInt("GOODS_CODE"), rs.getString("GOODS_NAME"), rs.getInt("GOODS_PRICE"), 
+						rs.getInt("GOODS_STOCK"), rs.getString("GOODS_REGDATE"), rs.getInt("GOODS_REVIEWCOUNT"), rs.getInt("GOODS_CATEGORY"), rs.getFloat("GOODS_GRADEAVG"));
+				
+				list.add(goodsVO);
+			}
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}
+		return list;
+	}
 }

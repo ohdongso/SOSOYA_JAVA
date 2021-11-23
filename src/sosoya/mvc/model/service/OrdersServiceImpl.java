@@ -1,5 +1,5 @@
 package sosoya.mvc.model.service;
 
-public class OrdersServiceImpl {
+public class OrdersServiceImpl implements OrdersService {
 
 }

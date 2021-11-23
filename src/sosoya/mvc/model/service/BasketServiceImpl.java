@@ -54,6 +54,7 @@ public class BasketServiceImpl implements BasketService {
 		"[ 상품이름: " + goodsVO.getGoodsName() + ", 재고량: " + goodsVO.getGoodsStock() + "개 ]");
 		
 		int result = basketDAO.updateBasket(basketCode, goodsCount);
+		
 		if(result == 0) throw new SQLException("상품이 수정되지 않았습니다.");
 	}
 	
@@ -62,6 +63,7 @@ public class BasketServiceImpl implements BasketService {
 	 */
 	@Override
 	public void deleteBasket(int basketCode) throws SQLException {
-		
+		int result = basketDAO.deleteBasket(basketCode);
+		if(result == 0) throw new SQLException("장바구니 상품이 삭제되지 않았습니다.");
 	}	
 }

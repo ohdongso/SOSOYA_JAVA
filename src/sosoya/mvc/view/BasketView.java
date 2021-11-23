@@ -1,10 +1,9 @@
 package sosoya.mvc.view;
 
-import java.util.Scanner;
+import java.util.Scanner; 
 
 import sosoya.mvc.controller.BasketController;
 import sosoya.mvc.model.dto.BasketVO;
-import sosoya.mvc.model.dto.GoodsVO;
 import sosoya.mvc.model.dto.MemberVO;
 
 public class BasketView {
@@ -34,14 +33,25 @@ public class BasketView {
 	}
 	
 	// 장바구니 삭제
-	public static void printSelectBasket(MemberVO memberVO) {
+	public static void printDeleteBasket(MemberVO memberVO) {
 		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
 		System.out.println("=== 장바구니상품(삭제) ===");
+		System.out.println("삭제할 장바구니 코드 : ");
+		int basketCode = Integer.parseInt(sc.nextLine());
 		
+		System.out.print("정말 삭제하시겠습니까??(Y/N) : ");
+		String answer = sc.nextLine();
+		if(answer.toUpperCase().equals("Y")) {
+			BasketController.deleteBasket(basketCode);
+		} else if(answer.toUpperCase().equals("N")) {
+			System.out.println("장바구니 상품삭제가 취소 되었습니다.");
+		} else {
+			System.out.println("Y또는N을 입력해주세요.");
+		}
 	}
 	
 	// 장바구니 담기 메뉴
-	public static void printBasket(MemberVO memberVO) {
+	public static void printInsertBasket(MemberVO memberVO) {
 		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
 		System.out.println("=== 상품 장바구니에 담기 ===");
 			

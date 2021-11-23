@@ -70,7 +70,6 @@ public class MyPageView {
 				break;
 			case 2:
 				// 장바구니상품(주문)
-				
 				break;
 			case 3:
 				// 장바구니상품(수정)
@@ -78,9 +77,10 @@ public class MyPageView {
 				break;
 			case 4:
 				// 장바구니상품(삭제)
-				
+				BasketView.printDeleteBasket(memberVO);
 				break;
 			case 5:
+				// 뒤로가기
 				return;
 			default :
 				// 1~5번 까지 숫자를 입력해주세요.

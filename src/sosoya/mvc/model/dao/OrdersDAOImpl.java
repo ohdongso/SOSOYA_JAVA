@@ -1,5 +1,5 @@
 package sosoya.mvc.model.dao;
 
-public class OrdersDAOImpl {
+public class OrdersDAOImpl implements OrdersDAO {
 
 }

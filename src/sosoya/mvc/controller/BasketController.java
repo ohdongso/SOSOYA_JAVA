@@ -1,6 +1,6 @@
 package sosoya.mvc.controller;
 
-import java.sql.SQLException;
+import java.sql.SQLException; 
 import java.util.List;
 
 import sosoya.mvc.model.dto.BasketVO;
@@ -45,7 +45,6 @@ public class BasketController {
 			basketService.updateBasket(updateBasket, goodsCount);
 			SuccessView.printMessage("장바구니 상품 수정이 완료 되었습니다.");
 		} catch (Exception e) {
-			e.printStackTrace();
 			FailView.errorMessage(e.getMessage());
 		}
 	}
@@ -53,11 +52,14 @@ public class BasketController {
 	/**
 	 * 장바구니삭제
 	 * */
-	public static void deleteBasket() {
+	public static void deleteBasket(int basketCode) {
 		try {
-			
+			basketService.deleteBasket(basketCode);
+			SuccessView.printMessage("장바구니 상품 삭제가 완료 되었습니다.");
 		} catch (Exception e) {
-			// TODO: handle exception
+			FailView.errorMessage(e.getMessage());
 		}
 	}
+	
+	
 }

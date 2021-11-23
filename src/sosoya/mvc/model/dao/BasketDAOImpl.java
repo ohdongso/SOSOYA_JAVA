@@ -1,6 +1,7 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.Connection; 
+import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -116,10 +117,7 @@ public class BasketDAOImpl implements BasketDAO {
 			
 			rs = ps.executeQuery();
 			
-			if(rs.next()) {
-				int goodsCode = rs.getInt("GOODS_CODE");
-				GoodsVO goodsVO = goodsDao.selectByGoods(goodsCode);
-				
+			if(rs.next()) {				
 				basketVO = new BasketVO(rs.getInt("BASKET_CODE"), rs.getString("ID"), rs.getInt("GOODS_CODE"),
 						rs.getString("BASKET_REGDATE"), rs.getInt("BASKET_TOTALPRICE"), rs.getInt("BASKET_GOODSCOUNT"));
 			}
@@ -143,18 +141,40 @@ public class BasketDAOImpl implements BasketDAO {
 		try {
 			con = DbUtil.getConnection();
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, basketCode);
 			
+			// BASKET_TOTALPRICE
+			BasketVO basketVO = this.selectByBasketCode(basketCode);
+			basketVO.setGoodsVO(goodsDao.selectByGoods(basketVO.getGoodsCode())); // DB에는 Goods객체가 없기 때문에따로 넣어야 한다.
+			MemberVO memberVO = memberDAO.selectByMember(basketVO.getId());
+			float discountRate = 0.0f;
 			
+			switch(memberVO.getGrade()) {
+				case "A":
+					discountRate = 0.9f;
+					break;
+				case "B":
+					discountRate = 0.95f;
+					break;
+				case "C":
+					discountRate = 1.0f;
+					break;
+			}
 			
+			int totalPrice = (int)((basketVO.getGoodsVO().getGoodsPrice() * goodsCount) * discountRate);
+			// BASKET_TOTALPRICE
+			ps.setInt(1, totalPrice);
+			
+			// BASKET_GOODSOUNT
+			ps.setInt(2, goodsCount);
+			
+			// BASKET_GOODSOUNT
+			ps.setInt(3, basketCode);
 			
 			result = ps.executeUpdate();
-			
 		} finally {
-			
+			DbUtil.close(con, ps);
 		}
-		
-		return 0;
+		return result;
 	}
 
 	/**
@@ -162,13 +182,21 @@ public class BasketDAOImpl implements BasketDAO {
 	 */
 	@Override
 	public int deleteBasket(int basketCode) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int result = 0;
+		String sql = sosoyaSql.getProperty("BASKET.DELETE");
 		
 		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
 			
+			ps.setInt(1, basketCode);
+			
+			result = ps.executeUpdate();
 		} finally {
-			
+			DbUtil.close(con, ps);
 		}
-		
-		return 0;
+		return result;
 	}
 }
