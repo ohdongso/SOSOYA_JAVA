@@ -6,13 +6,73 @@ public class OrdersVO {
 	// 멤버변수
 	private int ordersCode;
 	private String id;
-	private int goodsCode;
 	private String ordersDi;
 	private int ordersTotalprice;
 	private String ordersDate;
 	private int ordersGoodscount;
 	
-	private List<GoodsVO> goodsList;
+	private List<OrdersDetailsVO> ordersDetailsList;
 	
+	// 생성자
+	public OrdersVO() {}
+	public OrdersVO(int ordersCode, String id,String ordersDi, int ordersTotalprice, String ordersDate, int ordersGoodscount) {
+		this.ordersCode = ordersCode;
+		this.id = id;
+		this.ordersDi = ordersDi;
+		this.ordersTotalprice = ordersTotalprice;
+		this.ordersDate = ordersDate;
+		this.ordersGoodscount = ordersGoodscount;
+	}
 	
+	// getter, setter
+	public int getOrdersCode() {
+		return ordersCode;
+	}
+	public void setOrdersCode(int ordersCode) {
+		this.ordersCode = ordersCode;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getOrdersDi() {
+		return ordersDi;
+	}
+	public void setOrdersDi(String ordersDi) {
+		this.ordersDi = ordersDi;
+	}
+	public int getOrdersTotalprice() {
+		return ordersTotalprice;
+	}
+	public void setOrdersTotalprice(int ordersTotalprice) {
+		this.ordersTotalprice = ordersTotalprice;
+	}
+	public String getOrdersDate() {
+		return ordersDate;
+	}
+	public void setOrdersDate(String ordersDate) {
+		this.ordersDate = ordersDate;
+	}
+	public int getOrdersGoodscount() {
+		return ordersGoodscount;
+	}
+	public void setOrdersGoodscount(int ordersGoodscount) {
+		this.ordersGoodscount = ordersGoodscount;
+	}
+	public List<OrdersDetailsVO> getOrdersDetailsList() {
+		return ordersDetailsList;
+	}
+	public void setOrdersDetailsList(List<OrdersDetailsVO> ordersDetailsList) {
+		this.ordersDetailsList = ordersDetailsList;
+	}
+	
+	// toString
+	@Override
+	public String toString() {
+		return "OrdersVO [ordersCode=" + ordersCode + ", id=" + id + ", ordersDi=" + ordersDi + ", ordersTotalprice="
+				+ ordersTotalprice + ", ordersDate=" + ordersDate + ", ordersGoodscount=" + ordersGoodscount
+				+ ", ordersDetailsList=" + ordersDetailsList + "]";
+	}
 }

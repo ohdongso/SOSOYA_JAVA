@@ -61,7 +61,7 @@ public class GoodsView {
 			switch(menu) {
 			case 1:
 				// 주문하기
-				
+				OrderView.printOrder(memberVO);
 				break;
 			case 2:
 				// 장바구니에담기

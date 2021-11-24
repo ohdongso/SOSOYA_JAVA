@@ -1,4 +1,4 @@
-package sosoya.mvc.view;
+package sosoya.mvc.view.main;
 
 import java.util.List;
 

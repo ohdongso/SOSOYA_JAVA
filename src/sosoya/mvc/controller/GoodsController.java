@@ -1,14 +1,13 @@
 package sosoya.mvc.controller;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.SQLException; 
 import java.util.List;
 
 import sosoya.mvc.model.dto.GoodsVO;
 import sosoya.mvc.model.service.GoodsService;
 import sosoya.mvc.model.service.GoodsServiceImpl;
-import sosoya.mvc.view.FailView;
-import sosoya.mvc.view.SuccessView;
+import sosoya.mvc.view.main.FailView;
+import sosoya.mvc.view.main.SuccessView;
 
 public class GoodsController {
 	private static GoodsService goodsService = new GoodsServiceImpl();

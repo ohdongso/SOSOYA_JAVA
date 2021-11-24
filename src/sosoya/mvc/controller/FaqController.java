@@ -6,8 +6,8 @@ import java.util.List;
 import sosoya.mvc.model.dto.FaqVO;
 import sosoya.mvc.model.service.FaqService;
 import sosoya.mvc.model.service.FaqServiceImpl;
-import sosoya.mvc.view.FailView;
-import sosoya.mvc.view.SuccessView;
+import sosoya.mvc.view.main.FailView;
+import sosoya.mvc.view.main.SuccessView;
 
 public class FaqController {
 	private static FaqService faqService = new FaqServiceImpl();

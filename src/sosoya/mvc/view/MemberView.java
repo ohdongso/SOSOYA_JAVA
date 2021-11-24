@@ -5,6 +5,8 @@ import java.util.Scanner;
 import sosoya.mvc.controller.MemberController;
 import sosoya.mvc.model.dao.MemberDAOImpl;
 import sosoya.mvc.model.dto.MemberVO;
+import sosoya.mvc.view.main.FailView;
+import sosoya.mvc.view.main.MenuView;
 
 public class MemberView {
 	private static Scanner sc = new Scanner(System.in);

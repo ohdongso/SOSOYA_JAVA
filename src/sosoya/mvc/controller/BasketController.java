@@ -7,8 +7,8 @@ import sosoya.mvc.model.dto.BasketVO;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.service.BasketService;
 import sosoya.mvc.model.service.BasketServiceImpl;
-import sosoya.mvc.view.FailView;
-import sosoya.mvc.view.SuccessView;
+import sosoya.mvc.view.main.FailView;
+import sosoya.mvc.view.main.SuccessView;
 
 public class BasketController {
 	private static BasketService basketService = new BasketServiceImpl();

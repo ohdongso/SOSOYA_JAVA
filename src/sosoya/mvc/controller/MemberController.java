@@ -6,10 +6,10 @@ import sosoya.mvc.exception.DuplicatedException;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.service.MemberService;
 import sosoya.mvc.model.service.MemberServiceImpl;
-import sosoya.mvc.view.FailView;
 import sosoya.mvc.view.MemberView;
-import sosoya.mvc.view.MenuView;
-import sosoya.mvc.view.SuccessView;
+import sosoya.mvc.view.main.FailView;
+import sosoya.mvc.view.main.MenuView;
+import sosoya.mvc.view.main.SuccessView;
 
 public class MemberController {
 	private static MemberService memberService = new MemberServiceImpl();

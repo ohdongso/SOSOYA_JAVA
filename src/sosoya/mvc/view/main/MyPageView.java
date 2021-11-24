@@ -1,8 +1,9 @@
-package sosoya.mvc.view;
+package sosoya.mvc.view.main;
 
 import java.util.Scanner;
 
 import sosoya.mvc.model.dto.MemberVO;
+import sosoya.mvc.view.BasketView;
 
 public class MyPageView {
 	private static Scanner sc = new Scanner(System.in);
@@ -13,7 +14,7 @@ public class MyPageView {
 			System.out.println("┌──────────────┐");
 			System.out.println("  	 1. 장바구니						    ");
 			System.out.println("  	 2. 주문내역							");
-			System.out.println("  	 3. 결제내역  					        ");
+			System.out.println("  	 3. 결제내역(후기작성)  					");
 			System.out.println("  	 4. (교환,환불)내역  					");
 			System.out.println("  	 5. 작성한리뷰						    ");
 			System.out.println("  	 6. 뒤로가기						    ");
@@ -33,7 +34,7 @@ public class MyPageView {
 				// 결제내역
 				break;
 			case 4:
-				// (교환,환불)내역
+				// (교환,환불)
 				break;
 			case 5:
 				// 작성한리뷰
