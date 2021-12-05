@@ -1,9 +1,10 @@
 package sosoya.mvc.view.main;
 
-import java.util.Scanner;
+import java.util.Scanner; 
 
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.view.BasketView;
+import sosoya.mvc.view.OrderView;
 
 public class MyPageView {
 	private static Scanner sc = new Scanner(System.in);
@@ -29,6 +30,7 @@ public class MyPageView {
 				break;
 			case 2:
 				// 주문내역
+				OrderView.printSelectAllOrders(memberVO);
 				break;
 			case 3:
 				// 결제내역
@@ -71,6 +73,9 @@ public class MyPageView {
 				break;
 			case 2:
 				// 장바구니상품(주문)
+				OrderView.printOrder(memberVO);
+				// 1번 전체주문, 2번 선택주문
+				
 				break;
 			case 3:
 				// 장바구니상품(수정)
@@ -90,4 +95,36 @@ public class MyPageView {
 			}
 		}
 	}
+	
+	// 1번 전체주문, 2번 선택주문 
+	public static void printBasketOption(MemberVO memberVO) {
+		while(true) {
+			System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다."   + " / 회원등급[" + memberVO.getGrade() + "] -----");
+			System.out.println("┌──────────────┐");
+			System.out.println("  	 1. 전체주문					            ");
+			System.out.println("  	 2. 선택주문					            ");
+			System.out.println("  	 3. 뒤로가기   						    ");
+			System.out.println("└──────────────┘");
+			System.out.print("선택>>");
+			
+			int menu = Integer.parseInt(sc.nextLine());
+			switch(menu) {
+			case 1:
+				// 전체주문
+				OrderView.printDetailAllOrder(memberVO);
+				break;
+			case 2:
+				// 선택주문
+				break;
+			case 3:
+				// 뒤로가기
+				return;
+			default :
+				// 1~3번 까지 숫자를 입력해주세요.
+				System.out.println("1~3번 까지 숫자를 입력해주세요.");
+				break;
+			}
+		}
+	}
+	
 }

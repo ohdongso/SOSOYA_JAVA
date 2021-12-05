@@ -1,10 +1,12 @@
 package sosoya.mvc.view.main;
 
-import java.util.List;
+import java.util.List; 
 
 import sosoya.mvc.model.dto.BasketVO;
 import sosoya.mvc.model.dto.FaqVO;
 import sosoya.mvc.model.dto.GoodsVO;
+import sosoya.mvc.model.dto.OrdersDetailsVO;
+import sosoya.mvc.model.dto.OrdersVO;
 
 public class SuccessView {
 	/**
@@ -13,6 +15,21 @@ public class SuccessView {
 	public static void printMessage(String message) {
 		System.out.println(message);
 	}
+	
+	/**
+	 * 주문 내역 출력
+	 * */
+	public static void printOrderByMemberId(List<OrdersVO> orderVoList) {
+		for(OrdersVO order : orderVoList) {
+			System.out.println("주문코드:" + order.getOrdersCode() +" | 총금액:" + order.getOrdersTotalprice() 
+			+ " | 주소:" + order.getOrdersDi() + " | 주문날짜:" + order.getOrdersDate() );
+			   for(OrdersDetailsVO ordersDetailsVO : order.getOrdersDetailsList()) {
+				   System.out.println("  ▶ " + ordersDetailsVO);
+			   }
+			   System.out.println();
+		}
+	}
+	
 	
 	/**
 	 * FAQ전체 목록 출력

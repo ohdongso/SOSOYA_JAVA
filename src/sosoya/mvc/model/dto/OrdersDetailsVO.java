@@ -1,25 +1,21 @@
 package sosoya.mvc.model.dto;
 
-import java.util.List;
-
 public class OrdersDetailsVO {
 	// 멤버변수
 	private int ordersDetailsCode;
 	private int ordersCode;
-	private String id;
-	private List<Integer> goodsCode;
-	private int ordersDetailsPrice;
-	private int ordersDetailsCount;
-	private int ordersDetailsTotalPrice;
+	private int goodsCode;
+	private int ordersDetailsPrice; // 제품단가
+	private int ordersDetailsCount; // 구매수량
+	private int ordersDetailsTotalPrice; // 총가격
 	
 	// 생성자
 	public OrdersDetailsVO() {}
-	public OrdersDetailsVO(int ordersDetailsCode, int ordersCode, String id, List<Integer> goodsCode,
+	public OrdersDetailsVO(int ordersDetailsCode, int ordersCode, int goodsCode,
 			int ordersDetailsPrice, int ordersDetailsCount, int ordersDetailsTotalPrice) {
 		super();
 		this.ordersDetailsCode = ordersDetailsCode;
 		this.ordersCode = ordersCode;
-		this.id = id;
 		this.goodsCode = goodsCode;
 		this.ordersDetailsPrice = ordersDetailsPrice;
 		this.ordersDetailsCount = ordersDetailsCount;
@@ -39,16 +35,10 @@ public class OrdersDetailsVO {
 	public void setOrdersCode(int ordersCode) {
 		this.ordersCode = ordersCode;
 	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public List<Integer> getGoodsCode() {
+	public int getGoodsCode() {
 		return goodsCode;
 	}
-	public void setGoodsCode(List<Integer> goodsCode) {
+	public void setGoodsCode(int goodsCode) {
 		this.goodsCode = goodsCode;
 	}
 	public int getOrdersDetailsPrice() {
@@ -69,12 +59,12 @@ public class OrdersDetailsVO {
 	public void setOrdersDetailsTotalPrice(int ordersDetailsTotalPrice) {
 		this.ordersDetailsTotalPrice = ordersDetailsTotalPrice;
 	}
-	
-	// tostring
+
+	// toString()
 	@Override
 	public String toString() {
-		return "OrdersDetailsVO [ordersDetailsCode=" + ordersDetailsCode + ", ordersCode=" + ordersCode + ", id=" + id
-				+ ", goodsCode=" + goodsCode + ", ordersDetailsPrice=" + ordersDetailsPrice + ", ordersDetailsCount="
-				+ ordersDetailsCount + ", ordersDetailsTotalPrice=" + ordersDetailsTotalPrice + "]";
+		return "주문상세 [주문상세코드=" + ordersDetailsCode + ", 주문코드=" + ordersCode + ", 상품코드="
+				+ goodsCode + ", 상품단가=" + ordersDetailsPrice + ", 상품개수="
+				+ ordersDetailsCount + ", 총금액=" + ordersDetailsTotalPrice + "]";
 	}
 }

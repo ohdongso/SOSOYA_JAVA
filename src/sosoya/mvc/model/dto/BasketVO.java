@@ -8,7 +8,6 @@ public class BasketVO {
 	private String basketRegdate;
 	private int basketTotalprice;
 	private int basketGoodsCount;
-	
 	private GoodsVO goodsVO;
 	
 	// 생성자
@@ -90,5 +89,4 @@ public class BasketVO {
 		return  "상품이름:" + goodsVO.getGoodsName() + " ==> [ 상품단가:" + goodsVO.getGoodsPrice() + 
 		"원, 상품개수:" + basketGoodsCount + "개, 상품총가격:" + basketTotalprice + "원, 장바구니코드:" + basketCode + " ]";
 	}
-
 }

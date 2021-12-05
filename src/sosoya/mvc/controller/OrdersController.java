@@ -1,6 +1,7 @@
 package sosoya.mvc.controller;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import sosoya.mvc.model.dto.OrdersVO;
 import sosoya.mvc.model.service.OrdersService;
@@ -23,7 +24,16 @@ public class OrdersController {
 		}
 	}
 	
-	
-	
-	
+	/**
+	 * 주문내역보기
+	 * */
+	public static void selectOrdersByMemberId(String memberId) {
+		try {
+			List<OrdersVO> list = ordersService.selectOrdersByMemberId(memberId);
+			SuccessView.printOrderByMemberId(list);
+		} catch (Exception e) {
+			FailView.errorMessage(e.getMessage());
+			e.printStackTrace();
+		}
+	}
 }

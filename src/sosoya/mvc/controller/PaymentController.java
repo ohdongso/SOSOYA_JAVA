@@ -1,5 +1,6 @@
 package sosoya.mvc.controller;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import sosoya.mvc.model.dto.PaymentVO;
@@ -11,7 +12,7 @@ import sosoya.mvc.view.main.SuccessView;
 public class PaymentController {
 	private PaymentService paymentService = new PaymentServiceImpl();
 	
-	public void insertPayment(PaymentVO paymentVO) {
+	public void insertPayment(Connection con, PaymentVO paymentVO) {
 		try {
 			paymentService.insertPayment(paymentVO);
 			SuccessView.printMessage("결제가 완료 되었습니다.");

@@ -1,5 +1,6 @@
 package sosoya.mvc.model.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrdersVO {
@@ -9,19 +10,17 @@ public class OrdersVO {
 	private String ordersDi;
 	private int ordersTotalprice;
 	private String ordersDate;
-	private int ordersGoodscount;
 	
-	private List<OrdersDetailsVO> ordersDetailsList;
+	private List<OrdersDetailsVO> ordersDetailsList = new ArrayList<>();
 	
 	// 생성자
 	public OrdersVO() {}
-	public OrdersVO(int ordersCode, String id,String ordersDi, int ordersTotalprice, String ordersDate, int ordersGoodscount) {
+	public OrdersVO(int ordersCode, String id,String ordersDi, int ordersTotalprice, String ordersDate) {
 		this.ordersCode = ordersCode;
 		this.id = id;
 		this.ordersDi = ordersDi;
 		this.ordersTotalprice = ordersTotalprice;
 		this.ordersDate = ordersDate;
-		this.ordersGoodscount = ordersGoodscount;
 	}
 	
 	// getter, setter
@@ -55,12 +54,6 @@ public class OrdersVO {
 	public void setOrdersDate(String ordersDate) {
 		this.ordersDate = ordersDate;
 	}
-	public int getOrdersGoodscount() {
-		return ordersGoodscount;
-	}
-	public void setOrdersGoodscount(int ordersGoodscount) {
-		this.ordersGoodscount = ordersGoodscount;
-	}
 	public List<OrdersDetailsVO> getOrdersDetailsList() {
 		return ordersDetailsList;
 	}
@@ -72,7 +65,6 @@ public class OrdersVO {
 	@Override
 	public String toString() {
 		return "OrdersVO [ordersCode=" + ordersCode + ", id=" + id + ", ordersDi=" + ordersDi + ", ordersTotalprice="
-				+ ordersTotalprice + ", ordersDate=" + ordersDate + ", ordersGoodscount=" + ordersGoodscount
-				+ ", ordersDetailsList=" + ordersDetailsList + "]";
+				+ ordersTotalprice + ", ordersDate=" + ordersDate + ", ordersDetailsList=" + ordersDetailsList + "]";
 	}
 }

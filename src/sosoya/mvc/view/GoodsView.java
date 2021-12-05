@@ -23,15 +23,13 @@ public class GoodsView {
 			switch(menu) {
 			case 1:
 				// 전체검색
-				GoodsController.selectAllGoods();
-				
+				GoodsController.selectAllGoods();	
 				// 1,주문하기 2,장바구니에담기 3,뒤로가기
 				printOrderBasket(memberVO);
 				break;
 			case 2:
 				// 부분검색(1,제품이름 2,가격 3,리뷰개수)
 				printSelectPartSearch(memberVO);
-				
 				// 1,주문하기 2,장바구니에담기 3,뒤로가기
 				printOrderBasket(memberVO);
 				break;
