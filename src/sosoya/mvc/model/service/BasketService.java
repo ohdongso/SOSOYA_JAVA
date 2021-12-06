@@ -1,8 +1,7 @@
 package sosoya.mvc.model.service;
 
-import java.sql.SQLException;
+import java.sql.SQLException; 
 import java.util.List;
-
 import sosoya.mvc.model.dto.BasketVO;
 import sosoya.mvc.model.dto.MemberVO;
 
@@ -13,10 +12,10 @@ public interface BasketService {
 	 * @return
 	 * */
 	public void insertBasket(BasketVO basketVO) throws SQLException;
-	
+		
 	/**
 	 * 장바구니전체검색
-	 * @param MemberVO memberVO
+	 * @param MemberVO memberVOs
 	 * @return List<BasketVO> list
 	 * */
 	public List<BasketVO> selectAllBasket(MemberVO memberVO) throws SQLException;

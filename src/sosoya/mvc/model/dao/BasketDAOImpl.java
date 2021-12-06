@@ -17,7 +17,7 @@ public class BasketDAOImpl implements BasketDAO {
 	private Properties sosoyaSql = DbUtil.getProFile();
 	private GoodsDAO goodsDao = new GoodsDAOImpl();
 	private MemberDAO memberDAO = new MemberDAOImpl();
-	
+
 	/**
 	 * 장바구니등록
 	 */
@@ -195,6 +195,25 @@ public class BasketDAOImpl implements BasketDAO {
 			result = ps.executeUpdate();
 		} finally {
 			DbUtil.close(con, ps);
+		}
+		return result;
+	}
+	
+	/**
+	 * ID에 해당하는 장바구니 전체삭제
+	 */
+	@Override
+	public int deleteAllBasket(Connection con, String memberId) throws SQLException {
+		PreparedStatement ps = null;
+		String sql = sosoyaSql.getProperty("BASKET.DELETEALL");
+		int result = 0;
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, memberId);
+			
+			result = ps.executeUpdate();
+		} finally {
+			DbUtil.close(null, ps, null);
 		}
 		return result;
 	}

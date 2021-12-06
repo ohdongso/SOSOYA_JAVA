@@ -73,9 +73,8 @@ public class MyPageView {
 				break;
 			case 2:
 				// 장바구니상품(주문)
-				OrderView.printOrder(memberVO);
 				// 1번 전체주문, 2번 선택주문
-				
+				printBasketOption(memberVO);
 				break;
 			case 3:
 				// 장바구니상품(수정)
@@ -111,7 +110,7 @@ public class MyPageView {
 			switch(menu) {
 			case 1:
 				// 전체주문
-				OrderView.printDetailAllOrder(memberVO);
+				OrderView.printBasketAllOrder(memberVO);
 				break;
 			case 2:
 				// 선택주문
@@ -125,6 +124,5 @@ public class MyPageView {
 				break;
 			}
 		}
-	}
-	
+	}	
 }

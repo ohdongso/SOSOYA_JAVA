@@ -1,5 +1,6 @@
 package sosoya.mvc.view;
 
+import java.util.List;
 import java.util.Scanner;
 
 import sosoya.mvc.model.dto.GoodsVO;
@@ -9,13 +10,24 @@ import sosoya.mvc.model.dto.OrdersVO;
 public class PaymentView {
 	private static Scanner sc = new Scanner(System.in);
 	
-	public static boolean printPayment(MemberVO memberVO, GoodsVO GoodsVO, OrdersVO ordersVO) {
+	public static boolean printPayment(MemberVO memberVO, List<GoodsVO> goodsVoList, OrdersVO ordersVO) {
 		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
 		System.out.println("=== 결제하기 ===");
-		System.out.println("상품이름 : " + GoodsVO.getGoodsName());
-		System.out.println("상품가격 : " + GoodsVO.getGoodsPrice());
-		// System.out.println("상품개수 : " + ordersVO.getOrdersGoodscount());
-		System.out.println("상품총금액 : " + ordersVO.getOrdersTotalprice());
+		
+		int index = -1;
+		for(GoodsVO goodsVO : goodsVoList) {
+			++index;
+			System.out.println("--------------------------- " + (index+1) + "번째 장바구니 상품 ---------------------------");
+			System.out.println("상품이름 : " + goodsVO.getGoodsName());
+			System.out.println("상품가격 : " + goodsVO.getGoodsPrice());
+			System.out.println("상품개수 : " + ordersVO.getOrdersDetailsList().get(index).getOrdersDetailsCount());
+			System.out.println("상품총금액 : " + goodsVO.getGoodsPrice() * ordersVO.getOrdersDetailsList().get(index).getOrdersDetailsCount());
+			System.out.println();
+		}
+		
+		System.out.println("---------------------------결제 최종금액---------------------------");
+		System.out.println("최종결제 금액 : " + ordersVO.getOrdersTotalprice());
+		
 		
 		boolean flag = false;
 		while(true) {

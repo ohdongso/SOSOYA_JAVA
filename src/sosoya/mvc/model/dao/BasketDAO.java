@@ -1,5 +1,6 @@
 package sosoya.mvc.model.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -41,5 +42,11 @@ public interface BasketDAO {
 	 * @return int result
 	 * */
 	public int deleteBasket(int basketCode) throws SQLException;
-
+	
+	/**
+	 * ID에 해당하는 장바구니 전체삭제
+	 * @param String memberId
+	 * @return int result
+	 * */
+	public int deleteAllBasket(Connection con, String memberId) throws SQLException;
 }
