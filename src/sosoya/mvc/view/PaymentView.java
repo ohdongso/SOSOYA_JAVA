@@ -21,12 +21,12 @@ public class PaymentView {
 			System.out.println("상품이름 : " + goodsVO.getGoodsName());
 			System.out.println("상품가격 : " + goodsVO.getGoodsPrice());
 			System.out.println("상품개수 : " + ordersVO.getOrdersDetailsList().get(index).getOrdersDetailsCount());
-			System.out.println("상품총금액 : " + goodsVO.getGoodsPrice() * ordersVO.getOrdersDetailsList().get(index).getOrdersDetailsCount());
+			System.out.println("상품총금액 : " + goodsVO.getGoodsPrice() * ordersVO.getOrdersDetailsList().get(index).getOrdersDetailsCount() + "원");
 			System.out.println();
 		}
 		
 		System.out.println("---------------------------결제 최종금액---------------------------");
-		System.out.println("최종결제 금액 : " + ordersVO.getOrdersTotalprice());
+		System.out.println("최종결제 금액 : " + ordersVO.getOrdersTotalprice() + "원");
 		
 		
 		boolean flag = false;
@@ -44,7 +44,7 @@ public class PaymentView {
 				pay = Integer.parseInt(sc.nextLine());
 				
 				if(!String.valueOf(pay).equals(String.valueOf(ordersVO.getOrdersTotalprice()))) {
-					System.out.println("총결제 금액을 다시 한번 확인해주세요.");
+					System.out.println("총결제 금액을 다시 한번 확인해주세요. 결제 처음으로 돌아갑니다.");
 					continue;
 				}
 				

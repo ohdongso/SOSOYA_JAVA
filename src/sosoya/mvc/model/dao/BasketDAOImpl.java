@@ -1,6 +1,6 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.Connection; 
+import java.sql.Connection;  
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +11,7 @@ import java.util.Properties;
 import sosoya.mvc.model.dto.BasketVO;
 import sosoya.mvc.model.dto.GoodsVO;
 import sosoya.mvc.model.dto.MemberVO;
+import sosoya.mvc.model.dto.OrdersDetailsVO;
 import sosoya.mvc.util.DbUtil;
 
 public class BasketDAOImpl implements BasketDAO {
@@ -212,6 +213,31 @@ public class BasketDAOImpl implements BasketDAO {
 			ps.setString(1, memberId);
 			
 			result = ps.executeUpdate();
+		} finally {
+			DbUtil.close(null, ps, null);
+		}
+		return result;
+	}
+	
+	/**
+	 * 선택한 장바구니 삭제
+	 */
+	@Override
+	public int[] deleteByBasket(Connection con, List<OrdersDetailsVO> ordersDetailsVOList) throws SQLException {
+		PreparedStatement ps = null;
+		String sql = sosoyaSql.getProperty("BASKET.DELETEBYGOODSCODE");
+		int[] result = null;
+		try {
+			ps = con.prepareStatement(sql);
+			
+			for(OrdersDetailsVO vo : ordersDetailsVOList) {
+				ps.setInt(1, vo.getGoodsCode());
+				
+				ps.addBatch(); // 일괄처리할 작업에 추가
+				ps.clearParameters();
+			} // for문 끝.
+			
+			result = ps.executeBatch(); // 일괄처리
 		} finally {
 			DbUtil.close(null, ps, null);
 		}

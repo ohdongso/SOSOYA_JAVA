@@ -22,6 +22,13 @@ public interface OrdersService {
 	public void insertBasketAllOrder(MemberVO memberVO, String orderDi) throws SQLException;
 	
 	/**
+	 * 장바구니상품선택주문
+	 * @param OrdersVO ordersVO
+	 * @return int result
+	 * */
+	public void insertBasketByOrder(OrdersVO ordersVO) throws SQLException;
+	
+	/**
 	 * 주문내역보기
 	 * @param String memberId
 	 * @return List<OrdersVO> ordersVO

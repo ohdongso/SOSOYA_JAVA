@@ -1,9 +1,7 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.SQLException;
+import java.sql.SQLException; 
 import java.util.List;
-
-import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.OrdersVO;
 
 public interface OrdersDAO {
@@ -20,6 +18,14 @@ public interface OrdersDAO {
 	 * @return
 	 * */
 	public int insertBasketAllOrder(OrdersVO ordersVO) throws SQLException;
+	
+	/**
+	 * 장바구니상품선택주문
+	 * @param OrdersVO ordersVO
+	 * @return int result
+	 * */
+	public int insertBasketByOrder(OrdersVO ordersVO) throws SQLException;
+	
 	
 	/**
 	 * 주문내역보기

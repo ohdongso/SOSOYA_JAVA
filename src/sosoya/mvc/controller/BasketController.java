@@ -1,6 +1,6 @@
 package sosoya.mvc.controller;
 
-import java.sql.SQLException; 
+import java.sql.SQLException;  
 import java.util.List;
 
 import sosoya.mvc.model.dto.BasketVO;
@@ -60,6 +60,4 @@ public class BasketController {
 			FailView.errorMessage(e.getMessage());
 		}
 	}
-	
-	
 }

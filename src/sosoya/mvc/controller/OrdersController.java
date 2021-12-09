@@ -31,7 +31,19 @@ public class OrdersController {
 	public static void insertBasketAllOrder(MemberVO memberVO, String orderDi) {
 		try {
 			ordersService.insertBasketAllOrder(memberVO, orderDi);
-			SuccessView.printMessage("주문이 완료 되었습니다.");
+			SuccessView.printMessage("장바구니 전체상품이 주문 되었습니다.");
+		} catch (SQLException e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 장바구니 상품 선택 주문하기
+	 * */
+	public static void insertBasketByOrder(OrdersVO ordersVO) {
+		try {
+			ordersService.insertBasketByOrder(ordersVO);
+			SuccessView.printMessage("장바구니 선택상품이 주문 되었습니다.");
 		} catch (SQLException e) {
 			FailView.errorMessage(e.getMessage());
 		}
@@ -46,7 +58,6 @@ public class OrdersController {
 			SuccessView.printOrderByMemberId(list);
 		} catch (Exception e) {
 			FailView.errorMessage(e.getMessage());
-			e.printStackTrace();
 		}
 	}
 }

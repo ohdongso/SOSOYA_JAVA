@@ -1,6 +1,6 @@
 package sosoya.mvc.view.main;
 
-import java.util.Scanner; 
+import java.util.Scanner;  
 
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.view.BasketView;
@@ -114,6 +114,7 @@ public class MyPageView {
 				break;
 			case 2:
 				// 선택주문
+				OrderView.printBasketByOrder(memberVO);
 				break;
 			case 3:
 				// 뒤로가기

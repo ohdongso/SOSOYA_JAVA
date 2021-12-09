@@ -1,16 +1,13 @@
 package sosoya.mvc.model.service;
 
-import java.sql.SQLException;
+import java.sql.SQLException; 
 import java.util.List;
 
 import sosoya.mvc.model.dao.BasketDAO;
 import sosoya.mvc.model.dao.BasketDAOImpl;
-import sosoya.mvc.model.dao.GoodsDAO;
-import sosoya.mvc.model.dao.GoodsDAOImpl;
 import sosoya.mvc.model.dao.OrdersDAO;
 import sosoya.mvc.model.dao.OrdersDAOImpl;
 import sosoya.mvc.model.dto.BasketVO;
-import sosoya.mvc.model.dto.GoodsVO;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.OrdersDetailsVO;
 import sosoya.mvc.model.dto.OrdersVO;
@@ -51,7 +48,16 @@ public class OrdersServiceImpl implements OrdersService {
 		int result = ordersDao.insertBasketAllOrder(ordersVO);
 		if(result == 0) throw new SQLException("장바구니 전체 주문이 실패했습니다.");
 	}
-
+	
+	/**
+	 * 장바구니상품선택주문
+	 */
+	@Override
+	public void insertBasketByOrder(OrdersVO ordersVO) throws SQLException {
+		int result = ordersDao.insertBasketByOrder(ordersVO);
+		if(result == 0) throw new SQLException("장바구니 선택 주문이 실패했습니다.");
+	}
+	
 	/**
 	 * 주문내역보기
 	 */

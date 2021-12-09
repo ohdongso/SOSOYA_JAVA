@@ -1,6 +1,6 @@
 package sosoya.mvc.view;
 
-import java.util.Scanner;  
+import java.util.Scanner;   
 
 import sosoya.mvc.controller.BasketController;
 import sosoya.mvc.model.dto.BasketVO;
@@ -15,8 +15,6 @@ public class BasketView {
 		System.out.println("=== 장바구니상품(전체검색) ===");
 		BasketController.selectAllBasket(memberVO);
 	}
-	
-	// 장바구니 주문
 	
 	// 장바구니 수정
 	public static void printUpdateBasket(MemberVO memberVO) {
