@@ -1,8 +1,9 @@
 package sosoya.mvc.controller;
 
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
+import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.PaymentVO;
 import sosoya.mvc.model.service.PaymentService;
 import sosoya.mvc.model.service.PaymentServiceImpl;
@@ -10,14 +11,18 @@ import sosoya.mvc.view.main.FailView;
 import sosoya.mvc.view.main.SuccessView;
 
 public class PaymentController {
-	private PaymentService paymentService = new PaymentServiceImpl();
+	private static PaymentService paymentService = new PaymentServiceImpl();
 	
-	public void insertPayment(Connection con, PaymentVO paymentVO) {
+	/**
+	 * 결제내역 보기
+	 * */
+	public static void selectAllPayment(MemberVO memberVO) {
 		try {
-			paymentService.insertPayment(paymentVO);
-			SuccessView.printMessage("결제가 완료 되었습니다.");
+			PaymentVO paymentVO = paymentService.selectAllPayment(memberVO);
+			SuccessView.printPayment(paymentVO);
 		} catch (SQLException e) {
 			FailView.errorMessage(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

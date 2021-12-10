@@ -1,6 +1,6 @@
 package sosoya.mvc.controller;
 
-import java.sql.SQLException;
+import java.sql.SQLException; 
 import java.util.List;
 
 import sosoya.mvc.model.dto.MemberVO;

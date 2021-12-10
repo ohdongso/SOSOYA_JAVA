@@ -1,5 +1,6 @@
 package sosoya.mvc.view.main;
 
+import java.util.ArrayList;
 import java.util.List; 
 
 import sosoya.mvc.model.dto.BasketVO;
@@ -7,6 +8,7 @@ import sosoya.mvc.model.dto.FaqVO;
 import sosoya.mvc.model.dto.GoodsVO;
 import sosoya.mvc.model.dto.OrdersDetailsVO;
 import sosoya.mvc.model.dto.OrdersVO;
+import sosoya.mvc.model.dto.PaymentVO;
 
 public class SuccessView {
 	/**
@@ -16,6 +18,18 @@ public class SuccessView {
 		System.out.println(message);
 	}
 	
+	/**
+	 * 결제내역 출력
+	 * */
+	public static void printPayment(PaymentVO paymentVO) {
+		System.out.println("회원아이디:" + paymentVO.getMemberVO().getId() + " | 결제코드:" + paymentVO.getPaymentCode() 
+		+ " | 주문코드:" + paymentVO.getOrdersCode() + " | 결제날짜:" + paymentVO.getPaymentDate());
+
+		List<OrdersVO> orderVoList = new ArrayList<>();
+		orderVoList.add(paymentVO.getOrdersVO());
+		printOrderByMemberId(orderVoList);
+	}
+		
 	/**
 	 * 주문 내역 출력
 	 * */
@@ -29,7 +43,6 @@ public class SuccessView {
 			   System.out.println();
 		}
 	}
-	
 	
 	/**
 	 * FAQ전체 목록 출력

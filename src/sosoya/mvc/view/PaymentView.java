@@ -1,8 +1,10 @@
 package sosoya.mvc.view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import sosoya.mvc.controller.PaymentController;
 import sosoya.mvc.model.dto.GoodsVO;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.OrdersVO;
@@ -10,6 +12,7 @@ import sosoya.mvc.model.dto.OrdersVO;
 public class PaymentView {
 	private static Scanner sc = new Scanner(System.in);
 	
+	// 결제하기
 	public static boolean printPayment(MemberVO memberVO, List<GoodsVO> goodsVoList, OrdersVO ordersVO) {
 		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
 		System.out.println("=== 결제하기 ===");
@@ -57,4 +60,32 @@ public class PaymentView {
 			return flag;
 		}	
 	}
+	
+	// 결제내역전체 보기
+	public static void printPaymentList(MemberVO memberVO) {
+		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
+		System.out.println("=== 결제내역 ===");
+		
+		PaymentController.selectAllPayment(memberVO);
+	}
+	
+	// 결제내역 삭제
+	public static void printPaymentDelete(MemberVO memberVO) {
+		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
+		System.out.println("=== 결제내역 삭제 ===");
+		
+		System.out.print("삭제할 결제 내역 개수를 입력주세요: ");
+		int count = Integer.parseInt(sc.nextLine());
+		
+		List<Integer> paymentCodeList = new ArrayList<>();
+		for(int i = 1; i <= count; i++) {
+			System.out.print("삭제할 결제코드를 입력해주세요: ");
+			int paymentCode = Integer.parseInt(sc.nextLine());
+			paymentCodeList.add(paymentCode);
+		}
+		
+		// 후기를 등록하고 처리해야 한다.
+	}
+	
+	
 }

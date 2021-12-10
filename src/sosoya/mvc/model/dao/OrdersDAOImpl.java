@@ -1,6 +1,6 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.Connection;     
+import java.sql.Connection;       
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -388,6 +388,34 @@ public class OrdersDAOImpl implements OrdersDAO {
 	}
 	
 	/**
+	 * 주문코드에 해당하는 주문내역 가져오기
+	 */
+	@Override
+	public OrdersVO selectOrdersByOrderCode(int orderCode) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		OrdersVO ordersVO = null;
+		String sql = sosoyaSql.getProperty("ORDERS.SELECTBYORDERCODE");
+		
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, orderCode);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				ordersVO = new OrdersVO(rs.getInt("ORDERS_CODE") , rs.getString("ID"), rs.getString("ORDERS_DI"), 
+						rs.getInt("ORDERS_TOTOALPRICE"), rs.getString("ORDERS_DATE"));
+			}
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}
+		
+		return ordersVO;
+	}
+	
+	/**
 	 * 상품으로 재고량 감소시키키
 	 * */
 	public int[] decrementStock(Connection con, List<OrdersDetailsVO> ordersDetailsVOList) throws SQLException {
@@ -412,7 +440,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * 결제 후 회원 구매횟수 변경
 	 * */
@@ -471,6 +499,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 	/**
 	 * 주문상세 가져오기
 	 * */
+	@Override
 	public List<OrdersDetailsVO> selectOrdersDetailsVO(int orderCode) throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;

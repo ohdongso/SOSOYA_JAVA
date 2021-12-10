@@ -1,5 +1,5 @@
 package sosoya.mvc.model.service;
 
-public class ReviewServiceImpl {
+public class ReviewServiceImpl implements ReviewService {
 
 }

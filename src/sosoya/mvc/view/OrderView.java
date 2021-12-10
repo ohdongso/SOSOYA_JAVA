@@ -1,6 +1,6 @@
 package sosoya.mvc.view;
 
-import java.sql.SQLException; 
+import java.sql.SQLException;  
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;

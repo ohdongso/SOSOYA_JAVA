@@ -1,14 +1,16 @@
 package sosoya.mvc.model.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
+import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.PaymentVO;
 
 public interface PaymentDAO {
 	/**
-	 * 결제하기
-	 * @param PaymentVO paymentVO
-	 * @return int result
+	 * 전체결제내역 조회
+	 * @param MemberVO memberVO
+	 * @return List<PaymentVO> paymentVoList
 	 * */
-	public int insertPayment(PaymentVO paymentVO) throws SQLException; 
+	public PaymentVO selectAllPayment(MemberVO memberVO) throws SQLException;
 }
