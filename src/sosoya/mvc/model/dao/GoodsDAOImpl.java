@@ -13,6 +13,7 @@ import sosoya.mvc.util.DbUtil;
 
 public class GoodsDAOImpl implements GoodsDAO {
 	private Properties sosoyaSql = DbUtil.getProFile();
+	private static ReviewDAO reviewDao = new ReviewDAOImpl();
 	
 	/**
 	 * 전체검색
@@ -139,5 +140,77 @@ public class GoodsDAOImpl implements GoodsDAO {
 			DbUtil.close(con, ps, rs);
 		}
 		return list;
+	}
+	
+	/**
+	 * 상품 평점평균 변경
+	 */
+	@Override
+	public int updateGoodsAvg(int goodsCode, float goodsAvg, Connection con) throws SQLException {
+		PreparedStatement ps = null;
+		String sql = sosoyaSql.getProperty("GOODS.UPDATEGRADEAVG");
+		int result = 0;
+		
+		try {
+			ps = con.prepareStatement(sql);
+			
+			ps.setFloat(1, goodsAvg);
+			ps.setInt(2, goodsCode);
+			
+			result = ps.executeUpdate();
+		} finally {
+			DbUtil.close(null, ps, null);
+		}	
+		return result;
+	}
+
+	/**
+	 * 상품의 리뷰개수 변경
+	 */
+	@Override
+	public int updateReviewCount(int goodsCode, Connection con) throws SQLException {
+		PreparedStatement ps = null;
+		String sql = sosoyaSql.getProperty("GOODS.UPDATEREVIEWCOUNT");
+		int result = 0;
+		
+		try {
+			ps = con.prepareStatement(sql);
+			
+			// 상품 리뷰개수를 1증가 시킨다.
+			int reviewCount = reviewDao.selectReviewCount(goodsCode, con);
+			ps.setInt(1, reviewCount);
+			ps.setInt(2, goodsCode);
+			
+			result = ps.executeUpdate();
+		} finally {
+			DbUtil.close(null, ps, null);
+		}
+		return result;
+	}
+	
+	/**
+	 * 상품의 평점평균 가져오기
+	 */
+	@Override
+	public GoodsVO selectGoodsAvg(int goodsCode, Connection con) throws SQLException {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = sosoyaSql.getProperty("GOODS.SELECTGOODSAVG");
+		GoodsVO goodsVO = null;
+		
+		try {
+			con = DbUtil.getConnection();
+			
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, goodsCode);
+			
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				goodsVO = new GoodsVO(rs.getFloat(1));
+			}
+		} finally {
+			DbUtil.close(null, ps, rs);
+		}	
+		return goodsVO;
 	}
 }

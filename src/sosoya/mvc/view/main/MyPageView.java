@@ -1,11 +1,13 @@
 package sosoya.mvc.view.main;
 
-import java.util.Scanner;  
+import java.util.Scanner;
 
+import sosoya.mvc.controller.ReviewController;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.view.BasketView;
 import sosoya.mvc.view.OrderView;
 import sosoya.mvc.view.PaymentView;
+import sosoya.mvc.view.ReviewView;
 
 public class MyPageView {
 	private static Scanner sc = new Scanner(System.in);
@@ -148,7 +150,7 @@ public class MyPageView {
 			switch(menu) {
 			case 1:
 				// 리뷰작성
-				
+				ReviewView.printOrder(memberVO);
 				break;
 			case 2:
 				// 결제내역삭제 ==> 미완성

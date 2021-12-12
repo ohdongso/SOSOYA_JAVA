@@ -13,6 +13,9 @@ public class GoodsVO {
 	
 	// 생성자
 	public GoodsVO() {}
+	public GoodsVO(float goodsGradeAvg) {
+		this.goodsGradeAvg = goodsGradeAvg;
+	}
 	public GoodsVO(int goodsCode, String goodsName, int goodsPrice, int goodsStock, String goodsRegDate,
 			int goodsReviewCount, int goodsCategory, float goodsGradeAvg) {
 		this.goodsCode = goodsCode;

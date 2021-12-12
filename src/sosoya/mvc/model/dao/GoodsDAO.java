@@ -1,6 +1,7 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.SQLException;  
+import java.sql.Connection;
+import java.sql.SQLException;   
 import java.util.List;
 import sosoya.mvc.model.dto.GoodsVO;
 
@@ -11,6 +12,27 @@ public interface GoodsDAO {
 	 * @return List<GoodsVO> list
 	 * */
 	public List<GoodsVO> selectAllGoods() throws SQLException;
+	
+	/**
+	 * 상품 평점평균 변경
+	 * @param int goodsCode, float goodsAvg, Connection con
+	 * @return int result
+	 * */
+	public int updateGoodsAvg(int goodsCode, float goodsAvg, Connection con) throws SQLException;
+	
+	/**
+	 * 상품의 리뷰개수 변경
+	 * @param int goodsCode, Connection con
+	 * @return int result
+	 * */
+	public int updateReviewCount(int goodsCode, Connection con) throws SQLException;
+	
+	/**
+	 * 상품의 평점평균 가져오기
+	 * @param int goodsCode, Connection con
+	 * @return GoodsVO goodsVO
+	 * */
+	public GoodsVO selectGoodsAvg(int goodsCode, Connection con) throws SQLException;
 	
 	/**
 	 * 상품코드에 해당하는 상품가져오기
