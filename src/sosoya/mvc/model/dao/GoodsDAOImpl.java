@@ -170,14 +170,18 @@ public class GoodsDAOImpl implements GoodsDAO {
 	@Override
 	public int updateReviewCount(int goodsCode, Connection con) throws SQLException {
 		PreparedStatement ps = null;
+		// UPDATE GOODS SET GOODS_REVIEWCOUNT = ? WHERE GOODS_CODE=?
 		String sql = sosoyaSql.getProperty("GOODS.UPDATEREVIEWCOUNT");
 		int result = 0;
 		
 		try {
 			ps = con.prepareStatement(sql);
 			
-			// 상품 리뷰개수를 1증가 시킨다.
+			// SELECT COUNT(*) FROM REVIEW WHERE GOODS_CODE=?
+			// insert를 해서 증가된 GOODS_REVIEWCOUNT가 출력된다.
+			// update문에서 +1을 해주지 않아도 된다.
 			int reviewCount = reviewDao.selectReviewCount(goodsCode, con);
+			
 			ps.setInt(1, reviewCount);
 			ps.setInt(2, goodsCode);
 			
@@ -198,9 +202,7 @@ public class GoodsDAOImpl implements GoodsDAO {
 		String sql = sosoyaSql.getProperty("GOODS.SELECTGOODSAVG");
 		GoodsVO goodsVO = null;
 		
-		try {
-			con = DbUtil.getConnection();
-			
+		try {	
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, goodsCode);
 			

@@ -1,6 +1,6 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.Connection; 
+import java.sql.Connection;  
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,37 +41,48 @@ public class ReviewDAOImpl implements ReviewDAO {
 			
 			// REVIEW테이블에 데이터를 추가한다.
 			result = ps.executeUpdate();
-			
 			if(result == 0) {
 				con.rollback();
 				throw new SQLException("review테이블에 데이터 삽입 실패...");
 			} else {
 				// goods테이블에 리뷰개수 업데이트
 				result = goodsDao.updateReviewCount(reviewVO.getGoodsCode(), con);
-				if(result != 1) {
+				if(result == 0) {
 					con.rollback();
 					throw new SQLException("review테이블의 리뷰개수가 증가되지 않았습니다.");
+				}
+				
+				// 현재 상품에 평점평균을 가져온다.
+				GoodsVO goodsVO = goodsDao.selectGoodsAvg(reviewVO.getGoodsCode(), con);
+				
+				if(goodsVO == null) {
+					con.rollback();
+					throw new SQLException("goods테이블의 평점평균을 가져오지 못했습니다.");
 				} else {
-					// goods테이블에 평점평균 업데이트
-					// 현재 상품에 평점평균을 가져온다.
-					GoodsVO goodsVO = goodsDao.selectGoodsAvg(reviewVO.getGoodsCode(), con);
-					if(goodsVO == null) {
-						con.rollback();
-						throw new SQLException("goods테이블의 평점평균을 가져오지 못했습니다.");
+					// insert된 review개수가 저장된다.
+					int reviewCount = selectReviewCount(reviewVO.getGoodsCode(), con);
+					
+					// 현재상품의 평점평균 * 
+					float total = 0.0f;
+					float goodsAvg = 0.0f;
+					if(reviewCount == 1) {
+						goodsAvg = reviewVO.getReviewGrade();
 					} else {
-						// 현재 상품에 평점평균에서 총 리뷰개수를 나눠주고, 업데이트 한다.
-						int reviewCount = selectReviewCount(reviewVO.getGoodsCode(), con) + 1;
+						// 업데이트 전 상품 평점평균을 가져온다.
+						System.out.println(goodsVO.getGoodsGradeAvg());
+						total = goodsVO.getGoodsGradeAvg() * (reviewCount - 1);
+						System.out.println("total : " + total);
 						
-						float total = goodsVO.getGoodsGradeAvg() * this.selectReviewCount(reviewVO.getGoodsCode(), con);
-						
-						float goodsAvg = (total + reviewVO.getReviewGrade()) / reviewCount;
+						goodsAvg = (total + reviewVO.getReviewGrade()) / reviewCount;
+						System.out.println("goodsAvg : " + goodsAvg);
 						
 						goodsAvg = Math.round(goodsAvg*10)/10.0f;
-						
-						goodsDao.updateGoodsAvg(reviewVO.getGoodsCode(), goodsAvg, con);
+						System.out.println("goodsAvg : " + goodsAvg);
 					}
+					
+					goodsDao.updateGoodsAvg(reviewVO.getGoodsCode(), goodsAvg, con);
 				}
-			}		
+			}	
 		} finally {
 			con.commit();
 			DbUtil.close(con, ps, null);
