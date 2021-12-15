@@ -20,7 +20,18 @@ public class ReviewController {
 			SuccessView.printMessage("리뷰가 작성 되었습니다.");
 		} catch (SQLException e) {
 			FailView.errorMessage(e.getMessage());
-			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 내가작성한 전체 리뷰보기
+	 * */
+	public static void selectAllReview() {
+		try {
+			
+		} catch (Exception e) {
+			
+		}
+	}
+	
 }

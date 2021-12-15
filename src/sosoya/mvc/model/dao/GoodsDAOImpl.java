@@ -202,7 +202,7 @@ public class GoodsDAOImpl implements GoodsDAO {
 		String sql = sosoyaSql.getProperty("GOODS.SELECTGOODSAVG");
 		GoodsVO goodsVO = null;
 		
-		try {	
+		try {
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, goodsCode);
 			

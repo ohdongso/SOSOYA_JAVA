@@ -1,6 +1,6 @@
 package sosoya.mvc.view;
 
-import java.util.Scanner;
+import java.util.Scanner; 
 
 import sosoya.mvc.controller.ReviewController;
 import sosoya.mvc.model.dto.MemberVO;
@@ -10,7 +10,7 @@ public class ReviewView {
 	private static Scanner sc = new Scanner(System.in);
 	
 	// 결제한 상품 주문하는 기능
-	public static void printOrder(MemberVO memberVO) {
+	public static void printReviewOrder(MemberVO memberVO) {
 		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
 		System.out.println("=== 리뷰작성 ===");
 		
@@ -58,4 +58,14 @@ public class ReviewView {
 			System.out.println("Y 또는 N을 입력해주세요.");
 		}	
 	}
+	
+	// 작성한 리뷰 보기
+	public static void printReview(MemberVO memberVO) {
+		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
+		System.out.println("=== 내가작성한 리뷰 보기 ===");
+		
+		
+	}
+	
+	
 }

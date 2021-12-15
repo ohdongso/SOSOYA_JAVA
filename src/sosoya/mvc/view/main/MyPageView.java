@@ -48,6 +48,9 @@ public class MyPageView {
 				break;
 			case 5:
 				// 작성한리뷰보기
+				ReviewView.printReview(memberVO);
+				
+				// 1,상품코드로검색 2,리뷰수정 3,리뷰삭제
 				break;
 			case 6:
 				// 뒤로가기
@@ -150,7 +153,7 @@ public class MyPageView {
 			switch(menu) {
 			case 1:
 				// 리뷰작성
-				ReviewView.printOrder(memberVO);
+				ReviewView.printReviewOrder(memberVO);
 				break;
 			case 2:
 				// 결제내역삭제 ==> 미완성

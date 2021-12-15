@@ -1,12 +1,14 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.Connection;  
+import java.sql.Connection;   
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
-
 import sosoya.mvc.model.dto.GoodsVO;
+import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.ReviewVO;
 import sosoya.mvc.util.DbUtil;
 
@@ -71,13 +73,10 @@ public class ReviewDAOImpl implements ReviewDAO {
 						// 업데이트 전 상품 평점평균을 가져온다.
 						System.out.println(goodsVO.getGoodsGradeAvg());
 						total = goodsVO.getGoodsGradeAvg() * (reviewCount - 1);
-						System.out.println("total : " + total);
 						
 						goodsAvg = (total + reviewVO.getReviewGrade()) / reviewCount;
-						System.out.println("goodsAvg : " + goodsAvg);
 						
 						goodsAvg = Math.round(goodsAvg*10)/10.0f;
-						System.out.println("goodsAvg : " + goodsAvg);
 					}
 					
 					goodsDao.updateGoodsAvg(reviewVO.getGoodsCode(), goodsAvg, con);
@@ -88,6 +87,37 @@ public class ReviewDAOImpl implements ReviewDAO {
 			DbUtil.close(con, ps, null);
 		}
 		return result;
+	}
+	
+	/**
+	 * ID와 GOODS_CODE에 해당하는 리뷰가 작성 돼 있는지 검사한다.
+	 * */
+	@Override
+	public ReviewVO selectByReview(ReviewVO reviewVO) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = sosoyaSql.getProperty("REVIEW.SELECTBYREVIEW");
+		ReviewVO reviewVoCheck = null;
+		
+		try {
+			con = DbUtil.getConnection();
+			
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1, reviewVO.getId());
+			ps.setInt(2, reviewVO.getGoodsCode());
+			
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				reviewVoCheck = new ReviewVO();
+				reviewVoCheck.setReviewCode(rs.getInt(1));
+			}
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}
+		
+		return reviewVoCheck;
 	}
 
 	/**
@@ -114,4 +144,37 @@ public class ReviewDAOImpl implements ReviewDAO {
 		return count;
 	}
 	
+	/**S
+	 * 내가 작성한 전체 리뷰조회
+	 */
+	@Override
+	public List<ReviewVO> selectAllReview(MemberVO memberVO) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<ReviewVO> reviewVoList = new ArrayList<ReviewVO>();
+		String sql = sosoyaSql.getProperty("REVEIW.SELECTALLREVIEW");
+		
+		try {
+			con = DbUtil.getConnection();
+			
+			ps = con.prepareStatement(sql);
+			ps.setString(1, memberVO.getId());
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				ReviewVO reviewVO = new ReviewVO(0, sql, 0, sql, sql, 0, sql);
+				
+				// goodsCode에 해당하는 객체를 reviewVO에 의존성 주입해준다.
+				
+			}
+			
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}
+		
+		
+		return null;
+	}
 }

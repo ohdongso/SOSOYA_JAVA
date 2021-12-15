@@ -10,6 +10,8 @@ public class ReviewVO {
 	private int reviewGrade;
 	private String reviewRegdate;
 	
+	private GoodsVO goodsVO;
+	
 	// 생성자
 	public ReviewVO() {}
 	public ReviewVO(int reviewCode, String id, int goodsCode, String reviewTitle, String reviewContent, int reviewGrade,
@@ -22,6 +24,18 @@ public class ReviewVO {
 		this.reviewContent = reviewContent;
 		this.reviewGrade = reviewGrade;
 		this.reviewRegdate = reviewRegdate;
+	}
+	public ReviewVO(int reviewCode, String id, int goodsCode, String reviewTitle, String reviewContent, int reviewGrade,
+			String reviewRegdate, GoodsVO goodsVO) {
+		super();
+		this.reviewCode = reviewCode;
+		this.id = id;
+		this.goodsCode = goodsCode;
+		this.reviewTitle = reviewTitle;
+		this.reviewContent = reviewContent;
+		this.reviewGrade = reviewGrade;
+		this.reviewRegdate = reviewRegdate;
+		this.goodsVO = goodsVO;
 	}
 	
 	// getter, setter
@@ -67,12 +81,18 @@ public class ReviewVO {
 	public void setReviewRegdate(String reviewRegdate) {
 		this.reviewRegdate = reviewRegdate;
 	}
+	public GoodsVO getGoodsVO() {
+		return goodsVO;
+	}
+	public void setGoodsVO(GoodsVO goodsVO) {
+		this.goodsVO = goodsVO;
+	}
 	
 	// toString
 	@Override
 	public String toString() {
 		return "ReviewVO [reviewCode=" + reviewCode + ", id=" + id + ", goodsCode=" + goodsCode + ", reviewTitle="
 				+ reviewTitle + ", reviewContent=" + reviewContent + ", reviewGrade=" + reviewGrade + ", reviewRegdate="
-				+ reviewRegdate + "]";
+				+ reviewRegdate + ", goodsVO=" + goodsVO + "]";
 	}
 }
