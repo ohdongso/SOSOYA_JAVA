@@ -9,6 +9,7 @@ import sosoya.mvc.model.dto.GoodsVO;
 import sosoya.mvc.model.dto.OrdersDetailsVO;
 import sosoya.mvc.model.dto.OrdersVO;
 import sosoya.mvc.model.dto.PaymentVO;
+import sosoya.mvc.model.dto.ReviewVO;
 
 public class SuccessView {
 	/**
@@ -19,12 +20,27 @@ public class SuccessView {
 	}
 	
 	/**
+	 * 전체 리뷰내용 출력
+	 * */
+	public static void printAllReview(List<ReviewVO> reviewVoList) {
+		int index = 0;
+		
+		for(ReviewVO reviewVO : reviewVoList){
+			System.out.println(++index + "번째 리뷰" + " | 리뷰코드:" + reviewVO.getReviewCode() + " | 회원아이디:" + reviewVO.getId() + " | 상품이름:" + reviewVO.getGoodsVO().getGoodsName());
+			System.out.println("  리뷰제목 ▶ " + reviewVO.getReviewTitle());
+			System.out.println("  리뷰내용 ▶ " + reviewVO.getReviewContent());
+			System.out.println("  등록날짜 ▶ " + reviewVO.getReviewRegdate());
+			System.out.println("  상품평점 ▶ " + reviewVO.getReviewGrade() + "\n");
+		}
+	}
+	
+	/**
 	 * 결제내역 출력
 	 * */
 	public static void printPayment(PaymentVO paymentVO) {
 		System.out.println("회원아이디:" + paymentVO.getMemberVO().getId() + " | 결제코드:" + paymentVO.getPaymentCode() 
 		+ " | 주문코드:" + paymentVO.getOrdersCode() + " | 결제날짜:" + paymentVO.getPaymentDate());
-
+		
 		List<OrdersVO> orderVoList = new ArrayList<>();
 		orderVoList.add(paymentVO.getOrdersVO());
 		printOrderByMemberId(orderVoList);

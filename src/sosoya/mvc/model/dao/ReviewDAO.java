@@ -1,6 +1,6 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.Connection;
+import java.sql.Connection; 
 import java.sql.SQLException;
 import java.util.List;
 
@@ -35,4 +35,18 @@ public interface ReviewDAO {
 	 * @return List<ReviewVO> reviewVoList
 	 * */
 	public List<ReviewVO> selectAllReview(MemberVO memberVO) throws SQLException;
+	
+	/**
+	 * 상품이름으로 리뷰 검색하기
+	 * @param MemberVO memberVO, String goodsName
+	 * @return List<ReviewVO> reviewVoList
+	 * */
+	public List<ReviewVO> selectGoodsNameReview(MemberVO memberVO, String goodsName) throws SQLException;
+	
+	/**
+	 * 리뷰수정
+	 * @param ReviewVO reviewVO
+	 * @return int result
+	 * */
+	public int updateReview(ReviewVO reviewVO) throws SQLException;
 }

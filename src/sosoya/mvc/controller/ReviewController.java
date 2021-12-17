@@ -1,7 +1,9 @@
 package sosoya.mvc.controller;
 
 import java.sql.SQLException;
+import java.util.List;
 
+import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.ReviewVO;
 import sosoya.mvc.model.service.ReviewService;
 import sosoya.mvc.model.service.ReviewServiceImpl;
@@ -26,12 +28,35 @@ public class ReviewController {
 	/**
 	 * 내가작성한 전체 리뷰보기
 	 * */
-	public static void selectAllReview() {
+	public static void selectAllReview(MemberVO memberVO) {
 		try {
-			
-		} catch (Exception e) {
-			
+			List<ReviewVO> reviewVoList = reviewService.selectAllReview(memberVO);
+			SuccessView.printAllReview(reviewVoList);
+		} catch (SQLException e) {
+			FailView.errorMessage(e.getMessage());
 		}
 	}
 	
+	/**
+	 * 상품이름으로 리뷰 검색하기
+	 */
+	public static void selectGoodsNameReview(MemberVO memberVO, String goodsName) {
+		try {
+			List<ReviewVO> reviewVoList = reviewService.selectGoodsNameReview(memberVO, goodsName);
+			SuccessView.printAllReview(reviewVoList);
+		} catch (SQLException e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 리뷰수정하기
+	 */
+	public static void updateReview(ReviewVO reviewVO) {
+		try {
+			
+		} catch (Exception e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
 }

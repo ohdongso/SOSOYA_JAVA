@@ -1,6 +1,6 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.Connection;   
+import java.sql.Connection;    
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -144,7 +144,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 		return count;
 	}
 	
-	/**S
+	/**
 	 * 내가 작성한 전체 리뷰조회
 	 */
 	@Override
@@ -164,17 +164,77 @@ public class ReviewDAOImpl implements ReviewDAO {
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				ReviewVO reviewVO = new ReviewVO(0, sql, 0, sql, sql, 0, sql);
+				ReviewVO reviewVO = new ReviewVO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), 
+						rs.getString(5), rs.getInt(6), rs.getString(7));
 				
-				// goodsCode에 해당하는 객체를 reviewVO에 의존성 주입해준다.
+				// 의존성 주입
+				GoodsVO goodsVO = goodsDao.selectByGoods(reviewVO.getGoodsCode());
+				reviewVO.setGoodsVO(goodsVO);
 				
+				reviewVO.setMemberVO(memberVO);
+				
+				reviewVoList.add(reviewVO);
 			}
-			
 		} finally {
 			DbUtil.close(con, ps, rs);
+		}		
+		return reviewVoList;
+	}
+	
+	/**
+	 * 상품이름으로 리뷰 검색하기
+	 */
+	@Override
+	public List<ReviewVO> selectGoodsNameReview(MemberVO memberVO, String goodsName) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<ReviewVO> reviewVoList = new ArrayList<ReviewVO>();
+		String sql = sosoyaSql.getProperty("REVIEW.SELECTGOODSNAMEREVIEW");
+		
+		try {
+			con = DbUtil.getConnection();
+			
+			ps = con.prepareStatement(sql);			
+			ps.setString(1, memberVO.getId());
+			ps.setString(2, "%" + goodsName + "%");
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				ReviewVO reviewVO = new ReviewVO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), 
+						rs.getString(5), rs.getInt(6), rs.getString(7));
+				
+				// 의존성 주입
+				GoodsVO goodsVO = goodsDao.selectByGoods(reviewVO.getGoodsCode());
+				reviewVO.setGoodsVO(goodsVO);
+				
+				reviewVO.setMemberVO(memberVO);
+				
+				reviewVoList.add(reviewVO);
+			}
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}	
+		return reviewVoList;
+	}
+
+	/**
+	 * 리뷰수정
+	 */
+	@Override
+	public int updateReview(ReviewVO reviewVO) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = sosoyaSql.getProperty("");
+		int result = 0;
+		
+		// 서비스에서, 리뷰코드에 해당하는 리뷰가 있는지 유효성 검사부터 해야된다.
+		try {
+			
+		} catch (Exception e) {
+			
 		}
 		
-		
-		return null;
+		return 0;
 	}
 }

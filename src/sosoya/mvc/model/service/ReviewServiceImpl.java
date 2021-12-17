@@ -1,9 +1,11 @@
 package sosoya.mvc.model.service;
 
-import java.sql.SQLException; 
+import java.sql.SQLException;
+import java.util.List;
 
 import sosoya.mvc.model.dao.ReviewDAO;
 import sosoya.mvc.model.dao.ReviewDAOImpl;
+import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.ReviewVO;
 
 public class ReviewServiceImpl implements ReviewService {
@@ -20,5 +22,27 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		int result = reviewDao.insertReview(reviewVO);
 		if(result == 0) throw new SQLException("리뷰가 등록되지 않았습니다.");
+	}
+	
+	/**
+	 * 내가 작성한 전체 리뷰조회
+	 */
+	@Override
+	public List<ReviewVO> selectAllReview(MemberVO memberVO) throws SQLException {
+		List<ReviewVO> reviewVoList = reviewDao.selectAllReview(memberVO);
+		if(reviewVoList.size() == 0) throw new SQLException("작성된 리뷰가 없습니다.");
+		
+		return reviewVoList;
+	}
+	
+	/**
+	 * 상품이름으로 리뷰 검색하기
+	 */
+	@Override
+	public List<ReviewVO> selectGoodsNameReview(MemberVO memberVO, String goodsName) throws SQLException {
+		List<ReviewVO> reviewVoList = reviewDao.selectGoodsNameReview(memberVO, goodsName);
+		if(reviewVoList.size() == 0) throw new SQLException("검색한 이름에 해당하는 상품이 없습니다.");
+		
+		return reviewVoList;
 	}
 }

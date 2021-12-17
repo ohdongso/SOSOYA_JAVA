@@ -1,7 +1,6 @@
 package sosoya.mvc.view;
 
 import java.util.Scanner; 
-
 import sosoya.mvc.controller.ReviewController;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.ReviewVO;
@@ -64,8 +63,40 @@ public class ReviewView {
 		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
 		System.out.println("=== 내가작성한 리뷰 보기 ===");
 		
+		ReviewController.selectAllReview(memberVO);
+	}
+	
+	// 상품코드로리뷰검색
+	public static void printGoodsNameReview(MemberVO memberVO) {
+		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
+		System.out.println("=== 상품이름으로리뷰검색 ===");
+		
+		System.out.print("상품 이름을 입력해주세요: ");
+		String goodsName = sc.nextLine();
+		
+		ReviewController.selectGoodsNameReview(memberVO, goodsName);
+	}
+	
+	// 리뷰수정
+	public static void printUpdateReview(MemberVO memberVO) {
+		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
+		System.out.println("=== 리뷰수정 ===");
+		
+		System.out.print("수정할 리뷰코드를 입력해주세요: ");
+		int reviewCode = Integer.parseInt(sc.nextLine());
+		
+		System.out.print("수정할 리뷰제목를 입력해주세요: ");
+		String reviewTitle = sc.nextLine();
+		
+		System.out.print("수정할 리뷰내용을 입력해주세요: ");
+		String reviewContent = sc.nextLine();
+		
+		System.out.print("수정할 상품평점을 입력해주세요: ");
+		int reviewGrade = Integer.parseInt(sc.nextLine());
+		
+		ReviewVO reviewVO = new ReviewVO(reviewCode, reviewTitle, reviewContent, reviewGrade);
 		
 	}
 	
-	
+	// 리뷰삭제
 }
