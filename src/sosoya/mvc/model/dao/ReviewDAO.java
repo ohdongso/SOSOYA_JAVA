@@ -44,6 +44,13 @@ public interface ReviewDAO {
 	public List<ReviewVO> selectGoodsNameReview(MemberVO memberVO, String goodsName) throws SQLException;
 	
 	/**
+	 * 리뷰코드로 리뷰검색
+	 * @param int reviewCode
+	 * @return ReviewVO reviewVO
+	 * */
+	public ReviewVO selectByReveiwCode(int reviewCode) throws SQLException;
+	
+	/**
 	 * 리뷰수정
 	 * @param ReviewVO reviewVO
 	 * @return int result

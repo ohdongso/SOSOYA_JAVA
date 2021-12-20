@@ -27,4 +27,11 @@ public interface ReviewService {
 	 * @return List<ReviewVO> reviewVoList
 	 * */
 	public List<ReviewVO> selectGoodsNameReview(MemberVO memberVO, String goodsName) throws SQLException;
+	
+	/**
+	 * 리뷰수정
+	 * @param ReviewVO reviewVO
+	 * @return
+	 * */
+	public void updateReview(ReviewVO reviewVO) throws SQLException;
 }

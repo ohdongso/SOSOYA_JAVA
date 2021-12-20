@@ -225,16 +225,99 @@ public class ReviewDAOImpl implements ReviewDAO {
 	public int updateReview(ReviewVO reviewVO) throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;
-		String sql = sosoyaSql.getProperty("");
+		
+		// ==> 여기서 부터 하면 된다.
+		String sql = sosoyaSql.getProperty("REVIEW.UPDATEREVIEW");
 		int result = 0;
 		
-		// 서비스에서, 리뷰코드에 해당하는 리뷰가 있는지 유효성 검사부터 해야된다.
 		try {
+			con = DbUtil.getConnection();
 			
-		} catch (Exception e) {
+			// 오토커밋을 하지 않겠다.
+			con.setAutoCommit(false);
 			
+			// 트랜잭션 시작
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1, reviewVO.getId());
+			ps.setInt(2, reviewVO.getGoodsCode());
+			ps.setString(3, reviewVO.getReviewTitle());
+			ps.setString(4, reviewVO.getReviewContent());
+			ps.setInt(5, reviewVO.getReviewGrade());
+			
+			// REVIEW테이블에 데이터를 추가한다.
+			result = ps.executeUpdate();
+			if(result == 0) {
+				con.rollback();
+				throw new SQLException("review테이블에 데이터 삽입 실패...");
+			} else {
+				// goods테이블에 리뷰개수 업데이트
+				result = goodsDao.updateReviewCount(reviewVO.getGoodsCode(), con);
+				if(result == 0) {
+					con.rollback();
+					throw new SQLException("review테이블의 리뷰개수가 증가되지 않았습니다.");
+				}
+				
+				// 현재 상품에 평점평균을 가져온다.
+				GoodsVO goodsVO = goodsDao.selectGoodsAvg(reviewVO.getGoodsCode(), con);
+				
+				if(goodsVO == null) {
+					con.rollback();
+					throw new SQLException("goods테이블의 평점평균을 가져오지 못했습니다.");
+				} else {
+					// insert된 review개수가 저장된다.
+					int reviewCount = selectReviewCount(reviewVO.getGoodsCode(), con);
+					
+					// 현재상품의 평점평균 * 
+					float total = 0.0f;
+					float goodsAvg = 0.0f;
+					if(reviewCount == 1) {
+						goodsAvg = reviewVO.getReviewGrade();
+					} else {
+						// 업데이트 전 상품 평점평균을 가져온다.
+						System.out.println(goodsVO.getGoodsGradeAvg());
+						total = goodsVO.getGoodsGradeAvg() * (reviewCount - 1);
+						
+						goodsAvg = (total + reviewVO.getReviewGrade()) / reviewCount;
+						
+						goodsAvg = Math.round(goodsAvg*10)/10.0f;
+					}
+					
+					goodsDao.updateGoodsAvg(reviewVO.getGoodsCode(), goodsAvg, con);
+				}
+			}	
+		} finally {
+			con.commit();
+			DbUtil.close(con, ps, null);
 		}
+		return result;
+	}
+	
+	/**
+	 * 리뷰코드로 리뷰검색
+	 */
+	@Override
+	public ReviewVO selectByReveiwCode(int reviewCode) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		ReviewVO reviewVO = null;
+		String sql = sosoyaSql.getProperty("REVIEW.SELECTBYREVIEWCODE");
 		
-		return 0;
+		try {
+			con = DbUtil.getConnection();
+			
+			ps = con.prepareStatement(sql);			
+			ps.setInt(1, reviewCode);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				reviewVO = new ReviewVO(); 
+				reviewVO.setReviewCode(rs.getInt(1));			
+			}
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}	
+		return reviewVO;
 	}
 }

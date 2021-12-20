@@ -91,9 +91,18 @@ public class ReviewView {
 		System.out.print("수정할 리뷰내용을 입력해주세요: ");
 		String reviewContent = sc.nextLine();
 		
-		System.out.print("수정할 상품평점을 입력해주세요: ");
-		int reviewGrade = Integer.parseInt(sc.nextLine());
-		
+		int reviewGrade = 0;
+		while(true) {
+			System.out.print("수정할 상품평점을 입력해주세요: ");
+			reviewGrade = Integer.parseInt(sc.nextLine());
+			
+			if(reviewGrade==1||reviewGrade==2||reviewGrade==3||reviewGrade==4||reviewGrade==5) {
+				break;
+			} else {
+				System.out.println("평점은 1~5사이 숫자를 입력해 주세요.");
+			}
+		}
+
 		ReviewVO reviewVO = new ReviewVO(reviewCode, reviewTitle, reviewContent, reviewGrade);
 		
 	}
