@@ -54,8 +54,10 @@ public class ReviewController {
 	 */
 	public static void updateReview(ReviewVO reviewVO) {
 		try {
-			
-		} catch (Exception e) {
+			reviewService.updateReview(reviewVO);
+			SuccessView.printMessage("리뷰수정이 완료 되었습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
 			FailView.errorMessage(e.getMessage());
 		}
 	}

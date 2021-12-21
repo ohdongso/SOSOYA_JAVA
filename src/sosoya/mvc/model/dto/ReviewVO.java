@@ -15,11 +15,13 @@ public class ReviewVO {
 	
 	// 생성자
 	public ReviewVO() {}
-	public ReviewVO(int reviewCode, String reviewTitle, String reviewContent, int reviewGrade) {
+	public ReviewVO(int reviewCode, String reviewTitle, String reviewContent, int reviewGrade, MemberVO memberVO) {
+		super();
 		this.reviewCode = reviewCode;
 		this.reviewTitle = reviewTitle;
 		this.reviewContent = reviewContent;
 		this.reviewGrade = reviewGrade;
+		this.memberVO = memberVO;
 	}
 	public ReviewVO(int reviewCode, String id, int goodsCode, String reviewTitle, String reviewContent, int reviewGrade,
 			String reviewRegdate) {

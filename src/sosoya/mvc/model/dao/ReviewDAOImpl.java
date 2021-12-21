@@ -15,6 +15,7 @@ import sosoya.mvc.util.DbUtil;
 public class ReviewDAOImpl implements ReviewDAO {
 	private Properties sosoyaSql = DbUtil.getProFile();
 	private GoodsDAO goodsDao = new GoodsDAOImpl();
+	private MemberDAO memberDao = new MemberDAOImpl();
 	
 	/**
 	 * 리뷰등록하기
@@ -226,7 +227,6 @@ public class ReviewDAOImpl implements ReviewDAO {
 		Connection con = null;
 		PreparedStatement ps = null;
 		
-		// ==> 여기서 부터 하면 된다.
 		String sql = sosoyaSql.getProperty("REVIEW.UPDATEREVIEW");
 		int result = 0;
 		
@@ -239,20 +239,27 @@ public class ReviewDAOImpl implements ReviewDAO {
 			// 트랜잭션 시작
 			ps = con.prepareStatement(sql);
 			
-			ps.setString(1, reviewVO.getId());
-			ps.setInt(2, reviewVO.getGoodsCode());
-			ps.setString(3, reviewVO.getReviewTitle());
-			ps.setString(4, reviewVO.getReviewContent());
-			ps.setInt(5, reviewVO.getReviewGrade());
+			ps.setString(1, reviewVO.getReviewTitle());
+			ps.setString(2, reviewVO.getReviewContent());
+			ps.setInt(3, reviewVO.getReviewGrade());
+			ps.setInt(4, reviewVO.getReviewCode());
 			
-			// REVIEW테이블에 데이터를 추가한다.
+			// REVIEW테이블에 데이터를 수정한다.
 			result = ps.executeUpdate();
+			
 			if(result == 0) {
 				con.rollback();
-				throw new SQLException("review테이블에 데이터 삽입 실패...");
-			} else {
-				// goods테이블에 리뷰개수 업데이트
+				throw new SQLException("review테이블에 데이터 수정 실패...");
+			} else {				
+				// update를 하면 commit을 하기전에 변경된 데이터가 검색되는지 확인.
+				// update구문을 실행 됐지만, commit이 실행되지 않았기 때문에 수정전 데이터가 출력된다.
+				// System.out.println(this.selectByReveiwCode(reviewVO.getReviewCode()));
+				// 즉 commit을 하기전에는 기존데이터가 검색된다.
+				
+				// goods테이블의 상품에 대한 평점평균을 변경
+				// ==> 여기서 부터 하면 된다.
 				result = goodsDao.updateReviewCount(reviewVO.getGoodsCode(), con);
+				
 				if(result == 0) {
 					con.rollback();
 					throw new SQLException("review테이블의 리뷰개수가 증가되지 않았습니다.");
@@ -312,8 +319,15 @@ public class ReviewDAOImpl implements ReviewDAO {
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				reviewVO = new ReviewVO(); 
-				reviewVO.setReviewCode(rs.getInt(1));			
+				reviewVO = new ReviewVO(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), 
+						rs.getString(5), rs.getInt(6), rs.getString(7));
+				
+				// 의존성 주입
+				GoodsVO goodsVO = goodsDao.selectByGoods(reviewVO.getGoodsCode());
+				reviewVO.setGoodsVO(goodsVO);
+				
+				MemberVO memberVO = memberDao.selectByMember(reviewVO.getId());
+				reviewVO.setMemberVO(memberVO);
 			}
 		} finally {
 			DbUtil.close(con, ps, rs);

@@ -103,8 +103,9 @@ public class ReviewView {
 			}
 		}
 
-		ReviewVO reviewVO = new ReviewVO(reviewCode, reviewTitle, reviewContent, reviewGrade);
+		ReviewVO reviewVO = new ReviewVO(reviewCode, reviewTitle, reviewContent, reviewGrade,memberVO);
 		
+		ReviewController.updateReview(reviewVO);
 	}
 	
 	// 리뷰삭제

@@ -52,10 +52,9 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public void updateReview(ReviewVO reviewVO) throws SQLException {
 		ReviewVO checkReviewVo = reviewDao.selectByReveiwCode(reviewVO.getReviewCode());
-		if(checkReviewVo == null) throw new SQLException("리뷰코드에 해당하는 리보가 존재하지 않습니다.");
+		if(checkReviewVo == null) throw new SQLException("리뷰코드에 해당하는 리뷰가 존재하지 않습니다.");
 		
-		
-		
-		return 0;
+		int result = reviewDao.updateReview(reviewVO);
+		if(result == 0) throw new SQLException("리뷰가 수정되지 않았습니다.");
 	}
 }
