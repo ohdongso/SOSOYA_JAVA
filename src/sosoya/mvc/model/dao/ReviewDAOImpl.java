@@ -1,6 +1,6 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.Connection;    
+import java.sql.Connection;      
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,8 +14,9 @@ import sosoya.mvc.util.DbUtil;
 
 public class ReviewDAOImpl implements ReviewDAO {
 	private Properties sosoyaSql = DbUtil.getProFile();
-	private GoodsDAO goodsDao = new GoodsDAOImpl();
-	private MemberDAO memberDao = new MemberDAOImpl();
+	private static GoodsDAO goodsDao = new GoodsDAOImpl();
+	private static MemberDAO memberDao = new MemberDAOImpl();
+	private static ReviewDAO reviewDao = new ReviewDAOImpl();
 	
 	/**
 	 * 리뷰등록하기
@@ -65,7 +66,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 					// insert된 review개수가 저장된다.
 					int reviewCount = selectReviewCount(reviewVO.getGoodsCode(), con);
 					
-					// 현재상품의 평점평균 * 
+					// 현재상품의 평점평균
 					float total = 0.0f;
 					float goodsAvg = 0.0f;
 					if(reviewCount == 1) {
@@ -254,16 +255,9 @@ public class ReviewDAOImpl implements ReviewDAO {
 				// update를 하면 commit을 하기전에 변경된 데이터가 검색되는지 확인.
 				// update구문을 실행 됐지만, commit이 실행되지 않았기 때문에 수정전 데이터가 출력된다.
 				// System.out.println(this.selectByReveiwCode(reviewVO.getReviewCode()));
-				// 즉 commit을 하기전에는 기존데이터가 검색된다.
 				
-				// goods테이블의 상품에 대한 평점평균을 변경
-				// ==> 여기서 부터 하면 된다.
-				result = goodsDao.updateReviewCount(reviewVO.getGoodsCode(), con);
-				
-				if(result == 0) {
-					con.rollback();
-					throw new SQLException("review테이블의 리뷰개수가 증가되지 않았습니다.");
-				}
+				// 리뷰코드에 대한 goodsCode를 가지와서 reviewVO에 저장 해준다.
+				reviewVO.setGoodsCode(reviewDao.selectByReveiwCode(reviewVO.getReviewCode()).getGoodsCode());
 				
 				// 현재 상품에 평점평균을 가져온다.
 				GoodsVO goodsVO = goodsDao.selectGoodsAvg(reviewVO.getGoodsCode(), con);
@@ -272,24 +266,35 @@ public class ReviewDAOImpl implements ReviewDAO {
 					con.rollback();
 					throw new SQLException("goods테이블의 평점평균을 가져오지 못했습니다.");
 				} else {
-					// insert된 review개수가 저장된다.
+					// 현재 리뷰개수를 가져온다.
 					int reviewCount = selectReviewCount(reviewVO.getGoodsCode(), con);
 					
-					// 현재상품의 평점평균 * 
 					float total = 0.0f;
 					float goodsAvg = 0.0f;
-					if(reviewCount == 1) {
+					if(reviewCount == 1) { // 리뷰가 한개일 경우
+						// 수정할 리뷰값을 reviewVO에서 담아 변수에 저장한다.
 						goodsAvg = reviewVO.getReviewGrade();
-					} else {
-						// 업데이트 전 상품 평점평균을 가져온다.
-						System.out.println(goodsVO.getGoodsGradeAvg());
-						total = goodsVO.getGoodsGradeAvg() * (reviewCount - 1);
+					} else { // 리뷰가 2개 이상일 경우
+						// 상품평점평균 * 리뷰개수 = 총점
+						total = goodsVO.getGoodsGradeAvg() * reviewCount;
 						
+						// 총점 - REVIEW테이블의 GOODS_CODE에 해당하는 평점평균을 가져온다.
+						// 위에서 업데이트 했지만, commit되기 전이라 수정되기 전의 데이터가 출력된다.
+						int beforeReviewScore = reviewDao.selectByReveiwCode(reviewVO.getReviewCode()).getReviewGrade();
+						
+						// 총점 - 수정전 상품평점평균(commit하지 않으면 수정전 데이터를 들고온다.)
+						total = total - beforeReviewScore;
+						
+						// 총점 + 수정후 상품평점평균
+						total = reviewVO.getReviewGrade();
+						
+						// 수정된상품평점평균 = 총점 / 리뷰개수;
 						goodsAvg = (total + reviewVO.getReviewGrade()) / reviewCount;
 						
+						// 소수 둘째자리에서 반올림해서 소수 첫째자리까지 표시한다.
 						goodsAvg = Math.round(goodsAvg*10)/10.0f;
 					}
-					
+					// 상품전체 평균 최종 업데이트.
 					goodsDao.updateGoodsAvg(reviewVO.getGoodsCode(), goodsAvg, con);
 				}
 			}	

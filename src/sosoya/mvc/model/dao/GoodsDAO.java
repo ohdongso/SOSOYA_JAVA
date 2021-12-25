@@ -54,4 +54,10 @@ public interface GoodsDAO {
 	 * @return List<GoodsVO> list
 	 * */
 	public List<GoodsVO> SelectByPriceGoods(int min, int max) throws SQLException;
+	
+	/**
+	 * 
+	 * @param String GoodsName
+	 * @return List<GoodsVO> list
+	 * */
 }

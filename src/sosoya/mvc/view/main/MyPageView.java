@@ -68,7 +68,7 @@ public class MyPageView {
 		while(true) {
 			System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다."   + " / 회원등급[" + memberVO.getGrade() + "] -----");
 			System.out.println("┌──────────────┐");
-			System.out.println("  	 1. 리뷰전체검색				            ");
+			System.out.println("  	 1. 리뷰전체검색				                ");
 			System.out.println("  	 2. 상품이름으로리뷰검색				            ");
 			System.out.println("  	 3. 리뷰수정   					            ");
 			System.out.println("  	 4. 리뷰삭제									");
