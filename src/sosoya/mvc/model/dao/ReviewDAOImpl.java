@@ -345,4 +345,14 @@ public class ReviewDAOImpl implements ReviewDAO {
 		}	
 		return reviewVO;
 	}
+	
+	// ==> 여기서 부터.
+	/**
+	 * 리뷰삭제
+	 */
+	@Override
+	public int deleteReview(ReviewVO reviewVO) throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

@@ -56,4 +56,11 @@ public interface ReviewDAO {
 	 * @return int result
 	 * */
 	public int updateReview(ReviewVO reviewVO) throws SQLException;
+	
+	/**
+	 * 리뷰삭제
+	 * @param reviewCode
+	 * @return int result
+	 * */
+	public  int deleteReview(ReviewVO reviewVO) throws SQLException;
 }

@@ -92,7 +92,7 @@ public class MyPageView {
 				break;
 			case 4:
 				// 리뷰삭제
-				
+				ReviewView.printDeleteReview(memberVO);
 				break;
 			case 5:
 				// 뒤로가기

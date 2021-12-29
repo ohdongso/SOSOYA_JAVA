@@ -109,4 +109,13 @@ public class ReviewView {
 	}
 	
 	// 리뷰삭제
+	public static void printDeleteReview(MemberVO memberVO) {
+		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
+		System.out.println("=== 리뷰삭제 ===");
+		
+		System.out.print("삭제할 리뷰코드를 입력해주세요: ");
+		int reviewCode = Integer.parseInt(sc.nextLine());
+		
+		// ReviewController.updateReview(reviewVO);
+	}
 }
