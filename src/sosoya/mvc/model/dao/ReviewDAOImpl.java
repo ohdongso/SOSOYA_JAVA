@@ -346,13 +346,90 @@ public class ReviewDAOImpl implements ReviewDAO {
 		return reviewVO;
 	}
 	
-	// ==> 여기서 부터.
 	/**
 	 * 리뷰삭제
 	 */
 	@Override
 	public int deleteReview(ReviewVO reviewVO) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		Connection con = null;
+		PreparedStatement ps = null;
+		
+		String sql = sosoyaSql.getProperty("REVIEW.DELETEREVIEW");
+		int result = 0;
+		
+		try {
+			con = DbUtil.getConnection();
+			
+			// 오토커밋을 하지 않겠다.
+			con.setAutoCommit(false);
+			
+			// 트랜잭션 시작
+			ps = con.prepareStatement(sql);
+			
+			ps.setInt(1, reviewVO.getReviewCode());
+			
+			// REVIEW테이블에 데이터삭제한다.
+			result = ps.executeUpdate();
+			
+			if(result == 0) {
+				con.rollback();
+				throw new SQLException("review테이블에 데이터 삭제 실패...");
+			} else {				
+				// 여기서부터
+				// 리뷰데이터 삭제하면 어떻게 될지 생각해보자.
+				
+				// 리뷰코드에 대한 goodsCode를 가지와서 reviewVO에 저장 해준다.
+				reviewVO.setGoodsCode(reviewDao.selectByReveiwCode(reviewVO.getReviewCode()).getGoodsCode());
+				
+				// 현재 상품에 평점평균을 가져온다.
+				GoodsVO goodsVO = goodsDao.selectGoodsAvg(reviewVO.getGoodsCode(), con);
+				
+				if(goodsVO == null) {
+					con.rollback();
+					throw new SQLException("goods테이블의 평점평균을 가져오지 못했습니다.");
+				} else {
+					// 현재 리뷰개수를 가져온다.
+					int reviewCount = selectReviewCount(reviewVO.getGoodsCode(), con);
+					
+					float total = 0.0f;
+					float goodsAvg = 0.0f;
+					if(reviewCount == 1) { // 리뷰가 한개일 경우
+						// 수정할 리뷰값을 reviewVO에서 담아 변수에 저장한다.
+						goodsAvg = reviewVO.getReviewGrade();
+					} else { // 리뷰가 2개 이상일 경우
+						// 상품평점평균 * 리뷰개수 = 총점
+						total = goodsVO.getGoodsGradeAvg() * reviewCount;
+						System.out.println("total : " + total);
+						
+						// 총점 - REVIEW테이블의 GOODS_CODE에 해당하는 평점평균을 가져온다.
+						// 위에서 업데이트 했지만, commit되기 전이라 수정되기 전의 데이터가 출력된다.
+						int beforeReviewScore = reviewDao.selectByReveiwCode(reviewVO.getReviewCode()).getReviewGrade();
+						System.out.println("beforeReviewScore : " + beforeReviewScore);
+						
+						// 총점 - 수정전 상품평점평균(commit하지 않으면 수정전 데이터를 들고온다.)
+						total = total - beforeReviewScore;
+						System.out.println("total - beforeReviewScore : " + total);
+						
+						// 총점 + 수정후 상품평점평균
+						total = total + reviewVO.getReviewGrade();
+						System.out.println("reviewVO.getReviewGrade() : " + total);
+						
+						// 수정된상품평점평균 = 총점 / 리뷰개수;
+						goodsAvg = total / reviewCount;
+						System.out.println("goodsAvg : " + goodsAvg);
+						
+						// 소수 둘째자리에서 반올림해서 소수 첫째자리까지 표시한다.
+						goodsAvg = Math.round(goodsAvg*10)/10.0f;
+						System.out.println("goodsAvg : " + goodsAvg);
+					}
+					// 상품전체 평균 최종 업데이트.
+					goodsDao.updateGoodsAvg(reviewVO.getGoodsCode(), goodsAvg, con);
+				}
+			}	
+		} finally {
+			con.commit();
+			DbUtil.close(con, ps, null);
+		}
+		return result;
 	}
 }

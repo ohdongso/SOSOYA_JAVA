@@ -102,7 +102,7 @@ public class ReviewView {
 				System.out.println("평점은 1~5사이 숫자를 입력해 주세요.");
 			}
 		}
-
+		
 		ReviewVO reviewVO = new ReviewVO(reviewCode, reviewTitle, reviewContent, reviewGrade,memberVO);
 		
 		ReviewController.updateReview(reviewVO);
