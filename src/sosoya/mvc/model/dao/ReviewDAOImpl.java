@@ -377,6 +377,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 			} else {				
 				// 여기서부터
 				// 리뷰데이터 삭제하면 어떻게 될지 생각해보자.
+				// 
 				
 				// 리뷰코드에 대한 goodsCode를 가지와서 reviewVO에 저장 해준다.
 				reviewVO.setGoodsCode(reviewDao.selectByReveiwCode(reviewVO.getReviewCode()).getGoodsCode());
