@@ -1,6 +1,6 @@
 package sosoya.mvc.model.dao;
 
-import java.sql.Connection;
+import java.sql.Connection; 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +11,51 @@ import sosoya.mvc.util.DbUtil;
 
 public class MemberDAOImpl implements MemberDAO {
 	private Properties sosoyaSql = DbUtil.getProFile();
+	
+	/**
+	 * 로그인
+	 * */
+	@Override
+	public MemberVO login(String id, String password) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = sosoyaSql.getProperty("MEMBER.LOGIN");
+		MemberVO memberVO = null;
+		
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			ps.setString(2, password);
+			
+			// 1.활동중, 2.관리자, 3.탈퇴한회원
+			ps.setInt(3, 1);
+			ps.setInt(4, 2);
+			
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				int purchasesCount = rs.getInt("PURCHASESCOUNT");
+				int state = rs.getInt("STATE");
+				
+				memberVO = new MemberVO(id, password, rs.getString("NAME"), rs.getInt("PURCHASESCOUNT"), rs.getString("GRADE"), 
+						   rs.getInt("STATE"), rs.getString("EMAIL"), rs.getString("PHONE"), rs.getString("ADDRESS"), rs.getString("REGDATE"));
+								
+				if(state == 1) {
+					if(purchasesCount <= 10) memberVO.setGrade("C");
+					else if(purchasesCount <= 20) memberVO.setGrade("B");
+					else memberVO.setGrade("A");
+					
+					int result = this.updateMemberGrade(id, memberVO.getGrade());
+					if(result == 0) throw new SQLException("로그인 후 등급이 조회되지 않았습니다.");
+				}
+			}		
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}
+		return memberVO;
+	}
 	
 	/**
 	 * 회원등록
@@ -75,12 +120,12 @@ public class MemberDAOImpl implements MemberDAO {
 	 * 회원 아이디 중복체크
 	 * */
 	@Override
-	public boolean dulicateByMember(String id) throws SQLException {
+	public boolean duplicateByMemberId(String id) throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		boolean result = false;
-		String sql = sosoyaSql.getProperty("MEMBER.DUPLICATE");
+		String sql = sosoyaSql.getProperty("MEMBER.DUPLICATEID");
 		
 		try {
 			con = DbUtil.getConnection();
@@ -96,48 +141,32 @@ public class MemberDAOImpl implements MemberDAO {
 		}
 		return result;
 	}
-
+	
 	/**
-	 * 로그인
+	 * 회원 이메일 중복체크
 	 * */
 	@Override
-	public MemberVO login(String id, String password) throws SQLException {
+	public boolean duplicateByMemberEmail(String email) throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		String sql = sosoyaSql.getProperty("MEMBER.LOGIN");
-		MemberVO memberVO = null;
+		boolean result = false;
+		String sql = sosoyaSql.getProperty("MENBER.DUPLICATEEMAIL");
 		
 		try {
 			con = DbUtil.getConnection();
 			ps = con.prepareStatement(sql);
-			ps.setString(1, id);
-			ps.setString(2, password);
-			ps.setInt(3, 1);
-			ps.setInt(4, 2);
-			
+			ps.setString(1, email);
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				int purchasesCount = rs.getInt("PURCHASESCOUNT");
-				int state = rs.getInt("STATE");
-				
-				memberVO = new MemberVO(id, password, rs.getString("NAME"), rs.getInt("PURCHASESCOUNT"), rs.getString("GRADE"), 
-						   rs.getInt("STATE"), rs.getString("EMAIL"), rs.getString("PHONE"), rs.getString("ADDRESS"), rs.getString("REGDATE"));
-								
-				if(state == 1) {
-					if(purchasesCount <= 10) memberVO.setGrade("C");
-					else if(purchasesCount <= 20) memberVO.setGrade("B");
-					else memberVO.setGrade("A");
-					
-					int result = this.updateMemberGrade(id, memberVO.getGrade());
-					if(result == 0) throw new SQLException();
-				}
-			}		
+				result = true;
+			}
+			
 		} finally {
 			DbUtil.close(con, ps, rs);
-		}
-		return memberVO;
+		}	
+		return result;
 	}
 	
 	/**

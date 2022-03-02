@@ -7,6 +7,14 @@ import sosoya.mvc.exception.NotFoundException;
 import sosoya.mvc.model.dto.MemberVO;
 
 public interface MemberService {
+	
+	/**
+	 * 로그인
+	 * @param String id, String password
+	 * @return MemberVO memberVO
+	 * */
+	public MemberVO login(String id, String password) throws NotFoundException, SQLException;
+	
 	/**
 	 * 회원등록
 	 * @param MemberVO memberVO
@@ -27,13 +35,6 @@ public interface MemberService {
 	 * @return void
 	 * */
 	public void memberStateUpdate(String id) throws SQLException;
-	
-	/**
-	 * 로그인
-	 * @param String id, String password
-	 * @return MemberVO memberVO
-	 * */
-	public MemberVO login(String id, String password) throws NotFoundException, SQLException;
 	
 	/**
 	 * 회원정보수정

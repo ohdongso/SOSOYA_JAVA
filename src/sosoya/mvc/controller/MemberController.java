@@ -15,6 +15,18 @@ public class MemberController {
 	private static MemberService memberService = new MemberServiceImpl();
 	
 	/**
+	 * 로그인
+	 * */
+	public static void login(String id, String password) {
+		try {
+			MemberVO memberVO = memberService.login(id, password);
+			MenuView.printUserMenu(memberVO);
+		} catch (Exception e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
+	
+	/**
 	 * 회원등록
 	 * */
 	public static void inputMember(MemberVO memberVO) {
@@ -41,18 +53,6 @@ public class MemberController {
 		}
 		
 		return memberVO;
-	}
-	
-	/**
-	 * 로그인
-	 * */
-	public static void login(String id, String password) {
-		try {
-			MemberVO memberVO = memberService.login(id, password);
-			MenuView.printUserMenu(memberVO);
-		} catch (Exception e) {
-			FailView.errorMessage(e.getMessage());
-		}
 	}
 	
 	/**

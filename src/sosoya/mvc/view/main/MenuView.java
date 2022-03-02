@@ -1,6 +1,6 @@
 package sosoya.mvc.view.main;
 
-import java.util.Scanner;     
+import java.util.Scanner;      
 import sosoya.mvc.controller.MemberController;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.view.FaqView;
@@ -116,7 +116,7 @@ public class MenuView {
 		String id = sc.nextLine();
 		
 		String password = printPasswordCheck();
-		while(password.equals("1")) {
+		while(password.equals("~!@#$%^&*()_+q")) {
 			password = printPasswordCheck();
 		}
 		
@@ -148,7 +148,7 @@ public class MenuView {
 			return password;
 		} else {
 			System.out.println("비밀번호를 다시 한번 확인해주세요.");
-			return "1";
+			return "~!@#$%^&*()_+q";
 		}
 	}
 }
