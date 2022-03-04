@@ -92,8 +92,7 @@ public class MemberView {
 	
 	// 회원정보수정
 	public static void printMemberUpdate(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
-		System.out.println("=== 비밀번호확인 ===");
+		System.out.println("\n=== 비밀번호확인 ===");
 		System.out.print("비밀번호: ");
 		String passwordCheck = sc.nextLine();
 		
@@ -103,21 +102,94 @@ public class MemberView {
 			return;
 		}
 		
+		// 회원정보 출력
+		System.out.println("\n=== 회원정보 ===");
+		System.out.println("아이디 : " + memberVO.getId());
+		System.out.println("구매횟수 : " + memberVO.getPurchasescount() + "회");
+		System.out.println("회원등급 : " + memberVO.getGrade());
+		System.out.println("이름 : " + memberVO.getName());
+		System.out.println("이메일 : " + memberVO.getEmail());
+		System.out.println("핸드폰 : " + memberVO.getPhone());
+		System.out.println("주소 : " + memberVO.getAddress());
+		System.out.println("가입날짜 : " + memberVO.getRegdate());
+		
 		System.out.println("\n=== 회원정보수정 ===");
 		
-		password = printPasswordCheck();
-		while(password.equals("1")) {
-			password = printPasswordCheck();
+		while(true) {
+			System.out.print("비밀번호를 변경 하시겠습니까?(Y/N) : ");
+			String input = sc.nextLine().toUpperCase();
+			
+			if(input.equals("Y")) {
+				password = printPasswordCheck();
+				while(password.equals("~!@#$%^&*()_+q")) {
+					password = printPasswordCheck();
+				}
+				break; 
+			} else if(!input.equals("N")) {
+				System.out.println("Y 또는 N을 입력해주세요.");
+				continue;
+			}
+			
+			// N이 입력 됐을 경우.
+			password = memberVO.getPassword();
+			break;
 		}
 		
-		System.out.print("핸드폰 : ");
-		String phone = sc.nextLine();
+		String phone = "";
+		while(true) {
+			System.out.print("핸드폰 번호를 변경 하시겠습니까?(Y/N) : ");
+			String input = sc.nextLine().toUpperCase();
+			
+			if(input.equals("Y")) {
+				System.out.print("핸드폰 : ");
+				phone = sc.nextLine();
+				break;
+			} else if(!input.equals("N")) {
+				System.out.println("Y 또는 N을 입력해주세요.");
+				continue;
+			}
+			
+			// N이 입력 됐을 경우.
+			phone = memberVO.getPhone();
+			break;
+		}
 		
-		System.out.print("이메일 : ");
-		String email = sc.nextLine();
-	
-		System.out.print("주소 : ");
-		String address = sc.nextLine();
+		String email = "";
+		while(true) {
+			System.out.print("이메일을 변경 하시겠습니까?(Y/N) : ");
+			String input = sc.nextLine().toUpperCase();
+			
+			if(input.equals("Y")) {
+				System.out.print("이메일 : ");
+				email = sc.nextLine();
+				break;
+			} else if(!input.equals("N")) {
+				System.out.println("Y 또는 N을 입력해주세요.");
+				continue;
+			}
+			
+			// N이 입력 됐을 경우.
+			email = memberVO.getEmail();
+			break;
+		}
+		
+		String address = "";
+		while(true) {
+			System.out.print("주소를 변경 하시겠습니까?(Y/N) : ");
+			String input = sc.nextLine().toUpperCase();
+			
+			if(input.equals("Y")) {
+				System.out.print("주소 : ");
+				address = sc.nextLine();
+				break;
+			} else if(!input.equals("N")) {
+				System.out.println("Y 또는 N을 입력해주세요.");
+				continue;
+			}
+			
+			address = memberVO.getAddress();
+			break;
+		}		
 		
 		MemberVO memberUpdateVO = new MemberVO(memberVO.getId(), password, email, phone, address);
 		MemberController.updateMember(memberUpdateVO);
@@ -135,7 +207,7 @@ public class MemberView {
 			return password;
 		} else {
 			System.out.println("비밀번호를 다시 한번 확인해주세요.");
-			return "1";
+			return "~!@#$%^&*()_+q";
 		}
 	} 
 }

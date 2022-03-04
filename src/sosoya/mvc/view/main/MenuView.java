@@ -1,6 +1,6 @@
 package sosoya.mvc.view.main;
 
-import java.util.Scanner;      
+import java.util.Scanner;       
 import sosoya.mvc.controller.MemberController;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.view.FaqView;
