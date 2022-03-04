@@ -1,6 +1,6 @@
 package sosoya.mvc.view;
 
-import java.util.Scanner; 
+import java.util.Scanner;  
 
 import sosoya.mvc.controller.MemberController;
 import sosoya.mvc.model.dao.MemberDAOImpl;
@@ -34,9 +34,14 @@ public class MemberView {
 				break;
 			case 3:
 				// 회원탈퇴
-				printStateUpdate(memberVO);
-				MenuView.menu();
-				break;
+				int flag = printStateUpdate(memberVO);
+				if(flag == 1) {
+					System.out.println("\n=== SoSoYa Shopping Mall을 이용해 주셔서 감사합니다.^^ ===");
+					System.out.println("회원탈퇴가 완료 되었습니다.");
+					MenuView.menu();
+				} else {
+					break;
+				}
 			case 4:
 				// 뒤로가기
 				try {
@@ -51,29 +56,37 @@ public class MemberView {
 		}
 	}
 	
-	// 회원정보탈퇴
-	public static void printStateUpdate(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
-		System.out.println("=== 회원탈퇴 비밀번호 확인 ===");
+	// 회원정보탈퇴, (1,활동중 2,관리자 3,탈퇴한회원)
+	public static int printStateUpdate(MemberVO memberVO) {
+		System.out.println("\n=== 회원탈퇴 비밀번호 확인 ===");
 		System.out.print("비밀번호: ");
 		String passwordCheck = sc.nextLine();
+		
+		// Y == 1, (비밀번호 일치하지 않을 때 or N or 다른문자열) == 2
+		int flag = 0;
 		
 		String password = memberVO.getPassword();
 		if(!password.equals(passwordCheck)) {
 			System.out.println("비밀번호가 일치하지 않습니다.");
-			return;
+			return flag = 2;
 		}
 		
 		System.out.println("\n=== 회원탈퇴 ===");
 		System.out.print("정말로 회원탈퇴 하시겠습니까??(Y/N) : ");
 		String answer = sc.nextLine();
+		
 		if(answer.toUpperCase().equals("Y")) {
 			MemberController.memberStateUpdate(memberVO.getId());
+			flag = 1;
+			return flag;
 		} else if(answer.toUpperCase().equals("N")) {
 			System.out.println("회원 탈퇴를 취소하셨습니다.");
+			flag = 2;
+			return flag;
 		} else {
 			System.out.println("Y 또는 N을 입력해주세요.");
-			return;
+			flag = 2;
+			return flag;
 		}
 	}
 	
