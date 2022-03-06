@@ -23,18 +23,16 @@ public class GoodsView {
 			switch(menu) {
 			case 1:
 				// 전체검색
-				GoodsController.selectAllGoods();	
+				printSelectAllGoods();		
 				// 1,주문하기 2,장바구니에담기 3,뒤로가기
 				printOrderBasket(memberVO);
 				break;
 			case 2:
 				// 부분검색(1,제품이름 2,가격 3,리뷰개수)
 				printSelectPartSearch(memberVO);
-				// 1,주문하기 2,장바구니에담기 3,뒤로가기
-				printOrderBasket(memberVO);
 				break;
 			case 3:
-				// 뒤로가기
+				// 뒤로가기		
 				return;
 			default :
 				// 1~3번 까지 숫자를 입력해주세요.
@@ -83,7 +81,7 @@ public class GoodsView {
 			System.out.println("┌──────────────┐");
 			System.out.println("  	 1. 상품이름으로검색						");
 			System.out.println("  	 2. 상품가격으로검색						");
-			System.out.println("  	 3. Top3리뷰개수로검색        		    ");
+			System.out.println("  	 3. Top5구매횟수로검색        		    ");
 			System.out.println("  	 4. 뒤로가기                		    ");
 			System.out.println("└──────────────┘");
 			System.out.print("선택>>");
@@ -93,10 +91,14 @@ public class GoodsView {
 			case 1:
 				// 상품이름으로검색
 				printSelectByNameGoods(memberVO);
+				// 1,주문하기 2,장바구니에담기 3,뒤로가기
+				printOrderBasket(memberVO);
 				break;
 			case 2:
 				// 상품가격으로검색
 				printSelectByPriceGoods(memberVO);
+				// 1,주문하기 2,장바구니에담기 3,뒤로가기
+				printOrderBasket(memberVO);
 				break;
 			case 3:
 				// Top3리뷰개수로검색
@@ -106,14 +108,19 @@ public class GoodsView {
 				return;
 			default :
 				// 1~4번 까지 숫자를 입력해주세요.
-				System.out.println("1~34번 까지 숫자를 입력해주세요.");
+				System.out.println("1~4번 까지 숫자를 입력해주세요.");
 				break;
 			}
 		}
 	}
 	
+	// 상품전체검색
+	public static void printSelectAllGoods() {
+		System.out.println("\n=== 상품전체검색 ===");
+		GoodsController.selectAllGoods();
+	}
+	
 	public static void printSelectByNameGoods(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
 		System.out.println("\n=== 상품이름으로검색 ===");
 		
 		String goodsName = "";
@@ -124,16 +131,15 @@ public class GoodsView {
 	}
 	
 	public static void printSelectByPriceGoods(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
 		System.out.println("\n=== 상품가격으로검색 ===");
 		
 		int minPrice = 0;
 		int maxPrice = 0;
 		
-		System.out.print("최소 값 입력 : ");
+		System.out.print("최소 가격 입력 : ");
 		minPrice = Integer.parseInt(sc.nextLine());
 				
-		System.out.print("최대 값 입력 : ");
+		System.out.print("최대 가격 입력 : ");
 		maxPrice = Integer.parseInt(sc.nextLine());
 		
 		GoodsController.SelectByPriceGoods(minPrice, maxPrice);

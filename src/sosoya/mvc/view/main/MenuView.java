@@ -1,6 +1,6 @@
 package sosoya.mvc.view.main;
 
-import java.util.Scanner;       
+import java.util.Scanner;        
 import sosoya.mvc.controller.MemberController;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.view.FaqView;
@@ -25,7 +25,7 @@ public class MenuView {
 				break;
 			case 3:
 				// 종료
-				System.out.println("=== SoSoYa Shopping Mall에 다음에도 방문해주세요.^^ ===");
+				System.out.println("\n=== SoSoYa Shopping Mall에 다음에도 방문해주세요.^^ ===");
 				System.exit(0);
 			default :
 				// 1~3번 까지 숫자를 입력해주세요.
