@@ -33,4 +33,18 @@ public interface BasketService {
 	 * @return List<BasketVO> list
 	 * */
 	public void deleteBasket(int basketCode) throws SQLException;
+	
+	/**
+	 * 장바구니 선택삭제(일반)
+	 * @param int[] basketCode
+	 * @return void
+	 * */
+	public void deletePartBasketNomal(List<Integer> basketCodeList) throws SQLException;
+	
+	/**
+	 * 장바구니 전체삭제(일반)
+	 * @param
+	 * @return
+	 * */
+	public void deleteAllBasketNomal(String memberId) throws SQLException;
 }

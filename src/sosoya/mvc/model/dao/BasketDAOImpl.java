@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -201,7 +203,7 @@ public class BasketDAOImpl implements BasketDAO {
 	}
 	
 	/**
-	 * ID에 해당하는 장바구니 전체삭제
+	 * ID에 해당하는 장바구니 전체삭제(트랜잭션처리)
 	 */
 	@Override
 	public int deleteAllBasket(Connection con, String memberId) throws SQLException {
@@ -220,7 +222,7 @@ public class BasketDAOImpl implements BasketDAO {
 	}
 	
 	/**
-	 * 선택한 장바구니 삭제
+	 * 선택한 장바구니 삭제(트랜잭션처리)
 	 */
 	@Override
 	public int[] deleteByBasket(Connection con, List<OrdersDetailsVO> ordersDetailsVOList) throws SQLException {
@@ -241,6 +243,70 @@ public class BasketDAOImpl implements BasketDAO {
 		} finally {
 			DbUtil.close(null, ps, null);
 		}
+		return result;
+	}
+	
+	/**
+	 * 장바구니 선택삭제
+	 */
+	@Override
+	public void deletePartBasketNomal(List<Integer> basketCodeList) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = sosoyaSql.getProperty("BASKET.DELETE");
+		
+		try {
+			con = DbUtil.getConnection();
+			
+			con.setAutoCommit(false);
+			
+			ps = con.prepareStatement(sql);
+			
+			// 장바구니 코드가 없더라도 -2를 반환하기 때문에
+			// 쿼리를 하나씩 날리고 0을 반환하는 경우 rollback하고 예외를 던진다.
+			// System.out.println("result[] : " + Arrays.toString(result));
+			int result = 0;
+			for(int basketCode : basketCodeList) {
+				ps.setInt(1, basketCode);
+				
+				result = 0;
+				result = ps.executeUpdate();
+				
+				// delete는 트랜잭션 처리할 때, 배치말고 하나씩 쿼리문을 날려 0일때 예외처리를 해준다.
+				// System.out.println(result);
+				
+				if(result == 0) {
+					con.rollback();
+					throw new SQLException("장바구니 코드가 일치하지 않습니다. 다시 한번 확인해주세요.");
+				}		
+			}
+		} finally {
+			con.commit();
+			DbUtil.close(con, ps);
+		}
+	}
+	
+	/**
+	 * 장바구니 전체삭제(일반)
+	 */
+	@Override
+	public int deleteAllBasketNomal(String memberId) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = sosoyaSql.getProperty("BASKET.DELETEALL");
+		int result = 0;
+		
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1, memberId);
+			
+			result = ps.executeUpdate();
+		} finally {
+			DbUtil.close(con, ps);
+		}
+		
 		return result;
 	}
 }

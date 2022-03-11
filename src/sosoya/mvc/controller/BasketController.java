@@ -60,4 +60,28 @@ public class BasketController {
 			FailView.errorMessage(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 장바구니 선택삭제(일반)
+	 * */
+	public static void deletePartBasket(List<Integer> basketCodeList) {
+		try {
+			basketService.deletePartBasketNomal(basketCodeList);
+			SuccessView.printMessage("장바구니 상품 선택삭제가 완료 되었습니다.");
+		} catch (Exception e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 장바구니전체삭제(일반)
+	 * */
+	public static void deleteAllBasket(String memberId) {
+		try {
+			basketService.deleteAllBasketNomal(memberId);
+			SuccessView.printMessage("장바구니 상품 전체삭제가 완료 되었습니다.");
+		} catch (Exception e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
 }

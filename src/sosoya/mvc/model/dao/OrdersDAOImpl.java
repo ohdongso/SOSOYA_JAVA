@@ -201,7 +201,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 				throw new SQLException("PayMentView에서 N을 입력했습니다.....");
 			}
 			
-			// 장바구니 데이터 삭제
+			// 장바구니 데이터 전체삭제
 			result = basketDao.deleteAllBasket(con, memberVO.getId());
 			if(result == 0) {
 				con.rollback();
@@ -266,7 +266,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 					throw new SQLException("orders_details테이블에 데이터 삽입 실패...");
 				}
 			}
-	
+			
 			// 주문수량만큼 재고량 감소하기
 			// order객체의 주문 상세 내역리스트를 넘긴다.
 			re = decrementStock(con, ordersVO.getOrdersDetailsList());
@@ -276,7 +276,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 					throw new SQLException("goods테이블에 재고량 감소 실패...");
 				}
 			}
-
+			
 			// 결제, 장바구니에 담긴상품을 종합하여, payment테이블에 담아야 한다.
 			MemberVO memberVO = memberDao.selectByMember(ordersVO.getId());
 			List<GoodsVO> goodsVoList = new ArrayList<>();
@@ -309,7 +309,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 			for(int i : re) {
 				if(i != Statement.SUCCESS_NO_INFO) {
 					con.rollback();
-					throw new SQLException("basket테이블에 장바구니 데이터 삭제...");
+					throw new SQLException("basket테이블에 장바구니 데이터 삭제 실패...");
 				}
 			}			
 			

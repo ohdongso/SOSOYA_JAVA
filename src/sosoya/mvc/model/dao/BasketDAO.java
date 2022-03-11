@@ -45,14 +45,28 @@ public interface BasketDAO {
 	public int deleteBasket(int basketCode) throws SQLException;
 	
 	/**
-	 * ID에 해당하는 장바구니 전체삭제
+	 * 장바구니 선택삭제(일반)
+	 * @param int[] basketCode
+	 * @return void
+	 * */
+	public void deletePartBasketNomal(List<Integer> basketCodeList) throws SQLException;
+	
+	/**
+	 * 장바구니 전체삭제(일반)
+	 * @param
+	 * @return
+	 * */
+	public int deleteAllBasketNomal(String memberId) throws SQLException;
+			
+	/**
+	 * ID에 해당하는 장바구니 전체삭제(트랜잭션으로 처리)
 	 * @param String memberId
 	 * @return int result
 	 * */
 	public int deleteAllBasket(Connection con, String memberId) throws SQLException;
 	
 	/**
-	 * 선택한 장바구니 삭제
+	 * 선택한 장바구니 삭제(트랜잭션으로 처리)
 	 * @param Connection con, OrdersVO ordersVO
 	 * @return int[] result
 	 */
