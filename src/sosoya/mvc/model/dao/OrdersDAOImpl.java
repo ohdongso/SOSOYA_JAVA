@@ -45,9 +45,9 @@ public class OrdersDAOImpl implements OrdersDAO {
 			ps.setString(1, ordersVO.getId());
 			ps.setString(2, ordersVO.getOrdersDi());
 			
-			// 주문 전체금액
-			// 주문 상세의 전체금액
-			ps.setInt(3, getTotalPrice(ordersVO));
+			// 주문 전체금액(상세를 모두 포함한 가격)
+			int totalPrice = getTotalPrice(ordersVO);
+			ps.setInt(3, totalPrice);
 			
 			// orders테이블에 데이터를 추가한다.
 			result = ps.executeUpdate();
@@ -69,7 +69,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 				}
 				
 				// 주문수량만큼 재고량 감소하기
-				// order객체의 주문 상세 내역리스트를 넘긴다.
+				// order객체의 주문상세 리스트를 넘긴다.
 				re = decrementStock(con, ordersVO.getOrdersDetailsList());
 				for(int i : re) {
 					if(i != Statement.SUCCESS_NO_INFO) {
@@ -85,24 +85,22 @@ public class OrdersDAOImpl implements OrdersDAO {
 					goodsVoList.add(goodsDao.selectByGoods(ordersDetailsVO.getGoodsCode()));
 				}
 				
-				// 총결제 금액 구하기.
-				int totalPrice = this.getTotalPrice(ordersVO);
+				// 총결제 금액 주문객체에 저장하기.
 				ordersVO.setOrdersTotalprice(totalPrice);
-					
-				if(PaymentView.printPayment(memberVO, goodsVoList, ordersVO)){
-					// PAYMENT테이블에 데이터 삽입
+				
+				// === 결제하기 ===
+				if(PaymentView.printPaymentDirectOrder(memberVO, goodsVoList, ordersVO)){
+					// 결제테이블에 데이터 삽입(ID만 넣으면 된다.)
 					PaymentVO paymentVO = new PaymentVO(0, 0, memberVO.getId(), null);
 					result = this.insertPayment(con, paymentVO);
 					
-					// Statement.SUCCESS_NO_INFO는 SQL문이 성공적으로 실행 됐지만, 갱신 갯수를 알수 없을 경우 -2값을 가진다.
-					// 여기서 배치를 통해, 정상적으로 수행된 구문들은 -2를 반환해서 이와 다를 경우 예외를 던진다.
 					if(result != 1) {
 						con.rollback();
 						throw new SQLException("payment테이블에 데이터 삽입 실패...");
-					}					
+					}
 				} else {
 					con.rollback();
-					throw new SQLException("PayMentView에서 N을 입력했습니다.....");
+					throw new SQLException("N을 눌러 결제가 취소 되었습니다.");
 				}
 				
 				// 회원 구매 횟수 증가
@@ -110,7 +108,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 				if(result != 1) {
 					con.rollback();
 					throw new SQLException("member테이블에서 회원구매 횟수가 수정 되지 않았습니다.....");
-				}		
+				}
 			} // else문 끝.
 		} finally {
 			con.commit();
@@ -332,6 +330,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 	 * */
 	public int[] orderDetailsInsert(Connection con, OrdersVO order) throws SQLException {
 		PreparedStatement ps = null;
+		// 상품코드, 상품가격, 상품구매개수, 상품구매전체가격
 		String sql = sosoyaSql.getProperty("ORDERSDETAILS.INSERT");
 		
 		int[] result = null;
@@ -340,21 +339,26 @@ public class OrdersDAOImpl implements OrdersDAO {
 			ps = con.prepareStatement(sql);
 			
 			// 주문의 정보를 가지고 있는 order객체의 주문상세내역 리스트를 가져와서 하나씩 꺼낸다.
-			for(OrdersDetailsVO orderline : order.getOrdersDetailsList()) {		
-				// 주문상세 내역에 있는, 상품id를 통해 상품을 가져와서 goods변수에 담는다.
-				GoodsVO goods = goodsDao.selectByGoods(orderline.getGoodsCode());
+			for(OrdersDetailsVO orderDetailVo : order.getOrdersDetailsList()) {		
+				// 주문상세 내역에 있는, 상품id를 통해 상품객체를 가져와서 goods변수에 담는다.
+				GoodsVO goods = goodsDao.selectByGoods(orderDetailVo.getGoodsCode());
 				
-				ps.setInt(1, orderline.getGoodsCode());
-				ps.setInt(2, goods.getGoodsPrice());//가격
-				ps.setInt(3, orderline.getOrdersDetailsCount());//구매상품수량
+				ps.setInt(1, orderDetailVo.getGoodsCode());
+				ps.setInt(2, goods.getGoodsPrice()); 
+				ps.setInt(3, orderDetailVo.getOrdersDetailsCount());
 				
 				// 각각의 주문상세 합계 구해주기
-				int total = this.getDetailTotal(order, goods, orderline);
+				int total = this.getDetailTotal(order, goods, orderDetailVo);
 				ps.setInt(4, total);
 				
 				// ps실행구문을 쌓아둔다고 생각하면 된다.
-				// order객체에 있는, 주문상세내역을 하나씩, 주문상세테이블에 저장하는 작업(일괄처리ㅣ)
+				// order객체에 있는, 주문상세내역을 하나씩, 주문상세테이블에 저장하는 작업(일괄처리)
 				ps.addBatch(); // 일괄처리할 작업에 추가
+				
+				// 반복루프가 돌면서 앞의 ps도 전부 닫아주기 위해 사용
+				// PreparedStatement의 객체를 새로할당하는게 아니라 파라미터를 할당하고 
+				// 실행한 다음에 ps.clearParameters();로 파라미터를 클리어해버린다. 
+				// 루프돌면서 다시 할당하고 이렇게 돌리면 PreparedStatement객체를 여러번 사용할 수 있다. 
 				ps.clearParameters();
 			} // for문 끝.
 			
@@ -425,7 +429,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 		try {
 			ps = con.prepareStatement(sql);
 			
-			// 주문상세내역에 해당하는, 수량만큼, goods테이블에서 수량을 뺴준다.
+			// 주문상세내역에서 주문수량만큼 goods테이블에서 수량을 뺴준다.
 			for(OrdersDetailsVO vo : ordersDetailsVOList) {
 				ps.setInt(1, vo.getOrdersDetailsCount());
 				ps.setInt(2, vo.getGoodsCode());
@@ -529,28 +533,25 @@ public class OrdersDAOImpl implements OrdersDAO {
 	 * 주문 객체안의 모든 주문상세 가격을 구한다.
 	 * */
 	public int getTotalPrice(OrdersVO orderVO) throws SQLException {
-		// 주문에 대한 DTO(order)를 받고
-		// order객체의 주문상세리스트 멤버변수를 가지고 온다.
-		// 등급을 구해주기 위해, MemberId를 받는다.
+		// 등급을 구해주기 위해, MemberVO객체를 구해준다.
 		MemberVO memberVO = memberDao.selectByMember(orderVO.getId());
+		
+		// orderVO객체의 주문상세리스트 멤버변수를 가지고 온다.
 		List<OrdersDetailsVO> orderLineList = orderVO.getOrdersDetailsList();
 		int ordersTotalprice = 0;
 		
-		// ordersVo안의, 주문상세 내역을 하나씩 꺼낸다.
+		// OrdersVO안의, 주문상세 내역을 하나씩 꺼낸다.
 		for(OrdersDetailsVO vo : orderLineList) {
-			// 주문상세 내역의 상품코드를 꺼내서 상품객체를 들고온다.
+			// 주문상세 내역의 상품코드로 상품객체를 들고온다.
 			GoodsVO goodsVO = goodsDao.selectByGoods(vo.getGoodsCode());
 			
 			// 주문상세리스트의 주문상세객체에 해당하는 상품번호가 goods테이블에 없다면...
 			if(goodsVO == null) throw new SQLException("상품번호 오류입니다.... 주문 실패..");
-			
 			// 상품의 재고가, 주문상세의 상품 주문수량보다 적으면....
-			else if(goodsVO.getGoodsStock() < vo.getOrdersDetailsCount()) throw new SQLException("재고량 부족입니다...");
+			else if(goodsVO.getGoodsStock() < vo.getOrdersDetailsCount()) throw new SQLException(goodsVO.getGoodsName() + "상품 재고량이 부족합니다.");
 			
-			// 상품의 재고가, 주문상세의 상품 주문수량 이상이면....
 			// 등급에 따라 주문상세에 해당하는 총 금액을 구해준다.
 			float discountRate = 0.0f;
-			
 			switch(memberVO.getGrade()) {
 				case "A":
 					discountRate = 0.9f;
@@ -571,11 +572,10 @@ public class OrdersDAOImpl implements OrdersDAO {
 	/**
 	 * 각각의 주문상세의 합계를 구해준다.
 	 * */
-	public int getDetailTotal(OrdersVO orderVO, GoodsVO goodsVO, OrdersDetailsVO orderline) throws SQLException {
-		int ordersTotalprice = 0;
+	public int getDetailTotal(OrdersVO orderVO, GoodsVO goodsVO, OrdersDetailsVO orderDetailVo) throws SQLException {
+		int orderDetailTotalPrice = 0;
 		MemberVO memberVO = memberDao.selectByMember(orderVO.getId());
 		
-		// 상품의 재고가, 주문상세의 상품 주문수량 이상이면....
 		// 등급에 따라 주문상세에 해당하는 총 금액을 구해준다.
 		float discountRate = 0.0f;
 		
@@ -591,8 +591,8 @@ public class OrdersDAOImpl implements OrdersDAO {
 				break;
 		}
 		
-		ordersTotalprice = (int)((goodsVO.getGoodsPrice() * orderline.getOrdersDetailsCount()) * discountRate);
+		orderDetailTotalPrice = (int)((goodsVO.getGoodsPrice() * orderDetailVo.getOrdersDetailsCount()) * discountRate);
 		
-		return ordersTotalprice;
+		return orderDetailTotalPrice;
 	}
 }
