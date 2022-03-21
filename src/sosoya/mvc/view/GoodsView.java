@@ -81,7 +81,7 @@ public class GoodsView {
 			System.out.println("┌──────────────┐");
 			System.out.println("  	 1. 상품이름으로검색						");
 			System.out.println("  	 2. 상품가격으로검색						");
-			System.out.println("  	 3. Top5구매횟수로검색        		    ");
+			System.out.println("  	 3. Top3리뷰개수로검색        		    ");
 			System.out.println("  	 4. 뒤로가기                		    ");
 			System.out.println("└──────────────┘");
 			System.out.print("선택>>");

@@ -9,6 +9,8 @@ public class OrdersDetailsVO {
 	private int ordersDetailsCount; // 구매수량
 	private int ordersDetailsTotalPrice; // 총가격
 	
+	private String goodsName;
+	
 	// 생성자
 	public OrdersDetailsVO() {}
 	public OrdersDetailsVO(int ordersDetailsCode, int ordersCode, int goodsCode,
@@ -59,12 +61,16 @@ public class OrdersDetailsVO {
 	public void setOrdersDetailsTotalPrice(int ordersDetailsTotalPrice) {
 		this.ordersDetailsTotalPrice = ordersDetailsTotalPrice;
 	}
-
+	public String getGoodsName() {
+		return goodsName;
+	}
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
 	// toString()
 	@Override
 	public String toString() {
-		return "주문상세 [주문상세코드=" + ordersDetailsCode + ", 주문코드=" + ordersCode + ", 상품코드="
-				+ goodsCode + ", 상품단가=" + ordersDetailsPrice + ", 상품개수="
-				+ ordersDetailsCount + ", 총금액=" + ordersDetailsTotalPrice + "]";
+		return "주문상세 [상품이름:" + goodsName + ", 상품단가:" + ordersDetailsPrice + "원, 상품개수:"
+				+ ordersDetailsCount + "개, 총금액:" + ordersDetailsTotalPrice + "원]";
 	}
 }

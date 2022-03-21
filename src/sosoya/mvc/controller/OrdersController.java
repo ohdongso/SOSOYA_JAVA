@@ -54,7 +54,9 @@ public class OrdersController {
 	 * */
 	public static void selectOrdersByMemberId(String memberId) {
 		try {
+			// list에는 주문상세 list가 저장 돼 있다.
 			List<OrdersVO> list = ordersService.selectOrdersByMemberId(memberId);
+			
 			SuccessView.printOrderByMemberId(list);
 		} catch (Exception e) {
 			FailView.errorMessage(e.getMessage());

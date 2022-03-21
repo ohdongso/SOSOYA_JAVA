@@ -56,8 +56,9 @@ public interface GoodsDAO {
 	public List<GoodsVO> SelectByPriceGoods(int min, int max) throws SQLException;
 	
 	/**
-	 * 
-	 * @param String GoodsName
-	 * @return List<GoodsVO> list
+	 * 상품코드에 해당하는 상품 이름검색
+	 * @param int goodsCode
+	 * @return String name
 	 * */
+	public String selectByNameGoodsOne(int goodsCode) throws SQLException;
 }

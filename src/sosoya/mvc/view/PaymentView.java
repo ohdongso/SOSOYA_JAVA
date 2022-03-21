@@ -15,10 +15,9 @@ public class PaymentView {
 	// 상품검색 후 바로주문해서 보이는 View
 	public static boolean printPaymentDirectOrder(MemberVO memberVO, List<GoodsVO> goodsVoList, OrdersVO ordersVO) {
 		System.out.println("\n=== 결제하기 ===");
-		
 		int index = -1;
-		index++;
 		for(GoodsVO goodsVO : goodsVoList) {
+			++index;
 			System.out.println("--------------------------- " + (index+1) + "번째 상품 ---------------------------");
 			System.out.println("상품이름 : " + goodsVO.getGoodsName());
 			System.out.println("상품가격 : " + goodsVO.getGoodsPrice() + "원");

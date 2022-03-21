@@ -42,7 +42,7 @@ public class OrderView {
 		
 		System.out.print("\n배송지를 입력해주세요 : ");
 		String orderDi = sc.nextLine();
-		
+	
 		OrdersVO ordersVO = new OrdersVO(0, memberVO.getId(), orderDi, 0, null);
 		ordersVO.setOrdersDetailsList(list);
 		
@@ -99,9 +99,7 @@ public class OrderView {
 	
 	// 주문내역 보기
 	public static void printSelectAllOrders(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
-		System.out.println("=== 주문내역 ===");
-		
+		System.out.println("\n=== 주문내역 ===");
 		OrdersController.selectOrdersByMemberId(memberVO.getId());
 	}
 }

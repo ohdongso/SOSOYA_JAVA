@@ -50,13 +50,20 @@ public class SuccessView {
 	 * 주문 내역 출력
 	 * */
 	public static void printOrderByMemberId(List<OrdersVO> orderVoList) {
+		int size = orderVoList.size();
+		int index = 0;
 		for(OrdersVO order : orderVoList) {
-			System.out.println("주문코드:" + order.getOrdersCode() +" | 총금액:" + order.getOrdersTotalprice() 
-			+ " | 주소:" + order.getOrdersDi() + " | 주문날짜:" + order.getOrdersDate() );
+			// 주문객체 뷰 출력
+			System.out.println("▶ 주문코드:" + order.getOrdersCode() +" [총금액:" + order.getOrdersTotalprice() 
+			+ "원, 주소:" + order.getOrdersDi() + ", 주문날짜:" + order.getOrdersDate() + "]");
+			   
+			   // 주문상세목록을 출력하는데 코드는 전부 날리고 상품이름이 출력되게 해줘야 될거 같다.
 			   for(OrdersDetailsVO ordersDetailsVO : order.getOrdersDetailsList()) {
-				   System.out.println("  ▶ " + ordersDetailsVO);
+				   
+				   System.out.println("    ▶ " + ordersDetailsVO);
 			   }
-			   System.out.println();
+			   index++;
+			   if(index < size)System.out.println();
 		}
 	}
 	

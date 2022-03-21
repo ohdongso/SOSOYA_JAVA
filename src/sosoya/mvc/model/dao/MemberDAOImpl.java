@@ -41,14 +41,15 @@ public class MemberDAOImpl implements MemberDAO {
 				
 				memberVO = new MemberVO(id, password, rs.getString("NAME"), rs.getInt("PURCHASESCOUNT"), rs.getString("GRADE"), 
 						   rs.getInt("STATE"), rs.getString("EMAIL"), rs.getString("PHONE"), rs.getString("ADDRESS"), rs.getString("REGDATE"));
-								
+				
+				// 로그인시 구매횟수에 따라 등급 초기화.
 				if(state == 1) {
 					if(purchasesCount <= 10) memberVO.setGrade("C");
 					else if(purchasesCount <= 20) memberVO.setGrade("B");
 					else memberVO.setGrade("A");
 					
 					int result = this.updateMemberGrade(id, memberVO.getGrade());
-					if(result == 0) throw new SQLException("로그인 후 등급이 조회되지 않았습니다.");
+					if(result == 0) throw new SQLException("로그인 후 등급이 갱신되지 않았습니다.");
 				}
 			}		
 		} finally {

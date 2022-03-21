@@ -77,7 +77,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 						throw new SQLException("goods테이블에 재고량 감소 실패...");
 					}
 				}
-				
+			
 				// 결제
 				MemberVO memberVO = memberDao.selectByMember(ordersVO.getId());
 				List<GoodsVO> goodsVoList = new ArrayList<>();
@@ -440,8 +440,10 @@ public class OrdersDAOImpl implements OrdersDAO {
 			
 			result = ps.executeBatch(); // 일괄처리
 		} finally {
+			
 			DbUtil.close(null, ps, null);
 		}
+		
 		return result;
 	}
 
@@ -482,17 +484,27 @@ public class OrdersDAOImpl implements OrdersDAO {
 			ps.setString(1, memberId);
 			rs = ps.executeQuery();
 			
+			// ID에 해당하는 모든 주문목록을 가져온다.
 			while(rs.next()) {
 				OrdersVO ordersVO  = new OrdersVO(rs.getInt("ORDERS_CODE") , rs.getString("ID"), rs.getString("ORDERS_DI"), 
 						rs.getInt("ORDERS_TOTOALPRICE"), rs.getString("ORDERS_DATE"));
 
-				//주문번호에 해당하는 상세정보 가져오기
+				// 각각의 주문코드에 해당하는 주문상세목록을 주문객체에 저장한다.
 				List<OrdersDetailsVO> ordersDetailsVOList = selectOrdersDetailsVO(ordersVO.getOrdersCode());
 				
+				// 주문상세 리스트가 담긴상황에서, 각 주문상세의 상품코드에 해당하는 상품이름을 list에 저장해줘야 한다.
+				for(OrdersDetailsVO vo : ordersDetailsVOList) {
+					
+					String goodsName = goodsDao.selectByNameGoodsOne(vo.getGoodsCode());
+					vo.setGoodsName(goodsName);
+				}
+				
+				// 상품이름을 저장한 주문상세객체 리스트를 다시 주문객체에 저장해준다.
 				ordersVO.setOrdersDetailsList(ordersDetailsVOList);
+		
+				// 최종적으로 저장된 주문객체를, 리스트에 저장한다.
 	        	list.add(ordersVO);
 			}
-			
 		} finally {
 			DbUtil.close(con, ps, rs);
 		}
