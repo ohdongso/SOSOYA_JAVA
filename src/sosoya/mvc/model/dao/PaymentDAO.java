@@ -12,5 +12,5 @@ public interface PaymentDAO {
 	 * @param MemberVO memberVO
 	 * @return List<PaymentVO> paymentVoList
 	 * */
-	public PaymentVO selectAllPayment(MemberVO memberVO) throws SQLException;
+	public List<PaymentVO> selectAllPayment(MemberVO memberVO) throws SQLException;
 }

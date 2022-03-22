@@ -1,6 +1,8 @@
 package sosoya.mvc.controller;
 
-import java.sql.SQLException; 
+import java.sql.SQLException;
+import java.util.List;
+
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.PaymentVO;
 import sosoya.mvc.model.service.PaymentService;
@@ -16,8 +18,8 @@ public class PaymentController {
 	 * */
 	public static void selectAllPayment(MemberVO memberVO) {
 		try {
-			PaymentVO paymentVO = paymentService.selectAllPayment(memberVO);
-			SuccessView.printPayment(paymentVO);
+			List<PaymentVO> paymentVoList = paymentService.selectAllPayment(memberVO);
+			SuccessView.printPayment(paymentVoList);
 		} catch (SQLException e) {
 			FailView.errorMessage(e.getMessage());
 			e.printStackTrace();

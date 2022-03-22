@@ -37,13 +37,15 @@ public class SuccessView {
 	/**
 	 * 결제내역 출력
 	 * */
-	public static void printPayment(PaymentVO paymentVO) {
-		System.out.println("회원아이디:" + paymentVO.getMemberVO().getId() + " | 결제코드:" + paymentVO.getPaymentCode() 
-		+ " | 주문코드:" + paymentVO.getOrdersCode() + " | 결제날짜:" + paymentVO.getPaymentDate());
-		
-		List<OrdersVO> orderVoList = new ArrayList<>();
-		orderVoList.add(paymentVO.getOrdersVO());
-		printOrderByMemberId(orderVoList);
+	public static void printPayment(List<PaymentVO> paymentVoList) {
+		for(PaymentVO paymentVo : paymentVoList) {
+			System.out.println("회원아이디:" + paymentVo.getMemberVO().getId() + " | 결제코드:" + paymentVo.getPaymentCode() 
+			+ " | 주문코드:" + paymentVo.getOrdersCode() + " | 결제날짜:" + paymentVo.getPaymentDate());
+			
+			List<OrdersVO> orderVoList = new ArrayList<>();
+			orderVoList.add(paymentVo.getOrdersVO());
+			printOrderByMemberId(orderVoList);
+		}		
 	}
 		
 	/**

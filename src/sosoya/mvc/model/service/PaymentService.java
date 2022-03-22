@@ -1,6 +1,7 @@
 package sosoya.mvc.model.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.PaymentVO;
@@ -11,5 +12,5 @@ public interface PaymentService {
 	 * @param MemberVO memberVOs
 	 * @return List<PaymentVO> paymentVoList
 	 * */
-	public PaymentVO selectAllPayment(MemberVO memberVO) throws SQLException;
+	public List<PaymentVO> selectAllPayment(MemberVO memberVO) throws SQLException;
 }

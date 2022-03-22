@@ -126,22 +126,24 @@ public class OrdersDAOImpl implements OrdersDAO {
 		PreparedStatement ps = null;
 		String sql = sosoyaSql.getProperty("ORDERS.INSERT");
 		int result = 0;
-		
+
+		// 주문상세에는(제품단가, 구매수량, 총가격, 상품이름)이 서비스 단에서 저장 돼 넘어왔다.
 		try {
 			con = DbUtil.getConnection();
 			
 			// 오토커밋을 하지 않겠다.
 			con.setAutoCommit(false);
-			
-			// id, ordersDi, ordersTotalprice ==> 3개의 컬럼을 구해줘야한다.
+						
 			// 트랜잭션 시작
 			ps = con.prepareStatement(sql);
 			
+			// memberId, ordersDi, ordersTotalprice ==> 3개의 컬럼을 구해줘야한다.
 			ps.setString(1, ordersVO.getId());
 			ps.setString(2, ordersVO.getOrdersDi());
 			
-			// 주문 전체금액
-			ps.setInt(3, getTotalPrice(ordersVO));
+			// 주문 전체금액(상세를 모두 포함한 가격)
+			int totalPrice = this.getTotalPrice(ordersVO);
+			ps.setInt(3, totalPrice);
 			
 			// orders테이블에 데이터를 추가한다.
 			result = ps.executeUpdate();
@@ -149,69 +151,67 @@ public class OrdersDAOImpl implements OrdersDAO {
 				con.rollback();
 				throw new SQLException("orders테이블에 데이터 삽입 실패...");
 			} else {
-			// 주문테이블에 데이터가 들어가면, 주문상세 테이블에도 데이터가 담긴다.
-			// 주문된 정보를 담고있는 order객체를 매개변수로 전달한다.
-			// connection객체를 들고 가야한다.	
-			int[] re = orderDetailsInsert(con, ordersVO);
-			for(int i : re) {
-				// Statement.SUCCESS_NO_INFO는 SQL문이 성공적으로 실행 됐지만, 갱신 갯수를 알수 없을 경우 -2값을 가진다.
-				// 여기서 배치를 통해, 정상적으로 수행된 구문들은 -2를 반환해서 이와 다를 경우 예외를 던진다.
-				if(i != Statement.SUCCESS_NO_INFO) {
-					con.rollback();
-					throw new SQLException("orders_details테이블에 데이터 삽입 실패...");
+				// 주문테이블에 데이터가 들어가면, 주문상세 테이블에도 데이터가 담긴다.
+				// 주문된 정보를 담고있는 order객체를 매개변수로 전달한다.
+				// connection객체를 들고 가야한다.	
+				int[] re = orderDetailsInsert(con, ordersVO);
+				for(int i : re) {
+					// Statement.SUCCESS_NO_INFO는 SQL문이 성공적으로 실행 됐지만, 갱신 갯수를 알수 없을 경우 -2값을 가진다.
+					// 여기서 배치를 통해, 정상적으로 수행된 구문들은 -2를 반환해서 이와 다를 경우 예외를 던진다.
+					if(i != Statement.SUCCESS_NO_INFO) {
+						con.rollback();
+						throw new SQLException("orders_details테이블에 데이터 삽입 실패...");
+					}
 				}
-			}
+		
+				// 주문수량만큼 재고량 감소하기
+				// order객체의 주문 상세 내역리스트를 넘긴다.
+				re = decrementStock(con, ordersVO.getOrdersDetailsList());
+				for(int i : re) {
+					if(i != Statement.SUCCESS_NO_INFO) {
+						con.rollback();
+						throw new SQLException("goods테이블에 재고량 감소 실패...");
+					}
+				}
 	
-			// 주문수량만큼 재고량 감소하기
-			// order객체의 주문 상세 내역리스트를 넘긴다.
-			re = decrementStock(con, ordersVO.getOrdersDetailsList());
-			for(int i : re) {
-				if(i != Statement.SUCCESS_NO_INFO) {
-					con.rollback();
-					throw new SQLException("goods테이블에 재고량 감소 실패...");
+				// 결제, 장바구니에 담긴상품을 종합하여, payment테이블에 담아야 한다.
+				MemberVO memberVO = memberDao.selectByMember(ordersVO.getId());
+				List<GoodsVO> goodsVoList = new ArrayList<>();
+				for(OrdersDetailsVO ordersDetailsVO : ordersVO.getOrdersDetailsList()) {
+					goodsVoList.add(goodsDao.selectByGoods(ordersDetailsVO.getGoodsCode()));
 				}
-			}
-
-			// 결제, 장바구니에 담긴상품을 종합하여, payment테이블에 담아야 한다.
-			MemberVO memberVO = memberDao.selectByMember(ordersVO.getId());
-			List<GoodsVO> goodsVoList = new ArrayList<>();
-			for(OrdersDetailsVO ordersDetailsVO : ordersVO.getOrdersDetailsList()) {
-				goodsVoList.add(goodsDao.selectByGoods(ordersDetailsVO.getGoodsCode()));
-			}
-			
-			// 총결제 금액 구하기.
-			int totalPrice = this.getTotalPrice(ordersVO);
-			ordersVO.setOrdersTotalprice(totalPrice);
-			
-			if(PaymentView.printPayment(memberVO, goodsVoList, ordersVO)){
-				// PAYMENT테이블에 데이터 삽입
-				PaymentVO paymentVO = new PaymentVO(0, 0, memberVO.getId(), null);
-				result = this.insertPayment(con, paymentVO);
 				
-				// Statement.SUCCESS_NO_INFO는 SQL문이 성공적으로 실행 됐지만, 갱신 갯수를 알수 없을 경우 -2값을 가진다.
-				// 여기서 배치를 통해, 정상적으로 수행된 구문들은 -2를 반환해서 이와 다를 경우 예외를 던진다.
+				// 총결제 금액 구하기.
+				ordersVO.setOrdersTotalprice(totalPrice);
+				
+				if(PaymentView.printPayment(memberVO, goodsVoList, ordersVO)){
+					PaymentVO paymentVO = new PaymentVO(0, 0, memberVO.getId(), null);
+					result = this.insertPayment(con, paymentVO);
+					
+					// Statement.SUCCESS_NO_INFO는 SQL문이 성공적으로 실행 됐지만, 갱신 갯수를 알수 없을 경우 -2값을 가진다.
+					// 여기서 배치를 통해, 정상적으로 수행된 구문들은 -2를 반환해서 이와 다를 경우 예외를 던진다.
+					if(result != 1) {
+						con.rollback();
+						throw new SQLException("payment테이블에 데이터 삽입 실패...");
+					}					
+				} else {
+					con.rollback();
+					throw new SQLException("PayMentView에서 N을 입력했습니다.....");
+				}
+				
+				// 장바구니 데이터 전체삭제
+				result = basketDao.deleteAllBasket(con, memberVO.getId());
+				if(result == 0) {
+					con.rollback();
+					throw new SQLException("basket테이블에 데이터 삭제 실패...");
+				}				
+				
+				// 회원 구매 횟수 증가
+				result = this.memberPurchasecountUpdate(con, memberVO.getId()); 
 				if(result != 1) {
 					con.rollback();
-					throw new SQLException("payment테이블에 데이터 삽입 실패...");
-				}					
-			} else {
-				con.rollback();
-				throw new SQLException("PayMentView에서 N을 입력했습니다.....");
-			}
-			
-			// 장바구니 데이터 전체삭제
-			result = basketDao.deleteAllBasket(con, memberVO.getId());
-			if(result == 0) {
-				con.rollback();
-				throw new SQLException("basket테이블에 데이터 삭제 실패...");
-			}				
-			
-			// 회원 구매 횟수 증가
-			result = this.memberPurchasecountUpdate(con, memberVO.getId()); 
-			if(result != 1) {
-				con.rollback();
-				throw new SQLException("member테이블에서 회원구매 횟수가 수정 되지 않았습니다.....");
-			}		
+					throw new SQLException("member테이블에서 회원구매 횟수가 수정 되지 않았습니다.....");
+				}		
 			} // else문 끝.
 		} finally {
 			con.commit();

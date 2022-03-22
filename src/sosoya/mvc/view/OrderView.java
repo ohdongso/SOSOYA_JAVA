@@ -51,8 +51,7 @@ public class OrderView {
 	
 	// 장바구니상품 전체주문하는 기능
 	public static void printBasketAllOrder(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
-		System.out.println("=== 장바구니 상품전체주문하기 ===");
+		System.out.println("\n=== 장바구니 상품전체주문하기 ===");
 		
 		System.out.print("배송지를 입력해주세요 : ");
 		String orderDi = sc.nextLine();

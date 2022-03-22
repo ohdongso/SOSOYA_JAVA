@@ -60,7 +60,7 @@ public class PaymentView {
 	
 	// 결제하기(장바구니)
 	public static boolean printPayment(MemberVO memberVO, List<GoodsVO> goodsVoList, OrdersVO ordersVO) {
-		System.out.println("=== 결제하기 ===");
+		System.out.println("\n=== 결제하기 ===");
 		
 		int index = -1;
 		for(GoodsVO goodsVO : goodsVoList) {
@@ -108,8 +108,7 @@ public class PaymentView {
 	
 	// 결제내역전체 보기
 	public static void printPaymentList(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
-		System.out.println("=== 결제내역 ===");
+		System.out.println("\n=== 결제내역 ===");
 		
 		PaymentController.selectAllPayment(memberVO);
 	}
