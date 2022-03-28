@@ -13,6 +13,9 @@ public class OrdersVO {
 	
 	private List<OrdersDetailsVO> ordersDetailsList = new ArrayList<>();
 	
+	// 원가
+	private int originalPrice;
+	
 	// 생성자
 	public OrdersVO() {}
 	public OrdersVO(int ordersCode, String id,String ordersDi, int ordersTotalprice, String ordersDate) {
@@ -60,7 +63,12 @@ public class OrdersVO {
 	public void setOrdersDetailsList(List<OrdersDetailsVO> ordersDetailsList) {
 		this.ordersDetailsList = ordersDetailsList;
 	}
-	
+	public int getOriginalPrice() {
+		return originalPrice;
+	}
+	public void setOriginalPrice(int originalPrice) {
+		this.originalPrice = originalPrice;
+	}
 	// toString
 	@Override
 	public String toString() {

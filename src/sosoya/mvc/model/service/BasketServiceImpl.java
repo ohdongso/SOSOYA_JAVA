@@ -20,13 +20,18 @@ public class BasketServiceImpl implements BasketService {
 	 * 장바구니등록
 	 */
 	@Override
-	public void insertBasket(BasketVO basketVO) throws SQLException {
-		GoodsVO goodsVO = goodsDAO.selectByGoods(basketVO.getGoodsCode());
-		basketVO.setGoodsVO(goodsVO);
-		if(basketVO.getBasketGoodsCount() > basketVO.getGoodsVO().getGoodsStock()) throw new SQLException("상품 재고량이 부족합니다. " + 
-		"[ 상품이름: " + goodsVO.getGoodsName() + ", 재고량: " + goodsVO.getGoodsStock() + "개 ]");
+	public void insertBasket(List<BasketVO> basketVoList) throws SQLException {
+		for(BasketVO basketVO : basketVoList) {
+			GoodsVO goodsVO = goodsDAO.selectByGoods(basketVO.getGoodsCode());
+			if(goodsVO == null) throw new SQLException("\n\"" + basketVO.getGoodsCode() + "\"" + "상품코드에 해당하는 제품이 없습니다.");
+			
+			basketVO.setGoodsVO(goodsVO);
+			if(basketVO.getBasketGoodsCount() > basketVO.getGoodsVO().getGoodsStock()) {
+				throw new SQLException("상품 재고량이 부족합니다. " + "[ 상품이름: " + goodsVO.getGoodsName() + ", 재고량: " + goodsVO.getGoodsStock() + "개 ]");
+			}
+		}
 		
-		int result = basketDAO.insertBasket(basketVO);
+		int result = basketDAO.insertBasket(basketVoList);
 		if(result == 0) throw new SQLException("상품이 장바구니에 담기지 않았습니다.");
 	}
 	

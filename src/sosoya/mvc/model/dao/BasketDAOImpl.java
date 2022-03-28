@@ -25,43 +25,60 @@ public class BasketDAOImpl implements BasketDAO {
 	 * 장바구니등록
 	 */
 	@Override
-	public int insertBasket(BasketVO basketVO) throws SQLException {
+	public int insertBasket(List<BasketVO> basketVoList) throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		String sql = sosoyaSql.getProperty("BASKET.INSERT");
 		int result = 0;
+		int[] re = null;
 		
 		try {
 			con = DbUtil.getConnection();
+			
+			con.setAutoCommit(false);
+			
 			ps = con.prepareStatement(sql);
 			
-			ps.setString(1, basketVO.getId());
-			ps.setInt(2, basketVO.getGoodsCode());
-			
-			// 총금액 구하기
-			GoodsVO goodsVO = basketVO.getGoodsVO();
-			MemberVO memberVO = memberDAO.selectByMember(basketVO.getId());
-			float discountRate = 0.0f;
-			
-			switch(memberVO.getGrade()) {
-				case "A":
-					discountRate = 0.9f;
-					break;
-				case "B":
-					discountRate = 0.95f;
-					break;
-				case "C":
-					discountRate = 1.0f;
-					break;
-			}
-			
-			int total = (int)((goodsVO.getGoodsPrice() * basketVO.getBasketGoodsCount()) * discountRate);
-			
-			ps.setInt(3, total);
-			ps.setInt(4, basketVO.getBasketGoodsCount());
+			for(BasketVO basketVO : basketVoList) {
+				ps.setString(1, basketVO.getId());
+				ps.setInt(2, basketVO.getGoodsCode());
+				
+				// 총금액 구하기
+				GoodsVO goodsVO = basketVO.getGoodsVO();
+				MemberVO memberVO = memberDAO.selectByMember(basketVO.getId());
+				float discountRate = 0.0f;
+				
+				switch(memberVO.getGrade()) {
+					case "A":
+						discountRate = 0.9f;
+						break;
+					case "B":
+						discountRate = 0.95f;
+						break;
+					case "C":
+						discountRate = 1.0f;
+						break;
+				}
+				
+				int total = (int)((goodsVO.getGoodsPrice() * basketVO.getBasketGoodsCount()) * discountRate);
+				
+				ps.setInt(3, total);
+				ps.setInt(4, basketVO.getBasketGoodsCount());
 
-			result = ps.executeUpdate();
+				ps.addBatch();
+				ps.clearParameters();
+			}
+			re = ps.executeBatch();
+			System.out.println("확인 : " + Arrays.toString(re));
+			for(int i : re) {
+				if(i != Statement.SUCCESS_NO_INFO) {
+					con.rollback();
+					throw new SQLException("basket테이블에 데이터 삽입 실패...");
+				}
+			}
+			result = basketVoList.size();
 		} finally {
+			con.commit();
 			DbUtil.close(con, ps);
 		}
 		

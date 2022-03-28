@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
+import sosoya.mvc.controller.BasketController;
 import sosoya.mvc.controller.OrdersController;
 import sosoya.mvc.model.dao.BasketDAO;
 import sosoya.mvc.model.dao.BasketDAOImpl;
@@ -61,10 +63,12 @@ public class OrderView {
 	
 	// 장바구니상품 선택주문하는 기능
 	public static void printBasketByOrder(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
-		System.out.println("=== 장바구니 상품선택주문하기 ===");
+		System.out.println("\n=== 장바구니 상품선택주문하기 ===");
 		
-		System.out.print("주문할 장바구니 상품 개수를 입력해주세요 : ");
+		// 여기서 장바구니에 담긴 상품 전체목록을 한번 뿌려줘야 한다.
+		BasketController.selectAllBasket(memberVO);
+		
+		System.out.print("\n주문할 장바구니 상품 개수를 입력해주세요 : ");
 		int count = Integer.parseInt(sc.nextLine());
 		
 		Map<Integer, Integer> goodsCodeMap = new HashMap<>();

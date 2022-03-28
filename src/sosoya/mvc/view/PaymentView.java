@@ -27,6 +27,16 @@ public class PaymentView {
 		}
 		
 		System.out.println("---------------------------결제 최종금액---------------------------");
+		// 결제시 회원 멤버십 적용되기 전, 후 가격을 보여줘야 한다.
+		int originalPrice = 0;	
+		int reducedPrice = 0;
+		int reducedTotalPrice = 0; 
+		
+		reducedTotalPrice = ordersVO.getOrdersTotalprice();
+		originalPrice = ordersVO.getOriginalPrice();
+		reducedPrice = originalPrice - reducedTotalPrice;
+		
+		System.out.println("정가 : " + originalPrice + "원, 할인가격 : " + reducedPrice + "원");
 		System.out.println("최종결제 금액 : " + ordersVO.getOrdersTotalprice() + "원");
 		
 		boolean flag = false;
@@ -39,7 +49,8 @@ public class PaymentView {
 				break;
 			} else if(result.toUpperCase().equals("Y")){
 				int pay = 0;
-				System.out.println("최종결제 금액 " + ordersVO.getOrdersTotalprice() + "원 을 다시한번 입력해주세요.");
+				
+				System.out.println("\n최종결제 금액 " + reducedTotalPrice + "원 을 다시한번 입력해주세요.");
 				System.out.print("최종결제금액 입력 : ");
 				pay = Integer.parseInt(sc.nextLine());
 				
@@ -74,8 +85,17 @@ public class PaymentView {
 		}
 		
 		System.out.println("---------------------------결제 최종금액---------------------------");
-		System.out.println("최종결제 금액 : " + ordersVO.getOrdersTotalprice() + "원");
+		// 결제시 회원 멤버십 적용되기 전, 후 가격을 보여줘야 한다.
+		int originalPrice = 0;	
+		int reducedPrice = 0;
+		int reducedTotalPrice = 0; 
 		
+		reducedTotalPrice = ordersVO.getOrdersTotalprice();
+		originalPrice = ordersVO.getOriginalPrice();
+		reducedPrice = originalPrice - reducedTotalPrice;
+		
+		System.out.println("정가 : " + originalPrice + "원, 할인가격 : " + reducedPrice + "원");
+		System.out.println("최종결제 금액 : " + ordersVO.getOrdersTotalprice() + "원");
 		
 		boolean flag = false;
 		while(true) {
@@ -87,11 +107,12 @@ public class PaymentView {
 				return flag;
 			} else if(result.toUpperCase().equals("Y")){
 				int pay = 0;
-				System.out.println("최종결제 금액 " + ordersVO.getOrdersTotalprice() + "원 을 다시한번 입력해주세요.");
+		
+				System.out.println("\n최종결제 금액 " + reducedTotalPrice + "원 을 다시한번 입력해주세요.");
 				System.out.print("최종결제금액 입력 : ");
 				pay = Integer.parseInt(sc.nextLine());
 				
-				if(!String.valueOf(pay).equals(String.valueOf(ordersVO.getOrdersTotalprice()))) {
+				if(pay != ordersVO.getOrdersTotalprice()) {
 					System.out.println("총결제 금액을 다시 한번 확인해주세요. 결제 처음으로 돌아갑니다.");
 					continue;
 				}
@@ -101,7 +122,6 @@ public class PaymentView {
 				System.out.println("Y 또는 N을 입력해주세요.");
 				continue;
 			}
-			
 			return flag;
 		}	
 	}
@@ -130,6 +150,4 @@ public class PaymentView {
 		
 		// 후기를 등록하고 처리해야 한다.
 	}
-	
-	
 }

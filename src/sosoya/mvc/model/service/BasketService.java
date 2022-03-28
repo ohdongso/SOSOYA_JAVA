@@ -8,10 +8,10 @@ import sosoya.mvc.model.dto.MemberVO;
 public interface BasketService {
 	/**
 	 * 장바구니등록
-	 * @param BasketVO basketVO
+	 * @param List<BasketVO> basketVo
 	 * @return
 	 * */
-	public void insertBasket(BasketVO basketVO) throws SQLException;
+	public void insertBasket(List<BasketVO> basketVo) throws SQLException;
 		
 	/**
 	 * 장바구니전체검색

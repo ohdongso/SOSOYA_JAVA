@@ -11,10 +11,10 @@ import sosoya.mvc.model.dto.OrdersDetailsVO;
 public interface BasketDAO {
 	/**
 	 * 장바구니등록
-	 * @param BasketVO basketVO
+	 * @param List<BasketVO> basketVo
 	 * @return int result
 	 * */
-	public int insertBasket(BasketVO basketVO) throws SQLException;
+	public int insertBasket(List<BasketVO> basketVoList) throws SQLException;
 	
 	/**
 	 * 장바구니 코드에 해당하는 상품 검색

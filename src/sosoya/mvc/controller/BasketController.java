@@ -16,10 +16,10 @@ public class BasketController {
 	/**
 	 * 장바구니등록
 	 */
-	public static void inputBasket(BasketVO basketVO) {
+	public static void inputBasket(List<BasketVO> basketVoList) {
 		try {
-			basketService.insertBasket(basketVO);
-			SuccessView.printMessage(basketVO.getId() + "님 장바구니에 상품이 담겼습니다.\n");
+			basketService.insertBasket(basketVoList);
+			SuccessView.printMessage("\n장바구니에 " + basketVoList.size() + "개의 상품이 담겼습니다.");
 		} catch (SQLException e) {
 			FailView.errorMessage(e.getMessage());
 		}

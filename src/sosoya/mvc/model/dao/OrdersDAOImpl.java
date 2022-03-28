@@ -47,6 +47,11 @@ public class OrdersDAOImpl implements OrdersDAO {
 			
 			// 주문 전체금액(상세를 모두 포함한 가격)
 			int totalPrice = getTotalPrice(ordersVO);
+			
+			// getTotalPrice(ordersVO)함수에서 정가를 저장하고 반환 후 출력 되는지 확인
+			// System.out.println("확인 할인가 : " + totalPrice);
+			// System.out.println("확인 정가 : " + ordersVO.getOriginalPrice());
+			
 			ps.setInt(3, totalPrice);
 			
 			// orders테이블에 데이터를 추가한다.
@@ -54,7 +59,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 			if(result == 0) {
 				con.rollback();
 				throw new SQLException("orders테이블에 데이터 삽입 실패...");
-			} else {
+			} else {				
 				// 주문테이블에 데이터가 들어가면, 주문상세 테이블에도 데이터가 담긴다.
 				// 주문된 정보를 담고있는 order객체를 매개변수로 전달한다.
 				// connection객체를 들고 가야한다.	
@@ -85,7 +90,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 					goodsVoList.add(goodsDao.selectByGoods(ordersDetailsVO.getGoodsCode()));
 				}
 				
-				// 총결제 금액 주문객체에 저장하기.
+				// 총결제 금액 주문객체에 저장하기.(할인률 적용)
 				ordersVO.setOrdersTotalprice(totalPrice);
 				
 				// === 결제하기 ===
@@ -552,6 +557,9 @@ public class OrdersDAOImpl implements OrdersDAO {
 		List<OrdersDetailsVO> orderLineList = orderVO.getOrdersDetailsList();
 		int ordersTotalprice = 0;
 		
+		// 정가 총 금액
+		int originalTotalPrice = 0;
+		
 		// OrdersVO안의, 주문상세 내역을 하나씩 꺼낸다.
 		for(OrdersDetailsVO vo : orderLineList) {
 			// 주문상세 내역의 상품코드로 상품객체를 들고온다.
@@ -575,9 +583,13 @@ public class OrdersDAOImpl implements OrdersDAO {
 					discountRate = 1.0f;
 					break;
 			}
-			
+			// 할인가 적용된 총 금액
 			ordersTotalprice += (int)((goodsVO.getGoodsPrice() * vo.getOrdersDetailsCount()) * discountRate);
+			
+			// 정가 총 금액
+			originalTotalPrice += goodsVO.getGoodsPrice() * vo.getOrdersDetailsCount();
 		}// for문 끝.
+		orderVO.setOriginalPrice(originalTotalPrice);
 		return ordersTotalprice;
 	}
 	

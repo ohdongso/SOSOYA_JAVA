@@ -122,14 +122,25 @@ public class BasketView {
 	// 장바구니 담기 메뉴
 	public static void printInsertBasket(MemberVO memberVO) {
 		System.out.println("\n=== 상품 장바구니에 담기 ===");
+		
+		// 1개 이상 장바구니 상품담기 수정
+		System.out.print("장바구니에 담을 상품 개수를 입력해주세요 : ");
+		int count = Integer.parseInt(sc.nextLine());
+		
+		List<BasketVO> basketVoList = new ArrayList<>(); 
+		for(int i = 1; i <= count; i++) {
+			System.out.println("\n--------- " + i + "번째 장바구니 상품 ---------");
 			
-		System.out.print("상품코드 : ");
-		int goodsCode = Integer.parseInt(sc.nextLine());
+			System.out.print("상품코드 : ");
+			int goodsCode = Integer.parseInt(sc.nextLine());
+			
+			System.out.print("구매개수 : ");
+			int goodsCount = Integer.parseInt(sc.nextLine());
+			
+			BasketVO basketVO = new BasketVO(memberVO.getId(), goodsCode, goodsCount);
+			basketVoList.add(basketVO);
+		}
 		
-		System.out.print("구매개수 : ");
-		int goodsCount = Integer.parseInt(sc.nextLine());
-		
-		BasketVO basketVO = new BasketVO(memberVO.getId(), goodsCode, goodsCount);
-		BasketController.inputBasket(basketVO);
+		BasketController.inputBasket(basketVoList);
 	}
 }

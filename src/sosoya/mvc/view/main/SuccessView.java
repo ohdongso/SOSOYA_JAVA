@@ -38,16 +38,21 @@ public class SuccessView {
 	 * 결제내역 출력
 	 * */
 	public static void printPayment(List<PaymentVO> paymentVoList) {
+		int size = paymentVoList.size();
+		int index = 0;
 		for(PaymentVO paymentVo : paymentVoList) {
-			System.out.println("회원아이디:" + paymentVo.getMemberVO().getId() + " | 결제코드:" + paymentVo.getPaymentCode() 
-			+ " | 주문코드:" + paymentVo.getOrdersCode() + " | 결제날짜:" + paymentVo.getPaymentDate());
+			System.out.println("▶▶▶▶▶▶ 회원아이디:" + paymentVo.getMemberVO().getId() + " | 결제코드:" + paymentVo.getPaymentCode() 
+			+ " | 주문코드:" + paymentVo.getOrdersCode() + " | 결제날짜:" + paymentVo.getPaymentDate() + " ◀◀◀◀◀◀");
 			
 			List<OrdersVO> orderVoList = new ArrayList<>();
 			orderVoList.add(paymentVo.getOrdersVO());
 			printOrderByMemberId(orderVoList);
-		}		
+			
+			index++;
+			if(index < size)System.out.println();
+		}
 	}
-		
+
 	/**
 	 * 주문 내역 출력
 	 * */
