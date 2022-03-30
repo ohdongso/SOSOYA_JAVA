@@ -16,6 +16,13 @@ public interface ReviewDAO {
 	public int insertReview(ReviewVO reviewVO) throws SQLException;
 	
 	/**
+	 * 아이디와 주문상세코드에 해당하는 리뷰검색
+	 * @param String memberId, int ordersDetailsCode
+	 * @return ReviewVO reviewVoCheck
+	 * */
+	public ReviewVO selectByIdOrderDetailCode(String memberId, int ordersDetailsCode);
+	
+	/**
 	 * GOODS_CODE에 해당하는 리뷰 개수 구하기
 	 * @param int goodsCode, Connection con
 	 * @return int count

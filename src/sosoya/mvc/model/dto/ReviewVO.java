@@ -5,6 +5,7 @@ public class ReviewVO {
 	private int reviewCode;
 	private String id;
 	private int goodsCode;
+	private int ordersDetailsCode;
 	private String reviewTitle;
 	private String reviewContent;
 	private int reviewGrade;
@@ -15,6 +16,19 @@ public class ReviewVO {
 	
 	// 생성자
 	public ReviewVO() {}
+	
+	public ReviewVO(int reviewCode, String id, int goodsCode, int ordersDetailsCode, String reviewTitle,
+			String reviewContent, int reviewGrade, String reviewRegdate) {
+		super();
+		this.reviewCode = reviewCode;
+		this.id = id;
+		this.goodsCode = goodsCode;
+		this.ordersDetailsCode = ordersDetailsCode;
+		this.reviewTitle = reviewTitle;
+		this.reviewContent = reviewContent;
+		this.reviewGrade = reviewGrade;
+		this.reviewRegdate = reviewRegdate;
+	}
 	public ReviewVO(int reviewCode, String reviewTitle, String reviewContent, int reviewGrade, MemberVO memberVO) {
 		super();
 		this.reviewCode = reviewCode;
@@ -103,7 +117,13 @@ public class ReviewVO {
 	public void setMemberVO(MemberVO memberVO) {
 		this.memberVO = memberVO;
 	}
+	public int getOrdersDetailsCode() {
+		return ordersDetailsCode;
+	}
 
+	public void setOrdersDetailsCode(int ordersDetailsCode) {
+		this.ordersDetailsCode = ordersDetailsCode;
+	}
 	// toString
 	@Override
 	public String toString() {
