@@ -14,6 +14,13 @@ public interface GoodsDAO {
 	public List<GoodsVO> selectAllGoods() throws SQLException;
 	
 	/**
+	 * 상품 Top3 리뷰개수로 검색
+	 * @param
+	 * @return List<GoodsVO> goodsList
+	 * */
+	public List<GoodsVO> selectByTop3ReviewCount() throws SQLException;
+	
+	/**
 	 * 상품 평점평균 변경
 	 * @param int goodsCode, float goodsAvg, Connection con
 	 * @return int result

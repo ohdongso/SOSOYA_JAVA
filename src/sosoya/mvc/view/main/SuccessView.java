@@ -26,17 +26,28 @@ public class SuccessView {
 	}
 	
 	/**
+	 * 리뷰개수 TOP3에 해당하는 상품출력
+	 * */
+	public static void printReviewTop3CountGoods(List<GoodsVO> goodsList) {
+		for(GoodsVO goodsVo : goodsList) {
+			System.out.println(goodsVo);
+		}
+	}
+	
+	/**
 	 * 전체 리뷰내용 출력
 	 * */
 	public static void printAllReview(List<ReviewVO> reviewVoList) {
+		int size = reviewVoList.size();
 		int index = 0;
-		
 		for(ReviewVO reviewVO : reviewVoList){
 			System.out.println(++index + "번째 리뷰" + " | 리뷰코드:" + reviewVO.getReviewCode() + " | 회원아이디:" + reviewVO.getId() + " | 상품이름:" + reviewVO.getGoodsVO().getGoodsName());
 			System.out.println("  리뷰제목 ▶ " + reviewVO.getReviewTitle());
 			System.out.println("  리뷰내용 ▶ " + reviewVO.getReviewContent());
 			System.out.println("  등록날짜 ▶ " + reviewVO.getReviewRegdate());
-			System.out.println("  상품평점 ▶ " + reviewVO.getReviewGrade() + "\n");
+			System.out.println("  상품평점 ▶ " + reviewVO.getReviewGrade() + "점");
+			
+			if(index < size)System.out.println();
 		}
 	}
 	
@@ -103,7 +114,7 @@ public class SuccessView {
 				   // 작성된 리뷰일 경우
 				   // 아이디와 주문상세코드에 해당하는 리뷰가 존재하면 표시해줘야한다.
 				   ReviewVO reviewVo = reviewDao.selectByIdOrderDetailCode(memberId, orderDetailCode);
-				   if(reviewVo == null) {
+				   if(reviewVo != null) {
 					   System.out.println("      ▶ 리뷰등록이 완료된 결제상품입니다.");
 				   }
 			   }

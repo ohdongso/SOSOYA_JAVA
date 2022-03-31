@@ -48,4 +48,17 @@ public class GoodsController {
 			FailView.errorMessage(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 상품 Top3 리뷰개수로 검색
+	 * */
+	public static void selectByTop3ReviewCount() {
+		try {
+			List<GoodsVO> goodsList = goodsService.selectByTop3ReviewCount();
+			SuccessView.printReviewTop3CountGoods(goodsList);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FailView.errorMessage(e.getMessage());
+		}
+	}
 }

@@ -55,7 +55,7 @@ public class ReviewView {
 			System.out.println("\n----- 리뷰내용 최종확인 -----");
 			System.out.println("리뷰 제목 : " + title);
 			System.out.println("리뷰 내용 : " + content);
-			System.out.println("리뷰 평점 : " + grade);
+			System.out.println("리뷰 평점 : " + grade + "점");
 			System.out.println("상품코드 : " + goodsCode);
 			System.out.println("주문상세코드 : " + orderDetailCode);
 			
@@ -66,6 +66,7 @@ public class ReviewView {
 				if(input.toUpperCase().equals("Y")) {
 					ReviewVO reviewVO = new ReviewVO(0, memberVO.getId(), goodsCode, orderDetailCode, title, content, grade, null);
 					ReviewController.insertReview(reviewVO);
+					break;
 				} else if(input.toUpperCase().equals("N")) {
 					System.out.println("리뷰작성이 취소 되었습니다.");
 					break;
@@ -83,16 +84,13 @@ public class ReviewView {
 	
 	// 작성한 리뷰 보기
 	public static void printReview(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
-		System.out.println("=== 내가작성한 리뷰 보기 ===");
-		
+		System.out.println("\n=== 내가작성한 리뷰 전체보기 ===");
 		ReviewController.selectAllReview(memberVO);
 	}
 	
 	// 상품코드로리뷰검색
 	public static void printGoodsNameReview(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
-		System.out.println("=== 상품이름으로리뷰검색 ===");
+		System.out.println("\n=== 상품이름으로리뷰검색 ===");
 		
 		System.out.print("상품 이름을 입력해주세요: ");
 		String goodsName = sc.nextLine();

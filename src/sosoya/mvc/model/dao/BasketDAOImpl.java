@@ -69,7 +69,6 @@ public class BasketDAOImpl implements BasketDAO {
 				ps.clearParameters();
 			}
 			re = ps.executeBatch();
-			System.out.println("확인 : " + Arrays.toString(re));
 			for(int i : re) {
 				if(i != Statement.SUCCESS_NO_INFO) {
 					con.rollback();

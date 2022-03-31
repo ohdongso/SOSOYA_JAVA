@@ -41,4 +41,14 @@ public class GoodsServiceImpl implements GoodsService {
 		if(list.size() == 0) throw new SQLException("상품이 존재하지 않습니다.");
 		return list;
 	}
+
+	/**
+	 * 상품 Top3 리뷰개수로 검색
+	 */
+	@Override
+	public List<GoodsVO> selectByTop3ReviewCount() throws SQLException {
+		List<GoodsVO> goodsList = goodsService.selectByTop3ReviewCount();
+		if(goodsList.size() == 0) throw new SQLException("리뷰개수 Top3 상품이 조회되지 않았습니다.");
+		return goodsList;
+	}
 }

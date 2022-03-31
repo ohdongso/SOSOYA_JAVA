@@ -28,7 +28,7 @@ public class GoodsView {
 				printOrderBasket(memberVO);
 				break;
 			case 2:
-				// 부분검색(1,제품이름 2,가격 3,리뷰개수)
+				// 부분검색(1,이름 2,가격 3,리뷰개수)
 				printSelectPartSearch(memberVO);
 				break;
 			case 3:
@@ -102,6 +102,9 @@ public class GoodsView {
 				break;
 			case 3:
 				// Top3리뷰개수로검색
+				printSelectTopReviewCount(memberVO);
+				// 1,주문하기 2,장바구니에담기 3,뒤로가기
+				printOrderBasket(memberVO);
 				break;
 			case 4:
 				// 뒤로가기
@@ -120,6 +123,7 @@ public class GoodsView {
 		GoodsController.selectAllGoods();
 	}
 	
+	// 상품이름검색
 	public static void printSelectByNameGoods(MemberVO memberVO) {
 		System.out.println("\n=== 상품이름으로검색 ===");
 		
@@ -130,6 +134,7 @@ public class GoodsView {
 		GoodsController.selectByNameGoods(goodsName);
 	}
 	
+	// 상품가격검색
 	public static void printSelectByPriceGoods(MemberVO memberVO) {
 		System.out.println("\n=== 상품가격으로검색 ===");
 		
@@ -143,5 +148,13 @@ public class GoodsView {
 		maxPrice = Integer.parseInt(sc.nextLine());
 		
 		GoodsController.SelectByPriceGoods(minPrice, maxPrice);
+	}
+	
+	// Top3리뷰개수로검색
+	public static void printSelectTopReviewCount(MemberVO memberVO) {
+		System.out.println("\n=== Top3리뷰개수로검색 ===");
+		GoodsController.selectByTop3ReviewCount();
+		
+		
 	}
 }

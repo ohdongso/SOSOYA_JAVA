@@ -45,10 +45,7 @@ public class MyPageView {
 				// (교환,환불)
 				break;
 			case 5:
-				// 작성한리뷰보기
-				ReviewView.printReview(memberVO);
-				
-				// 1,상품코드로검색 2,리뷰수정 3,리뷰삭제
+				// 1,리뷰전체검색 2,상품이름으로검색 3,뒤로가기
 				printReviewOption(memberVO);
 				
 				break;
@@ -70,9 +67,7 @@ public class MyPageView {
 			System.out.println("┌──────────────┐");
 			System.out.println("  	 1. 리뷰전체검색				                ");
 			System.out.println("  	 2. 상품이름으로리뷰검색				            ");
-			System.out.println("  	 3. 리뷰수정   					            ");
-			System.out.println("  	 4. 리뷰삭제									");
-		    System.out.println("  	 5. 뒤로가기          						    ");
+		    System.out.println("  	 3. 뒤로가기          						    ");
 			System.out.println("└──────────────┘");
 			System.out.print("선택>>");
 			
@@ -87,18 +82,10 @@ public class MyPageView {
 				ReviewView.printGoodsNameReview(memberVO);
 				break;
 			case 3:
-				// 리뷰수정
-				ReviewView.printUpdateReview(memberVO);
-				break;
-			case 4:
-				// 리뷰삭제
-				ReviewView.printDeleteReview(memberVO);
-				break;
-			case 5:
 				// 뒤로가기
 				return;
 			default :
-				// 1~5번 까지 숫자를 입력해주세요.
+				// 1~3번 까지 숫자를 입력해주세요.
 				System.out.println("1~3번 까지 숫자를 입력해주세요.");
 				break;
 			}

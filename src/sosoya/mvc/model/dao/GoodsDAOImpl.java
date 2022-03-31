@@ -243,4 +243,39 @@ public class GoodsDAOImpl implements GoodsDAO {
 		}
 		return goodsName;
 	}
+	
+	/**
+	 * 상품 Top3 리뷰개수로 검색
+	 * */
+	@Override
+	public List<GoodsVO> selectByTop3ReviewCount() throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = sosoyaSql.getProperty("GOODS.SELECTBYTOP3REVIEWCOUNT");
+		GoodsVO goodsVo = null;
+		List<GoodsVO> goodsList = new ArrayList<GoodsVO>();
+		
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			
+			rs = ps.executeQuery();
+			
+			int index = 1;
+			while(rs.next()) {
+				if(index < 4) {
+					goodsVo = new GoodsVO(rs.getInt("GOODS_CODE"), rs.getString("GOODS_NAME"), rs.getInt("GOODS_PRICE"), 
+					rs.getInt("GOODS_STOCK"), rs.getString("GOODS_REGDATE"), rs.getInt("GOODS_REVIEWCOUNT"), rs.getInt("GOODS_CATEGORY"), rs.getFloat("GOODS_GRADEAVG"));
+					goodsList.add(goodsVo);
+					index++;
+				} else {
+					break;
+				}
+			}
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}
+		return goodsList;
+	}
 }
