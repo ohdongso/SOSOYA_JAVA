@@ -129,7 +129,6 @@ public class PaymentView {
 	// 결제내역전체 보기
 	public static void printPaymentList(MemberVO memberVO) {
 		System.out.println("\n=== 결제내역 ===");
-		
 		PaymentController.selectAllPayment(memberVO);
 	}
 	

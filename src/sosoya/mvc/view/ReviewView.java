@@ -21,7 +21,7 @@ public class ReviewView {
 			// 전체 결제내역을 보여줘야 한다.
 			System.out.println("\n=== 후기작성 가능한 결제내역 ===");
 			
-			PaymentController.selectAllPayment(memberVO);
+			PaymentController.selectAllReviewPayment(memberVO);
 			System.out.println();
 			
 			// (제목, 내용, 평점) 3가지는 유효성 검사후 setter를 통해입력받는다.

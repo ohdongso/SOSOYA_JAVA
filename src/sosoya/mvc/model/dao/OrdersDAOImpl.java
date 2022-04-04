@@ -498,8 +498,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 				List<OrdersDetailsVO> ordersDetailsVOList = selectOrdersDetailsVO(ordersVO.getOrdersCode());
 				
 				// 주문상세 리스트가 담긴상황에서, 각 주문상세의 상품코드에 해당하는 상품이름을 list에 저장해줘야 한다.
-				for(OrdersDetailsVO vo : ordersDetailsVOList) {
-					
+				for(OrdersDetailsVO vo : ordersDetailsVOList) {		
 					String goodsName = goodsDao.selectByNameGoodsOne(vo.getGoodsCode());
 					vo.setGoodsName(goodsName);
 				}
@@ -528,6 +527,34 @@ public class OrdersDAOImpl implements OrdersDAO {
 		List<OrdersDetailsVO> list = new ArrayList<>();
 		String sql = sosoyaSql.getProperty("ORDERS_DETAILS.SELECT");
 		
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, orderCode);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				OrdersDetailsVO ordersDetailsVO = new OrdersDetailsVO(rs.getInt(1),rs.getInt(2),rs.getInt(3),
+						rs.getInt(4),rs.getInt(5),rs.getInt(6));
+				list.add(ordersDetailsVO);
+			}
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}
+		return list;
+	}
+	
+	/**
+	 * 주문코드에 해당하는 주문상세중 리뷰가 작성되지않은 주문상세를 가져온다.
+	 */
+	@Override
+	public List<OrdersDetailsVO> selectOrdersReviewDetailsVO(int orderCode) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<OrdersDetailsVO> list = new ArrayList<>();
+		String sql = sosoyaSql.getProperty("ORDERS_DETAILS.SELECTREVIEWNULL");
+											
 		try {
 			con = DbUtil.getConnection();
 			ps = con.prepareStatement(sql);
@@ -592,7 +619,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 		orderVO.setOriginalPrice(originalTotalPrice);
 		return ordersTotalprice;
 	}
-	
+
 	/**
 	 * 각각의 주문상세의 합계를 구해준다.
 	 * */

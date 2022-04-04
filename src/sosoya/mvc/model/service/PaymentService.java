@@ -9,8 +9,15 @@ import sosoya.mvc.model.dto.PaymentVO;
 public interface PaymentService {
 	/**
 	 * 전체결제내역 조회
-	 * @param MemberVO memberVOs
+	 * @param MemberVO memberVO
 	 * @return List<PaymentVO> paymentVoList
 	 * */
 	public List<PaymentVO> selectAllPayment(MemberVO memberVO) throws SQLException;
+	
+	/**
+	 * 후기작성가능한 결제내역 전체보기
+	 * @param MemberVO memberVO
+	 * @return List<PaymentVO> paymentVoList
+	 * */
+	public List<PaymentVO> selectAllReviewPayment(MemberVO memberVO) throws SQLException;
 }

@@ -14,7 +14,7 @@ public class PaymentController {
 	private static PaymentService paymentService = new PaymentServiceImpl();
 	
 	/**
-	 * 결제내역 보기
+	 * 결제내역 전체보기
 	 * */
 	public static void selectAllPayment(MemberVO memberVO) {
 		try {
@@ -22,8 +22,20 @@ public class PaymentController {
 			SuccessView.printPayment(paymentVoList);
 		} catch (SQLException e) {
 			FailView.errorMessage(e.getMessage());
-			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * 후기작성가능한 결제내역 전체보기
+	 * */
+	public static void selectAllReviewPayment(MemberVO memberVO) {
+		try {
+			// 조회할 때 리뷰가 작성된 주문상세는 가져오지 않고
+			// 주문상세에 모든 리뷰작성이 완료되면 주문코드, 결제 코드도 안가져오면 된다.
+			List<PaymentVO> paymentVoList = paymentService.selectAllReviewPayment(memberVO);
+			SuccessView.printPayment(paymentVoList);
+		} catch (SQLException e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
 }
