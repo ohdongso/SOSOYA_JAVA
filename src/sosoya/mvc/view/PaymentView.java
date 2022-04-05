@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Scanner;
 
 import sosoya.mvc.controller.PaymentController;
+import sosoya.mvc.model.dao.PaymentDAO;
+import sosoya.mvc.model.dao.PaymentDAOImpl;
 import sosoya.mvc.model.dto.GoodsVO;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.model.dto.OrdersVO;
+import sosoya.mvc.model.dto.PaymentVO;
+import sosoya.mvc.view.main.FailView;
 
 public class PaymentView {
 	private static Scanner sc = new Scanner(System.in);
+	private static PaymentDAO paymentDao = new PaymentDAOImpl();
 	
 	// 상품검색 후 바로주문해서 보이는 View
 	public static boolean printPaymentDirectOrder(MemberVO memberVO, List<GoodsVO> goodsVoList, OrdersVO ordersVO) {
@@ -134,12 +139,38 @@ public class PaymentView {
 	
 	// 결제내역 삭제
 	public static void printPaymentDelete(MemberVO memberVO) {
-		System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다." + " / 회원등급[" + memberVO.getGrade() + "] -----");
-		System.out.println("=== 결제내역 삭제 ===");
+		System.out.println("\n=== 결제내역 삭제 ===");
+		PaymentController.selectAllPayment(memberVO);
+		System.out.println();
 		
-		System.out.print("삭제할 결제 내역 개수를 입력주세요: ");
-		int count = Integer.parseInt(sc.nextLine());
+		// 결제내역 개수를 초과하거나 0개 이하를 입력하면 다시 입력받는다.
+		List<PaymentVO> list = null;
+		try {
+			list = paymentDao.selectAllPayment(memberVO);
+		} catch (Exception e) {
+			FailView.errorMessage(e.getMessage());
+			return;
+		}
 		
+		int size = list.size();
+		if(size == 0) {
+			System.out.println("결제 내역이 존재하지 않습니다.");
+			return;
+		}
+		
+		int count = 0;
+
+		System.out.print("삭제할 결제 내역 개수를 입력주세요 : ");
+		count = Integer.parseInt(sc.nextLine());
+		
+		if(count > size) {
+			System.out.println("결제 내역 총 개수가 " + size + "개 입니다. 1개~" + size +"개 사이 숫자를 입력해주세요.");
+			return;
+		} else if(count < 1) {
+			System.out.println("1개 이상을 입력해주세요.");
+			return;
+		}
+
 		List<Integer> paymentCodeList = new ArrayList<>();
 		for(int i = 1; i <= count; i++) {
 			System.out.print("삭제할 결제코드를 입력해주세요: ");
@@ -147,6 +178,22 @@ public class PaymentView {
 			paymentCodeList.add(paymentCode);
 		}
 		
-		// 후기를 등록하고 처리해야 한다.
+		// 결제내역을 삭제하면 리뷰를 작성하지 못한다는것을 명시해야 한다.
+		while(true) {
+			System.out.print("\"결제내역을 삭제하면 리뷰작성을 하지못합니다. 정말 삭제하시겠습니까??(y 또는 n을 입력해주세요)\" : ");
+			String input = sc.nextLine();
+			
+			if(input.toUpperCase().equals("Y")) {
+				// Controller에 전달
+				PaymentController.printPaymentDelete(paymentCodeList);
+				return;
+			} else if(input.toUpperCase().equals("N")) {
+				System.out.println("결제내역 삭제가 취소되었습니다.");
+				return;
+			} else {
+				System.out.println("y 또는 n을 입력해주세요.\n");
+				continue;
+			}
+		}
 	}
 }

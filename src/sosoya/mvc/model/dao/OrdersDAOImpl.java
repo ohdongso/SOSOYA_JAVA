@@ -58,6 +58,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 			result = ps.executeUpdate();
 			if(result == 0) {
 				con.rollback();
+				System.out.println("확인");
 				throw new SQLException("orders테이블에 데이터 삽입 실패...");
 			} else {				
 				// 주문테이블에 데이터가 들어가면, 주문상세 테이블에도 데이터가 담긴다.

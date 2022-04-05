@@ -104,5 +104,8 @@ public class OrderView {
 	public static void printSelectAllOrders(MemberVO memberVO) {
 		System.out.println("\n=== 주문내역 ===");
 		OrdersController.selectOrdersByMemberId(memberVO.getId());
+		
+		// 삭제할 주문코드를 받아서 삭제해주자.
+		
 	}
 }

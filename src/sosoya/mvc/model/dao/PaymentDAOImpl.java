@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -123,5 +125,39 @@ public class PaymentDAOImpl implements PaymentDAO {
 		}
 		
 		return paymentVoList;
+	}
+	
+	/**
+	 * 결제내역 삭제
+	 */
+	@Override
+	public int deletePayment(List<Integer> paymentCodeList) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = sosoyaSql.getProperty("PAYMENT.DELETE");
+		int result = 0;
+		
+		try {
+			con = DbUtil.getConnection();
+			
+			// 오토커밋을 하지 않겠다.
+			con.setAutoCommit(false);
+			
+			// 트랜잭션 시작
+			ps = con.prepareStatement(sql);
+			
+			for(int paymentCode : paymentCodeList) {
+				ps.setInt(1, paymentCode);
+				result = ps.executeUpdate();
+				if(result == 0) {
+					con.rollback();
+					throw new SQLException("REVIEW테이블에 리뷰내역삭제중 상태 2로변경 실패...");
+				}
+			}
+		} finally {
+			con.commit();
+			DbUtil.close(con, ps, null);
+		}		
+		return result;
 	}
 }

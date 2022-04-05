@@ -20,4 +20,11 @@ public interface PaymentDAO {
 	 * @return List<PaymentVO> paymentVoList
 	 * */
 	public List<PaymentVO> selectAllReviewPayment(MemberVO memberVO) throws SQLException;
+	
+	/**
+	 * 결제내역 삭제
+	 * @param List<Integer> paymentCodeList
+	 * @return int result
+	 * */
+	public int deletePayment(List<Integer> paymentCodeList) throws SQLException;
 }

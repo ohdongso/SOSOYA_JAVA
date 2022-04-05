@@ -38,4 +38,16 @@ public class PaymentController {
 			FailView.errorMessage(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 결제내역 삭제
+	 */
+	public static void printPaymentDelete(List<Integer> paymentCodeList) {
+		try {
+			paymentService.deletePayment(paymentCodeList);
+			SuccessView.printMessage("결제내역이 삭제 되었습니다.");
+		} catch (SQLException e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
 }

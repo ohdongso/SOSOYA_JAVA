@@ -29,7 +29,15 @@ public class PaymentServiceImpl implements PaymentService {
 	public List<PaymentVO> selectAllReviewPayment(MemberVO memberVO) throws SQLException {
 		List<PaymentVO> paymentVoList = paymentDAO.selectAllReviewPayment(memberVO);
 		if(paymentVoList.size() == 0) throw new SQLException("리뷰작성 가능한 결제내역이 존재하지 않습니다.");
-		
 		return paymentVoList;
+	}
+	
+	/**
+	 * 결제내역 삭제
+	 */
+	@Override
+	public void deletePayment(List<Integer> paymentCodeList) throws SQLException {
+		int result = paymentDAO.deletePayment(paymentCodeList);
+		if(result == 0) throw new SQLException("결제목록이 삭제 되지 않았습니다.");
 	}
 }
