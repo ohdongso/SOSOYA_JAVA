@@ -62,4 +62,16 @@ public class OrdersController {
 			FailView.errorMessage(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 주문코드에 해당하는 주문내역 삭제하기
+	 */
+	public static void deleteOrderList(List<Integer> orderCodeList) {
+		try {
+			ordersService.deleteOrderList(orderCodeList);
+			SuccessView.printMessage("주문내역이 삭제 되었습니다.");
+		} catch (SQLException e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
 }

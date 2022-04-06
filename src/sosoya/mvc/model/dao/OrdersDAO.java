@@ -53,4 +53,11 @@ public interface OrdersDAO {
 	 * @return OrdersVO orderVO
 	 * */
 	public OrdersVO selectOrdersByOrderCode(int orderCode) throws SQLException;
+	
+	/**
+	 * 주문코드에 해당하는 주문내역 삭제하기
+	 * @param List<Integer> orderCodeList
+	 * @return int result
+	 */
+	public int deleteOrderList(List<Integer> orderCodeList) throws SQLException;
 }

@@ -80,4 +80,13 @@ public class OrdersServiceImpl implements OrdersService {
 		if(list.size() == 0) throw new SQLException("주문내역이 없습니다.");
 		return list;
 	}
+	
+	/**
+	 * 주문코드에 해당하는 주문내역 삭제하기
+	 */
+	@Override
+	public void deleteOrderList(List<Integer> orderCodeList) throws SQLException {
+		int result = ordersDao.deleteOrderList(orderCodeList);
+		if(result == 0) throw new SQLException("주문목록이 삭제 되지 않았습니다.");
+	}
 }

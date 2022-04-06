@@ -1,5 +1,5 @@
 package sosoya.mvc.model.service;
 
-public class ErServiceImpl {
+public class ErServiceImpl implements ErService {
 
 }

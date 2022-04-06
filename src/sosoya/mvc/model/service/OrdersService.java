@@ -34,4 +34,11 @@ public interface OrdersService {
 	 * @return List<OrdersVO> ordersVO
 	 * */
 	public List<OrdersVO> selectOrdersByMemberId(String memberId) throws SQLException;
+	
+	/**
+	 * 주문코드에 해당하는 주문내역 삭제하기
+	 * @param List<Integer> orderCodeList
+	 * @return
+	 */
+	public void deleteOrderList(List<Integer> orderCodeList) throws SQLException;
 }

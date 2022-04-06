@@ -17,8 +17,8 @@ public class MyPageView {
 			System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다."   + " / 회원등급[" + memberVO.getGrade() + "] -----");
 			System.out.println("┌──────────────┐");
 			System.out.println("  	 1. 장바구니						    ");
-			System.out.println("  	 2. 주문내역(전체조회, 삭제)			    ");
-			System.out.println("  	 3. 결제내역(후기작성)  					");
+			System.out.println("  	 2. 주문내역(삭제하기, 뒤로가기)			");
+			System.out.println("  	 3. 결제내역(리뷰작성)  					");
 			System.out.println("  	 4. (교환,환불)내역  					");
 			System.out.println("  	 5. 작성한리뷰보기					    ");
 			System.out.println("  	 6. 뒤로가기						    ");
@@ -32,7 +32,7 @@ public class MyPageView {
 				printBasket(memberVO);
 				break;
 			case 2:
-				// 주문내역
+				// 주문내역(삭제하기, 뒤로가기)
 				OrderView.printSelectAllOrders(memberVO);
 				break;
 			case 3:

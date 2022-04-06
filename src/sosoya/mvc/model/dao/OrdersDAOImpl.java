@@ -647,4 +647,38 @@ public class OrdersDAOImpl implements OrdersDAO {
 		
 		return orderDetailTotalPrice;
 	}
+	
+	/**
+	 * 주문코드에 해당하는 주문내역 삭제하기
+	 */
+	@Override
+	public int deleteOrderList(List<Integer> orderCodeList) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;	
+		String sql = sosoyaSql.getProperty("ORDERS.DELETE");
+		int result = 0;
+		
+		try {
+			con = DbUtil.getConnection();
+			
+			// 오토커밋을 하지 않겠다.
+			con.setAutoCommit(false);
+						
+			// 트랜잭션 시작
+			ps = con.prepareStatement(sql);
+			
+			for(int orderCode : orderCodeList) {
+				ps.setInt(1, orderCode);
+				result = ps.executeUpdate();
+				if(result == 0) {
+					con.rollback();
+					throw new SQLException("ORDER테이블에 주문내역삭제중 상태 2로변경 실패...");
+				}
+			}
+		} finally {
+			con.commit();
+			DbUtil.close(con, ps, null);
+		}
+		return result;
+	}
 }

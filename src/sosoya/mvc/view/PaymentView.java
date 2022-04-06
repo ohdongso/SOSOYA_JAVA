@@ -140,8 +140,6 @@ public class PaymentView {
 	// 결제내역 삭제
 	public static void printPaymentDelete(MemberVO memberVO) {
 		System.out.println("\n=== 결제내역 삭제 ===");
-		PaymentController.selectAllPayment(memberVO);
-		System.out.println();
 		
 		// 결제내역 개수를 초과하거나 0개 이하를 입력하면 다시 입력받는다.
 		List<PaymentVO> list = null;
@@ -158,13 +156,16 @@ public class PaymentView {
 			return;
 		}
 		
+		PaymentController.selectAllPayment(memberVO);
+		System.out.println();
+		
 		int count = 0;
 
-		System.out.print("삭제할 결제 내역 개수를 입력주세요 : ");
+		System.out.print("삭제할 결제내역 개수를 입력주세요 : ");
 		count = Integer.parseInt(sc.nextLine());
 		
 		if(count > size) {
-			System.out.println("결제 내역 총 개수가 " + size + "개 입니다. 1개~" + size +"개 사이 숫자를 입력해주세요.");
+			System.out.println("결제내역 총 개수가 " + size + "개 입니다. 1개~" + size +"개 사이 숫자를 입력해주세요.");
 			return;
 		} else if(count < 1) {
 			System.out.println("1개 이상을 입력해주세요.");

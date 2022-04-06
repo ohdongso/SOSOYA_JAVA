@@ -1,14 +1,20 @@
 package sosoya.mvc.view;
 
+import java.util.List;
 import java.util.Scanner;
 
 import sosoya.mvc.controller.PaymentController;
 import sosoya.mvc.controller.ReviewController;
+import sosoya.mvc.model.dao.PaymentDAO;
+import sosoya.mvc.model.dao.PaymentDAOImpl;
 import sosoya.mvc.model.dto.MemberVO;
+import sosoya.mvc.model.dto.PaymentVO;
 import sosoya.mvc.model.dto.ReviewVO;
+import sosoya.mvc.view.main.FailView;
 
 public class ReviewView {
 	private static Scanner sc = new Scanner(System.in);
+	private static PaymentDAO paymentDao = new PaymentDAOImpl();
 	
 	// 결제한 상품 주문하는 기능
 	public static void printReviewOrder(MemberVO memberVO) {
@@ -20,6 +26,19 @@ public class ReviewView {
 		if(flag.toUpperCase().equals("Y")) {
 			// 전체 결제내역을 보여줘야 한다.
 			System.out.println("\n=== 후기작성 가능한 결제내역 ===");
+			
+			List<PaymentVO> list = null;
+			try {
+				list = paymentDao.selectAllReviewPayment(memberVO);
+			} catch (Exception e) {
+				FailView.errorMessage(e.getMessage()); 
+			}
+			
+			int size = list.size();
+			if(size == 0) {
+				System.out.println("리뷰작성 가능한 결제내역이 존재하지 않습니다.");
+				return;
+			}
 			
 			PaymentController.selectAllReviewPayment(memberVO);
 			System.out.println();
