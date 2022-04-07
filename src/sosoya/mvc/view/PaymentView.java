@@ -181,7 +181,7 @@ public class PaymentView {
 		
 		// 결제내역을 삭제하면 리뷰를 작성하지 못한다는것을 명시해야 한다.
 		while(true) {
-			System.out.print("\"결제내역을 삭제하면 리뷰작성을 하지못합니다. 정말 삭제하시겠습니까??(y 또는 n을 입력해주세요)\" : ");
+			System.out.print("\"결제내역을 삭제하면 (리뷰작성)과 (교환,환불)을 하지못합니다. 정말 삭제하시겠습니까??\"(y 또는 n을 입력해주세요) : ");
 			String input = sc.nextLine();
 			
 			if(input.toUpperCase().equals("Y")) {

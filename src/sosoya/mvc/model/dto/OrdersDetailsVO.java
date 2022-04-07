@@ -8,11 +8,23 @@ public class OrdersDetailsVO {
 	private int ordersDetailsPrice; // 제품단가
 	private int ordersDetailsCount; // 구매수량
 	private int ordersDetailsTotalPrice; // 총가격
+	private int ordersDetailsState; // 1,주문완료상태 2,교환상태 3,환불상태 4,관리자최종승인
 	
 	private String goodsName;
 	
 	// 생성자
 	public OrdersDetailsVO() {}
+	public OrdersDetailsVO(int ordersDetailsCode, int ordersCode, int goodsCode, int ordersDetailsPrice,
+			int ordersDetailsCount, int ordersDetailsTotalPrice, int ordersDetailsState) {
+		super();
+		this.ordersDetailsCode = ordersDetailsCode;
+		this.ordersCode = ordersCode;
+		this.goodsCode = goodsCode;
+		this.ordersDetailsPrice = ordersDetailsPrice;
+		this.ordersDetailsCount = ordersDetailsCount;
+		this.ordersDetailsTotalPrice = ordersDetailsTotalPrice;
+		this.ordersDetailsState = ordersDetailsState;
+	}
 	public OrdersDetailsVO(int ordersDetailsCode, int ordersCode, int goodsCode,
 			int ordersDetailsPrice, int ordersDetailsCount, int ordersDetailsTotalPrice) {
 		super();
@@ -67,6 +79,13 @@ public class OrdersDetailsVO {
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
 	}
+	public int getOrdersDetailsState() {
+		return ordersDetailsState;
+	}
+	public void setOrdersDetailsState(int ordersDetailsState) {
+		this.ordersDetailsState = ordersDetailsState;
+	}
+	
 	// toString()
 	@Override
 	public String toString() {

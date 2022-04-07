@@ -535,8 +535,9 @@ public class OrdersDAOImpl implements OrdersDAO {
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
+				// 주문상세 상태값 저장되어 있는 상태. rs.getInt(7)
 				OrdersDetailsVO ordersDetailsVO = new OrdersDetailsVO(rs.getInt(1),rs.getInt(2),rs.getInt(3),
-						rs.getInt(4),rs.getInt(5),rs.getInt(6));
+						rs.getInt(4),rs.getInt(5),rs.getInt(6),rs.getInt(7));
 				list.add(ordersDetailsVO);
 			}
 		} finally {

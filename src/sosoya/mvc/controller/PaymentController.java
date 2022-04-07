@@ -26,6 +26,17 @@ public class PaymentController {
 	}
 	
 	/**
+	 * (교환, 환불)가능한 결제목록 전체보기
+	 * */
+	public static void selectAllErPayment(MemberVO memberVO) {
+		try {
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	/**
 	 * 후기작성가능한 결제내역 전체보기
 	 * */
 	public static void selectAllReviewPayment(MemberVO memberVO) {

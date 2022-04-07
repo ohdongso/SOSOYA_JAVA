@@ -82,10 +82,22 @@ public class SuccessView {
 			   for(OrdersDetailsVO ordersDetailsVO : order.getOrdersDetailsList()) {
 				   
 				   System.out.println("  ▶ " + ordersDetailsVO);
+				   
+				   int state = ordersDetailsVO.getOrdersDetailsState();				   		   
+				   // 교환중
+				   if(state == 2) {
+					   System.out.println("    ▶ 교환중인 상품입니다.");   
+				   // 환불중
+				   } else if(state == 3) {
+					   System.out.println("    ▶ 환불중인 상품입니다.");
+				   // 관리자 최종승인
+				   } else if(state == 4) {
+					   System.out.println("    ▶ (교환,환불)이 완료된 상품입니다.");
+				   }				  
 			   }
 			   index++;
 			   if(index < size)System.out.println();
-		}
+		} // for문 끝.
 	}
 	
 	/**
@@ -108,12 +120,36 @@ public class SuccessView {
 				   System.out.println("    ▶ 상품코드:\"" + goodsCode + "번\", "
 				   		+ "주문상세코드:\"" + orderDetailCode + "번\"");
 				   
-				   // 작성된 리뷰일 경우
+				   // 작성된 리뷰일 경우 + 교환, 환불 중인 상품일 경우
 				   // 아이디와 주문상세코드에 해당하는 리뷰가 존재하면 표시해줘야한다.
+				   int state = ordersDetailsVO.getOrdersDetailsState();
 				   ReviewVO reviewVo = reviewDao.selectByIdOrderDetailCode(memberId, orderDetailCode);
 				   if(reviewVo != null) {
 					   System.out.println("      ▶ 리뷰등록이 완료된 결제상품입니다.");
-				   }
+					   
+					   // 교환중
+					   if(state == 2) {
+						   System.out.println("        ▶ 교환중인 상품입니다.");
+					   
+					   // 환불중
+					   } else if(state == 3) {
+						   System.out.println("        ▶ 환불중인 상품입니다.");
+					   // 관리자최종승인
+					   } else if(state == 4) {
+						   System.out.println("        ▶ (교환,환불)이 완료된 상품입니다.");
+					   }
+				   // 작성되지 않을 리뷰일 경우 + 교환, 환불 중인 상품일 경우
+				   } else {
+					   // 교환중
+					   if(state == 2) {
+						   System.out.println("      ▶ 교환중인 상품입니다.");
+					   // 환불중
+					   } else if(state == 3) {
+						   System.out.println("      ▶ 환불중인 상품입니다.");
+					   } else if(state == 4) {
+						   System.out.println("      ▶ (교환,환불)이 완료된 상품입니다.");
+					   }
+				   }		   
 			   }
 			   index++;
 			   if(index < size)System.out.println();

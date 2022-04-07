@@ -5,6 +5,7 @@ import java.util.Scanner;
 import sosoya.mvc.controller.ReviewController;
 import sosoya.mvc.model.dto.MemberVO;
 import sosoya.mvc.view.BasketView;
+import sosoya.mvc.view.ErView;
 import sosoya.mvc.view.OrderView;
 import sosoya.mvc.view.PaymentView;
 import sosoya.mvc.view.ReviewView;
@@ -19,7 +20,7 @@ public class MyPageView {
 			System.out.println("  	 1. 장바구니						    ");
 			System.out.println("  	 2. 주문내역(삭제하기, 뒤로가기)			");
 			System.out.println("  	 3. 결제내역(리뷰작성)  					");
-			System.out.println("  	 4. (교환,환불)내역  					");
+			System.out.println("  	 4. (교환,환불)내역보기    				");
 			System.out.println("  	 5. 작성한리뷰보기					    ");
 			System.out.println("  	 6. 뒤로가기						    ");
 			System.out.println("└──────────────┘");
@@ -42,12 +43,11 @@ public class MyPageView {
 				printPaymentOption(memberVO);
 				break;
 			case 4:
-				// (교환,환불)
+				// 교환, 환불 내역보기
 				break;
 			case 5:
 				// 1,리뷰전체검색 2,상품이름으로검색 3,뒤로가기
-				printReviewOption(memberVO);
-				
+				printReviewOption(memberVO);	
 				break;
 			case 6:
 				// 뒤로가기

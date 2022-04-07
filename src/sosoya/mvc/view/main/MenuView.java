@@ -3,6 +3,7 @@ package sosoya.mvc.view.main;
 import java.util.Scanner;         
 import sosoya.mvc.controller.MemberController;
 import sosoya.mvc.model.dto.MemberVO;
+import sosoya.mvc.view.ErView;
 import sosoya.mvc.view.FaqView;
 import sosoya.mvc.view.GoodsView;
 import sosoya.mvc.view.MemberView;
@@ -76,7 +77,11 @@ public class MenuView {
 				MyPageView.printMyPage(memberVO);
 				break;
 			case 4:
+				// 교환, 환불가능한 주문목록 + 결제 보여주기
+				
+
 				// (교환,환불)
+				ErView.printErMenu(memberVO);
 				break;
 			case 5:
 				// 자주묻는 질문 FAQ

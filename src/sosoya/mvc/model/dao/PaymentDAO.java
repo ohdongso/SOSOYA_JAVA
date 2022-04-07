@@ -15,6 +15,13 @@ public interface PaymentDAO {
 	public List<PaymentVO> selectAllPayment(MemberVO memberVO) throws SQLException;
 	
 	/**
+	 * (교환, 환불)가능한 결제목록 전체보기
+	 * @Param MemberVO memberVO
+	 * @return List<PaymentVO> paymentVoList
+	 * */
+	 public List<PaymentVO> selectAllErPayment(MemberVO memberVO) throws SQLException;
+	
+	/**
 	 * 후기작성가능한 결제내역 전체보기
 	 * @param MemberVO memberVO
 	 * @return List<PaymentVO> paymentVoList
