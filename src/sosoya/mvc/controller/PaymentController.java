@@ -30,9 +30,11 @@ public class PaymentController {
 	 * */
 	public static void selectAllErPayment(MemberVO memberVO) {
 		try {
-			
+			// 결제데이터 상태가 1이고, 주문상세데이터 상태가 1인 데이터만 담아서 온다.
+			List<PaymentVO> paymentVoList = paymentService.selectAllErPayment(memberVO);
+			SuccessView.printPayment(paymentVoList);
 		} catch (Exception e) {
-			// TODO: handle exception
+			FailView.errorMessage(e.getMessage());
 		}
 	}
 	

@@ -575,6 +575,34 @@ public class OrdersDAOImpl implements OrdersDAO {
 	}
 	
 	/**
+	 * 주문코드에 해당하는 주문상세의 상태가 1,주문완료상태 것만 들고온다.
+	 */
+	@Override
+	public List<OrdersDetailsVO> selectOrdersDetailsVoState(int orderCode) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<OrdersDetailsVO> list = new ArrayList<>();
+		String sql = sosoyaSql.getProperty("ORDERS_DETAILS.SELECTSTATE");
+											
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, orderCode);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				OrdersDetailsVO ordersDetailsVO = new OrdersDetailsVO(rs.getInt(1),rs.getInt(2),rs.getInt(3),
+						rs.getInt(4),rs.getInt(5),rs.getInt(6));
+				list.add(ordersDetailsVO);
+			}
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}
+		return list;
+	}
+	
+	/**
 	 * 회원등급에 따른 총결제 금액 구하기
 	 * 주문 객체안의 모든 주문상세 가격을 구한다.
 	 * */

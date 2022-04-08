@@ -6,6 +6,7 @@ import java.util.List;
 import sosoya.mvc.model.dao.ReviewDAO;
 import sosoya.mvc.model.dao.ReviewDAOImpl;
 import sosoya.mvc.model.dto.MemberVO;
+import sosoya.mvc.model.dto.PaymentVO;
 import sosoya.mvc.model.dto.ReviewVO;
 
 public class ReviewServiceImpl implements ReviewService {
@@ -25,7 +26,12 @@ public class ReviewServiceImpl implements ReviewService {
 		int result = reviewDao.insertReview(reviewVO);
 		if(result == 0) throw new SQLException("리뷰가 등록되지 않았습니다.");
 	}
-
+	
+	/**
+	 * (교환, 환불)가능한 결제목록 전체보기
+	 */
+	
+	
 	/**
 	 * 내가 작성한 전체 리뷰조회
 	 */
@@ -36,7 +42,7 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		return reviewVoList;
 	}
-	
+
 	/**
 	 * 상품이름으로 리뷰 검색하기
 	 */

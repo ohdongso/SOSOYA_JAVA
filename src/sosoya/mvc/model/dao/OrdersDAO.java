@@ -37,8 +37,17 @@ public interface OrdersDAO {
 	
 	/**
 	 * 주문코드에 해당하는 리뷰가 작성되지 않은 주문상세를 가져온다.
+	 * @param int orderCode
+	 * @return List<OrdersDetailsVO> list
 	 * */
 	public List<OrdersDetailsVO> selectOrdersReviewDetailsVO(int orderCode) throws SQLException;
+	
+	/**
+	 * 주문코드에 해당하는 주문상세의 상태가 1,주문완료상태 것만 들고온다.
+	 * @param int orderCode
+	 * @return List<OrdersDetailsVO> list
+	 * */
+	public List<OrdersDetailsVO> selectOrdersDetailsVoState(int orderCode) throws SQLException;
 	
 	/**
 	 * 주문내역보기

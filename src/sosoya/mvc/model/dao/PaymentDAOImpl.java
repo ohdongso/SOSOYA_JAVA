@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import sosoya.mvc.model.dto.MemberVO;
@@ -15,7 +15,6 @@ import sosoya.mvc.model.dto.OrdersDetailsVO;
 import sosoya.mvc.model.dto.OrdersVO;
 import sosoya.mvc.model.dto.PaymentVO;
 import sosoya.mvc.util.DbUtil;
-import sosoya.mvc.view.OrderDetailView;
 
 public class PaymentDAOImpl implements PaymentDAO {
 	private Properties sosoyaSql = DbUtil.getProFile();
@@ -80,8 +79,9 @@ public class PaymentDAOImpl implements PaymentDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<PaymentVO> paymentVoList = null;
-		String sql = sosoyaSql.getProperty("PAYMENT.SELECTALLER");
+		String sql = sosoyaSql.getProperty("PAYMENT.SELECTALL");
 		
+		// 결제에서 삭제되지 않았고, 
 		try {
 			con = DbUtil.getConnection();
 			ps = con.prepareStatement(sql);
@@ -99,11 +99,11 @@ public class PaymentDAOImpl implements PaymentDAO {
 				// 주문코드에 해당하는, ordersVO객체를 가져온다.
 				OrdersVO ordersVO = ordersDao.selectOrdersByOrderCode(orderCode);
 				
-				// 주문코드에 해당하는, 주문상세리스트를 ordersVO객체에 저장한다.
-				// ordersDetailsVoList에는 주문중 주문상세에 해당하는 내역에 리뷰가 작성안된 주문상세를 가져온다.
-				List<OrdersDetailsVO> ordersDetailsVoList = ordersDao.selectOrdersReviewDetailsVO(orderCode);
-				
-				// size가 0이면 주문에 해당하는 주문상세의 모든 상품이 리뷰가 작성 됐다는 뜻이다.
+				// 주문코드에 해당하는, 주문상세리스트를 가져온다.
+				// ordersDetailsVoList에는 주문중 주문상세의 상태가 1,주문완료상태 것만 들고온다.()
+				List<OrdersDetailsVO> ordersDetailsVoList = ordersDao.selectOrdersDetailsVoState(orderCode);
+								
+				// size가 0이면 주문에 해당하는 주문상세의 모든 상품이 교환중이거나 환불중이라는 뜻이다.
 				if(ordersDetailsVoList.size() == 0 || ordersDetailsVoList == null) {
 					continue;
 				} else {
@@ -113,17 +113,17 @@ public class PaymentDAOImpl implements PaymentDAO {
 						vo.setGoodsName(goodsName);
 					}
 					
-					// 상품이름을 저장한 주문상세객체 리스트를 다시 주문객체에 저장해준다.
-					ordersVO.setOrdersDetailsList(ordersDetailsVoList);
+					// 상품이름을 저장한 주문상세객체 리스트를 주문객체에 저장해준다.
+					ordersVO.setOrdersDetailsList(ordersDetailsVoList);				
 					
-					PaymentVO paymentVO = new PaymentVO(paymentCode, orderCode, rs.getString(3), rs.getString(4), memberVO, ordersVO);
-					paymentVoList.add(paymentVO);
-				}
+				// 결제객체에 저장해서 리스트에 담아준다.
+				PaymentVO paymentVO = new PaymentVO(paymentCode, orderCode, rs.getString(3), rs.getString(4), memberVO, ordersVO);
+				paymentVoList.add(paymentVO);
+				}			
 			}
 		} finally {
 			DbUtil.close(con, ps, rs);
 		}
-		
 		return paymentVoList;
 	}
 	
@@ -155,8 +155,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 				// 주문코드에 해당하는, ordersVO객체를 가져온다.
 				OrdersVO ordersVO = ordersDao.selectOrdersByOrderCode(orderCode);
 				
-				// 주문코드에 해당하는, 주문상세리스트를 ordersVO객체에 저장한다.
-				// ordersDetailsVoListTemp에는 주문중 주문상세에 해당하는 내역에 리뷰가 작성안된 주문상세를 가져온다.
+				// 주문코드에 해당하는, 주문상세리스트를 가져온다.
 				List<OrdersDetailsVO> ordersDetailsVoList = ordersDao.selectOrdersReviewDetailsVO(orderCode);
 				
 				// size가 0이면 주문에 해당하는 주문상세의 모든 상품이 리뷰가 작성 됐다는 뜻이다.

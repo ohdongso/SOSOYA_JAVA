@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import sosoya.mvc.model.dto.MemberVO;
+import sosoya.mvc.model.dto.PaymentVO;
 import sosoya.mvc.model.dto.ReviewVO;
 
 public interface ReviewService {

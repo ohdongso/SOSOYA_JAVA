@@ -39,6 +39,7 @@ public class MyPageView {
 			case 3:
 				// 결제내역전체 보기
 				PaymentView.printPaymentList(memberVO);	
+				
 				// 1. 후기작성, 2. 결제내역삭제, 3. 뒤로가기
 				printPaymentOption(memberVO);
 				break;
