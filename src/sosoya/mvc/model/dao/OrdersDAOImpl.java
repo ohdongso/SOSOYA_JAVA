@@ -396,7 +396,7 @@ public class OrdersDAOImpl implements OrdersDAO {
 		}	
 		return result;
 	}
-	
+
 	/**
 	 * 주문코드에 해당하는 주문내역 가져오기
 	 */
