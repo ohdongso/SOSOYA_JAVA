@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import sosoya.mvc.controller.ErController;
 import sosoya.mvc.controller.PaymentController;
 import sosoya.mvc.model.dao.OrdersDAO;
 import sosoya.mvc.model.dao.OrdersDAOImpl;
@@ -141,9 +142,9 @@ public class ErView {
 					return;
 				}
 				
-				// 카테고리(1.교환 2.환불) 
+				// 카테고리 ==> 1.교환 2.환불 
 				int erCategory = 1;
-				// 상태(1.삭제전 2.삭제)
+				// 상태 ==> 1,(교환,환불 진행중,취소가능) 2,(교환,환불 진행중,취소불가능) 3,(교환,환불 완료) 4,삭제상태
 				int erState = 1;
 				
 				System.out.print("교환 내용 제목을 입력해주세요 : ");
@@ -163,6 +164,7 @@ public class ErView {
 						for(PaymentVO paymentVO : list) {
 							if(paymentVO.getOrdersCode() == orderCode) {
 								erDi = paymentVO.getOrdersVO().getOrdersDi();
+								System.out.println("기존배송지 : " + erDi);
 							}
 						}								
 						break;
@@ -176,11 +178,24 @@ public class ErView {
 					}
 				} // while문 끝.
 				
-				// 여기서 부터 진행
 				ErVO erVo = new ErVO(0, memberVO.getId(), orderCode, orderDetailCode, 
 						goodsCode, erCategory, title, content, erDi, null, erState);
 				
-				
+				while(true) {
+					System.out.println();
+					System.out.print("신청한 교환내역은 수정이 불가능 합니다. 정말 교환하시겠습니까??(y또는n을 입력해주세요) : ");
+					String input = sc.nextLine();
+					if(input.toUpperCase().equals("Y")) {
+						ErController.insertErVo(erVo);
+						return;
+					} else if(input.toUpperCase().equals("N")) {
+						System.out.println("교환이 취소되었습니다.");
+						return;
+					} else {
+						System.out.println("y 또는 n을 입력해주세요.");
+						continue;
+					}
+				} // while문 끝.
 			} // for문 끝.
 		} // while문 끝.
 	}
