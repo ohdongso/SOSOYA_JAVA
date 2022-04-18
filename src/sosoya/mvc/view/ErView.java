@@ -25,16 +25,20 @@ public class ErView {
 		while(true) {
 			System.out.println("\n----- " + memberVO.getId() + "님 방문을 환영합니다."   + " / 회원등급[" + memberVO.getGrade() + "] -----");
 			System.out.println("┌──────────────┐");
-			System.out.println("  	 1. 교환				                        ");
-			System.out.println("  	 2. 환불				                        ");
-		    System.out.println("  	 3. 뒤로가기          						    ");
+			System.out.println("  	 1. 교환신청				     ");
+			System.out.println("  	 2. 환불신청				     ");
+			System.out.println("  	 3. (교환,환불)내역조회    	     ");
+			System.out.println("  	 4. (교환,환불)취소하기    	     ");
+			System.out.println("  	 5. (교환,환불)수정하기    	     ");
+			System.out.println("  	 6. (교환,환불)내역삭제        	 ");
+			System.out.println("  	 7. 뒤로가기          			 ");
 			System.out.println("└──────────────┘");
 			System.out.print("선택>>");
 			
 			int menu = Integer.parseInt(sc.nextLine());
 			switch(menu) {
 			case 1:
-				// 교환가능한 결제목록
+				// 교환가능한 결제목록()
 				printErAllPage(memberVO);
 				
 				// 교환
@@ -43,17 +47,28 @@ public class ErView {
 			case 2:
 				// 환불가능한 결제목록
 				printErAllPage(memberVO);
-				
-				
+								
 				// 환불
 				printRefundPage(memberVO);
 				break;
 			case 3:
+				// (교환,환불)내역조회
+				break;
+			case 4:
+				// (교환,환불)취소하기
+				break;
+			case 5:
+				// (교환,환불)수정하기
+				break;
+			case 6:
+				// (교환,환불)내역삭제
+				break;
+			case 7:
 				// 뒤로가기
 				return;
 			default :
-				// 1~3번 까지 숫자를 입력해주세요.
-				System.out.println("1~3번 까지 숫자를 입력해주세요.");
+				// 1~7번 까지 숫자를 입력해주세요.
+				System.out.println("1~7번 까지 숫자를 입력해주세요.");
 				break;
 			}
 		} // while문 끝.
@@ -183,9 +198,11 @@ public class ErView {
 				
 				while(true) {
 					System.out.println();
-					System.out.print("신청한 교환내역은 수정이 불가능 합니다. 정말 교환하시겠습니까??(y또는n을 입력해주세요) : ");
+					System.out.print("위에 입력하신 내용으로 정말 교환하시겠습니까??(y또는n을 입력해주세요) : ");
 					String input = sc.nextLine();
 					if(input.toUpperCase().equals("Y")) {
+						// 교환테이블1(사용자가 교환신청하고 관리자가 확인하지 못한 상태)
+						// 주문상세테이블2(교환상태)
 						ErController.insertErVo(erVo);
 						return;
 					} else if(input.toUpperCase().equals("N")) {
@@ -208,5 +225,11 @@ public class ErView {
 	public static void printErAllPage(MemberVO memberVO) {
 		System.out.println("\n=== (교환,환불)가능한 결제목록 ===");
 		PaymentController.selectAllErPayment(memberVO);
+	}
+	
+	// 교환, 환불 내역보기
+	public static void selectErView(MemberVO memberVO) {
+		System.out.println("\n=== (교환,환불)전체내역보기===");
+		
 	}
 }

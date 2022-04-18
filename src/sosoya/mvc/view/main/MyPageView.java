@@ -20,9 +20,8 @@ public class MyPageView {
 			System.out.println("  	 1. 장바구니						    ");
 			System.out.println("  	 2. 주문내역(삭제하기, 뒤로가기)			");
 			System.out.println("  	 3. 결제내역(리뷰작성)  					");
-			System.out.println("  	 4. (교환,환불)내역보기    				");
-			System.out.println("  	 5. 작성한리뷰보기					    ");
-			System.out.println("  	 6. 뒤로가기						    ");
+			System.out.println("  	 4. 작성한리뷰보기					    ");
+			System.out.println("  	 5. 뒤로가기						    ");
 			System.out.println("└──────────────┘");
 			System.out.print("선택>>");
 			
@@ -44,18 +43,15 @@ public class MyPageView {
 				printPaymentOption(memberVO);
 				break;
 			case 4:
-				// 교환, 환불 내역보기
-				break;
-			case 5:
 				// 1,리뷰전체검색 2,상품이름으로검색 3,뒤로가기
 				printReviewOption(memberVO);	
 				break;
-			case 6:
+			case 5:
 				// 뒤로가기
 				return;
 			default :
-				// 1~6번 까지 숫자를 입력해주세요.
-				System.out.println("1~6번 까지 숫자를 입력해주세요.");
+				// 1~5번 까지 숫자를 입력해주세요.
+				System.out.println("1~5번 까지 숫자를 입력해주세요.");
 				break;
 			}
 		}
