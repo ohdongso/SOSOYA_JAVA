@@ -10,5 +10,12 @@ public interface ErService {
 	 * @param ErVO erVo
 	 * @return
 	 * */
-	public void insertErVo(ErVO erVo) throws SQLException;
+	public void insertErExchange(ErVO erVo) throws SQLException;
+	
+	/**
+	 * 환불하기
+	 * @param ErVO erVo
+	 * @return int result
+	 * */
+	public void insertErRefund(ErVO erVo) throws SQLException;
 }

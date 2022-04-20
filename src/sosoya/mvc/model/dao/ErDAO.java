@@ -10,5 +10,12 @@ public interface ErDAO {
 	 * @param ErVO erVo
 	 * @return int result
 	 * */
-	public int insertErVo(ErVO erVo) throws SQLException;
+	public int insertErExchange(ErVO erVo) throws SQLException;
+	
+	/**
+	 * 환불하기
+	 * @param ErVO erVo
+	 * @return int result
+	 * */
+	public int insertErRefund(ErVO erVo) throws SQLException;
 }

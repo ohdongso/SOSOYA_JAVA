@@ -13,10 +13,21 @@ public class ErServiceImpl implements ErService {
 	 * 교환하기
 	 */
 	@Override
-	public void insertErVo(ErVO erVo) throws SQLException {
-		int result = erDao.insertErVo(erVo);
+	public void insertErExchange(ErVO erVo) throws SQLException {
+		int result = erDao.insertErExchange(erVo);
 		if(result == 0) {
 			throw new SQLException("상품교환이 진행되지 않았습니다.");
 		}
 	}
+
+	/**
+	 * 환불하기
+	 */
+	@Override
+	public void insertErRefund(ErVO erVo) throws SQLException {
+		int result = erDao.insertErRefund(erVo);
+		if(result == 0) {
+			throw new SQLException("상품환불이 진행되지 않았습니다.");
+		}
+	}	
 }
