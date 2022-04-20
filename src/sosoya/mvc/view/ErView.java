@@ -86,26 +86,31 @@ public class ErView {
 			return;
 		}
 		
-		int size = list.size();
+		// 각각의 결제에 애당하는 주문의 주문상세 개수를 누적해야 한다.
+		int size = 0;
+		for(PaymentVO paymentVo : list) {
+			size += paymentVo.getOrdersVO().getOrdersDetailsList().size();
+		}
+		
 		if(size == 0) {
-			System.out.println("교환가능한 결제내역이 존재하지 않습니다.");
+			System.out.println("교환가능한 주문상품내역이 존재하지 않습니다.");
 			return;
 		}
 
 		while(true) {
 			int count = 0;
-			System.out.print("(교환,환불)할 결제내역 개수를 입력주세요 : ");
+			System.out.print("교환할 주문상품 개수를 입력주세요 : ");
 			count = Integer.parseInt(sc.nextLine());
 			
 			if(count > size) {
-				System.out.println("(교환,환불)가능한 결제내역 총 개수가 " + size + "개 입니다. 1개~" + size +"개 사이 숫자를 입력해주세요.");
+				System.out.println("교환가능한 주문상품 총 개수가 " + size + "개 입니다. 1개~" + size +"개 사이 숫자를 입력해주세요.");
 				return;
 			} else if(count < 1) {
 				System.out.println("1개 이상을 입력해주세요.");
 				return;
 			}
 			
-			List<Integer> paymentCodeList = new ArrayList<>();
+			// List<Integer> paymentCodeList = new ArrayList<>();
 			for(int i = 1; i <= count; i++) {
 				System.out.println("\n------------ " + i + "번째 교환할 상품정보를 입력해주세요. ------------");
 				System.out.print("교환할 주문코드를 입력해주세요 : ");
@@ -204,7 +209,12 @@ public class ErView {
 						// 교환테이블1(사용자가 교환신청하고 관리자가 확인하지 못한 상태)
 						// 주문상세테이블2(교환상태)
 						ErController.insertErVo(erVo);
-						return;
+						
+						if(i == count) {
+							return; 
+						} else {
+							break;
+						}
 					} else if(input.toUpperCase().equals("N")) {
 						System.out.println("교환이 취소되었습니다.");
 						return;
@@ -219,7 +229,121 @@ public class ErView {
 	
 	// 환불
 	public static void printRefundPage(MemberVO memberVO) {
+		System.out.println("\n=== 상품환불 ===");
+
+		List<PaymentVO> list = null;
+		try {
+			list = paymentDao.selectAllErPayment(memberVO);
+		} catch (Exception e) {
+			FailView.errorMessage(e.getMessage());
+			return;
+		}
 		
+		int size = list.size();
+		if(size == 0) {
+			System.out.println("환불가능한 결제내역이 존재하지 않습니다.");
+			return;
+		}
+
+		while(true) {
+			int count = 0;
+			System.out.print("환불할 결제내역 개수를 입력주세요 : ");
+			count = Integer.parseInt(sc.nextLine());
+			
+			if(count > size) {
+				System.out.println("환불가능한 결제내역 총 개수가 " + size + "개 입니다. 1개~" + size +"개 사이 숫자를 입력해주세요.");
+				return;
+			} else if(count < 1) {
+				System.out.println("1개 이상을 입력해주세요.");
+				return;
+			}
+			
+			List<Integer> paymentCodeList = new ArrayList<>();
+			for(int i = 1; i <= count; i++) {
+				System.out.println("\n------------ " + i + "번째 교환할 상품정보를 입력해주세요. ------------");
+				System.out.print("환불할 주문코드를 입력해주세요 : ");
+				int orderCode = Integer.parseInt(sc.nextLine()); 
+								
+				System.out.print("환불할 상품코드를 입력해주세요 : ");
+				int goodsCode = Integer.parseInt(sc.nextLine());
+				
+				System.out.print("환불할 주문상세코드를 입력해주세요 : ");
+				int orderDetailCode = Integer.parseInt(sc.nextLine());
+				
+				// 주문코드, 상품코드, 주문상세코드 유효성검사
+				boolean orderCodeFlag = false;
+				boolean goodsCodeFlag = false;
+				boolean orderDetailCodeFlag = false;
+				for(PaymentVO paymentVO : list) {
+					orderCodeFlag = false;
+					goodsCodeFlag = false;
+					orderDetailCodeFlag = false;
+					
+					// 주문코드
+					if(paymentVO.getOrdersCode() == orderCode) {
+						orderCodeFlag = true;
+					}
+					
+					// 상품코드, 주문상세코드
+					List<OrdersDetailsVO> orderDetailList = paymentVO.getOrdersVO().getOrdersDetailsList();
+					for(OrdersDetailsVO orderDetaillVo : orderDetailList) {
+						if(orderDetaillVo.getGoodsCode() == goodsCode) {
+							goodsCodeFlag = true;		
+						}
+						
+						if(orderDetaillVo.getOrdersDetailsCode() == orderDetailCode) {
+							orderDetailCodeFlag = true;
+						}					
+					}
+					
+					// 입력값 전체가 true인것이 존재한다면.(for문 종료)
+					if(orderCodeFlag == true || goodsCodeFlag == true || orderDetailCodeFlag == true) {
+						break;
+					}
+				} // for문 끝.
+				
+				if(orderCodeFlag == false || goodsCodeFlag == false || orderDetailCodeFlag == false) {
+					System.out.println();
+					if(orderCodeFlag == false) System.out.println("주문코드를 다시 한번 확인해주세요.");
+					if(goodsCodeFlag == false) System.out.println("상품코드를 다시 한번 확인해주세요.");
+					if(orderDetailCodeFlag == false)System.out.println("주문상세코드를 다시 한번 확인해주세요.");
+					return;
+				}
+				
+				// 카테고리 ==> 1.교환 2.환불 
+				int erCategory = 2;
+				// 상태 ==> 1,(교환,환불 진행중,취소가능) 2,(교환,환불 진행중,취소불가능) 3,(교환,환불 완료) 4,삭제상태
+				int erState = 1;
+				
+				System.out.print("환불 내용 제목을 입력해주세요 : ");
+				String title = sc.nextLine();
+				
+				System.out.print("환불 사유를 입력해주세요 : ");
+				String content = sc.nextLine();
+				
+				ErVO erVo = new ErVO(0, memberVO.getId(), orderCode, orderDetailCode, 
+						goodsCode, erCategory, title, content, null, null, erState);
+				
+				while(true) {
+					System.out.println();
+					System.out.print("위에 입력하신 내용으로 정말 환불하시겠습니까??(y또는n을 입력해주세요) : ");
+					String input = sc.nextLine();
+					if(input.toUpperCase().equals("Y")) {
+						// 교환테이블1(사용자가 교환신청하고 관리자가 확인하지 못한 상태)
+						// 주문상세테이블2(교환상태)
+						ErController.insertErVo(erVo);
+//						i > count ? 1 : 2;
+//						(i > count) ? return : continue;
+					} else if(input.toUpperCase().equals("N")) {
+						System.out.println("환불이 취소되었습니다.");
+						return;
+					} else {
+						System.out.println("y 또는 n을 입력해주세요.");
+						continue;
+					}
+				} // while문 끝.
+			} // for문 끝.
+		} // while문 끝.
 	}
 	
 	public static void printErAllPage(MemberVO memberVO) {
