@@ -12,4 +12,11 @@ public interface OrdersDetailsDAO {
 	 * @return int result
 	 * */
 	public int updateOrderDetailState(int orderDetailState, int orderDetailCode, Connection con) throws SQLException;
+	
+	/**
+	 * 주문상세코드에 해당하는 주문상세 검색
+	 * @param int ordersDetailsCode
+	 * @return OrdersDetailsVO ordersDetailsVo
+	 * */
+	public OrdersDetailsVO selectOrdersDetailsCode(int ordersDetailsCode) throws SQLException;
 }

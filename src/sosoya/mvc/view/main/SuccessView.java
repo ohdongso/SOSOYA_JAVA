@@ -1,10 +1,11 @@
 package sosoya.mvc.view.main;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;  
 import java.util.List;
 import sosoya.mvc.model.dao.ReviewDAO;
 import sosoya.mvc.model.dao.ReviewDAOImpl;
 import sosoya.mvc.model.dto.BasketVO;
+import sosoya.mvc.model.dto.ErVO;
 import sosoya.mvc.model.dto.FaqVO;
 import sosoya.mvc.model.dto.GoodsVO;
 import sosoya.mvc.model.dto.OrdersDetailsVO;
@@ -20,6 +21,78 @@ public class SuccessView {
 	 * */
 	public static void printMessage(String message) {
 		System.out.println(message);
+	}
+	
+	/**
+	 * (교환,환불) 내역전체조회
+	 * */
+	public static void printSelectAllEr(List<ErVO> list) {
+		int size = list.size();
+		int index = 0;
+		
+		for(ErVO erVo : list){
+			String erStateMessage = null;
+			if(erVo.getErCategory() == 1) {
+				System.out.println("---------------------- " + ++index + "번째 상품 (교환)내역 ----------------------");
+				System.out.println("  카테고리 ▶ 교환");
+				System.out.println("  교환제목 ▶ " + erVo.getErTitle());
+				System.out.println("  교환내용 ▶ " + erVo.getErContent());
+				System.out.println("  교환주소 ▶ " + erVo.getErDi());
+				System.out.println("  교환코드 ▶ " + erVo.getErCode());
+				System.out.println("  신청날짜 ▶ " + erVo.getErRegdate());
+				System.out.println("  주문상세내역 ▶ " + erVo.getOrdersDetailsVo());
+				
+				
+				// 1,(교환,환불 진행중,취소가능) 2,(교환,환불 진행중,취소불가능) 3,(교환,환불 완료) 4,삭제상태
+				int state = erVo.getErState();
+				switch (state) {
+				case 1:
+					erStateMessage = "교환 진행중 입니다. 관리자가 승인하지 않았기 때문에 취소가능합니다.";
+					break;
+				case 2:
+					erStateMessage = "교환 진행중 입니다. 관리자가 승인했기 때문에 취소불가능합니다.";
+					break;
+				case 3:
+					erStateMessage = "교환 완료 되었습니다. 사용자가 교환물품을 받고 관리자가 교환최종승인했습니다.";
+					break;
+				case 4:
+					erStateMessage = "교환이 취소되었습니다.";
+				}
+				
+				System.out.println("  교환진행상태 ▶ " + erStateMessage);
+			} else if(erVo.getErCategory() == 2) {
+				System.out.println("---------------------- " + ++index + "번째 상품 (환불)내역 ----------------------");
+				System.out.println("  카테고리 ▶ 환불");
+				System.out.println("  환불제목 ▶ " + erVo.getErTitle());
+				System.out.println("  환불내용 ▶ " + erVo.getErContent());
+				System.out.println("  환불코드 ▶ " + erVo.getErCode());
+				System.out.println("  신청날짜 ▶ " + erVo.getErRegdate());
+				System.out.println("  주문상세내역 ▶ " + erVo.getOrdersDetailsVo());
+				
+				// 1,(교환,환불 진행중,취소가능) 2,(교환,환불 진행중,취소불가능) 3,(교환,환불 완료) 4,삭제상태
+				int state = erVo.getErState();
+				switch (state) {
+				case 1:
+					erStateMessage = "환불 진행중 입니다. 관리자가 승인하지 않았기 때문에 취소가능합니다.";
+					break;
+				case 2:
+					erStateMessage = "환불 진행중 입니다. 관리자가 승인했기 때문에 취소불가능합니다.";
+					break;
+				case 3:
+					erStateMessage = "환불 완료 되었습니다. 관리자가 환불물품을 받고 관리자가 환불최종승인했습니다.";
+					break;
+				case 4:
+					erStateMessage = "환불이 취소되었습니다.";
+				}
+				
+				System.out.println("  환불진행상태 ▶ " + erStateMessage);		
+			} else {
+				System.out.println("잘못된 카테고리 값이 입력되었습니다. 관리자에게 문의해주세요.");
+				return;
+			}
+			
+			if(index < size)System.out.println();
+		}
 	}
 	
 	/**

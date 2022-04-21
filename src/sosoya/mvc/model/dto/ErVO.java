@@ -13,6 +13,9 @@ public class ErVO {
 	private String erRegdate;
 	private int erState;
 	
+	// 기본키에 해당하는 객체 저장
+	private OrdersDetailsVO ordersDetailsVo;
+	
 	public ErVO() {}
 	public ErVO(int erCode, String id, int ordersCode, int odersDetailsCode, int goodsCode, int erCategory,
 			String erTitle, String erContent, String erDi, String erRegdate, int erState) {
@@ -113,11 +116,15 @@ public class ErVO {
 	public int getErState() {
 		return erState;
 	}
-
 	public void setErState(int erState) {
 		this.erState = erState;
 	}
-
+	public OrdersDetailsVO getOrdersDetailsVo() {
+		return ordersDetailsVo;
+	}
+	public void setOrdersDetailsVo(OrdersDetailsVO ordersDetailsVo) {
+		this.ordersDetailsVo = ordersDetailsVo;
+	}
 	@Override
 	public String toString() {
 		return "ErVO [erCode=" + erCode + ", id=" + id + ", ordersCode=" + ordersCode + ", odersDetailsCode="

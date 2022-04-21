@@ -53,9 +53,12 @@ public class ErView {
 				break;
 			case 3:
 				// (교환,환불)내역조회
+				ErController.selectAllEr(memberVO);
 				break;
 			case 4:
 				// (교환,환불)취소하기
+				
+				
 				break;
 			case 5:
 				// (교환,환불)수정하기
@@ -362,7 +365,7 @@ public class ErView {
 		PaymentController.selectAllErPayment(memberVO);
 	}
 	
-	// 교환, 환불 내역보기
+	// 교환, 환불 내역조회
 	public static void selectErView(MemberVO memberVO) {
 		System.out.println("\n=== (교환,환불)전체내역보기===");
 		
