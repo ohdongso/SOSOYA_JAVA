@@ -38,6 +38,18 @@ public class ErController {
 	}
 	
 	/**
+	 * (교환,환불)취소가능한 내역전체조회
+	 */
+	public static void selectAllCancelEr(MemberVO memberVo) {
+		try {
+			List<ErVO> list = erService.selectAllCancelEr(memberVo);
+			SuccessView.printSelectAllCancelEr(list);
+		} catch (SQLException e) {
+			FailView.errorMessage(e.getMessage());
+		}
+	}
+	
+	/**
 	 * (교환,환불) 내역전체조회
 	 * */
 	public static void selectAllEr(MemberVO memberVo) {

@@ -44,4 +44,16 @@ public class ErServiceImpl implements ErService {
 		}
 		return list;
 	}
+	
+	/**
+	 * (교환,환불)취소가능한 내역전체조회
+	 */
+	@Override
+	public List<ErVO> selectAllCancelEr(MemberVO memberVo) throws SQLException {
+		List<ErVO> list = erDao.selectAllCancelEr(memberVo);
+		if(list == null || list.size() == 0) {
+			throw new SQLException("(교환,환불)취소가능한 내역이 없습니다.");
+		}
+		return list;
+	}
 }

@@ -74,7 +74,7 @@ public class ErDAOImpl implements ErDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<ErVO> list = new ArrayList<ErVO>();
-		String sql = sosoyaSql.getProperty("ER.SELECTAllER");
+		String sql = sosoyaSql.getProperty("ER.SELECTALLER");
 
 		try {
 			con = DbUtil.getConnection();
@@ -153,5 +153,47 @@ public class ErDAOImpl implements ErDAO {
 			DbUtil.close(con, ps, null);
 		}
 		return result;
+	}
+
+	/**
+	 * (교환,환불)취소가능한 내역전체조회
+	 */
+	@Override
+	public List<ErVO> selectAllCancelEr(MemberVO memberVo) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<ErVO> list = new ArrayList<ErVO>();
+		String sql = sosoyaSql.getProperty("ER.SELECTALLCANCEL");
+
+		try {
+			con = DbUtil.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, memberVo.getId());
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				ErVO erVo = new ErVO();
+				erVo.setErCode(rs.getInt("ER_CODE"));
+				erVo.setId(rs.getString("ID"));
+				erVo.setOrdersCode(rs.getInt("ORDERS_CODE"));
+				erVo.setGoodsCode(rs.getInt("GOODS_CODE"));
+				erVo.setErCategory(rs.getInt("ER_CATEGORY"));
+				erVo.setErTitle(rs.getString("ER_TITLE"));
+				erVo.setErContent(rs.getString("ER_CONTENT"));
+				erVo.setErRegdate(rs.getString("ER_REGDATE"));
+				erVo.setErState(rs.getInt("ER_STATE"));
+				erVo.setErDi(rs.getString("ER_DI"));
+				erVo.setOdersDetailsCode(rs.getInt("ORDERS_DETAILS_CODE"));
+				
+				OrdersDetailsVO ordersDetailsVo = orderDetailsDao.selectOrdersDetailsCode(rs.getInt("ORDERS_DETAILS_CODE"));
+				erVo.setOrdersDetailsVo(ordersDetailsVo);
+				
+				list.add(erVo);
+			}
+		} finally {
+			DbUtil.close(con, ps, rs);
+		}	
+		return list;
 	}
 }

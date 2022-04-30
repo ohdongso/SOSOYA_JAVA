@@ -27,4 +27,11 @@ public interface ErDAO {
 	 * @return int result
 	 * */
 	public List<ErVO> selectAllEr(MemberVO memberVo) throws SQLException;
+	
+	/**
+	 * (교환,환불)취소가능한 내역전체조회
+	 * @param ErVO erVo
+	 * @return int result
+	 * */
+	public List<ErVO> selectAllCancelEr(MemberVO memberVo) throws SQLException;
 }

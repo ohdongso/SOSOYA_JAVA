@@ -24,6 +24,41 @@ public class SuccessView {
 	}
 	
 	/**
+	 * (교환,환불)취소가능한 내역전체조회
+	 */
+	public static void printSelectAllCancelEr(List<ErVO> list) {
+		int size = list.size();
+		int index = 0;
+		
+		for(ErVO erVo : list) {
+			if(erVo.getErCategory() == 1) {
+				System.out.println("---------------------- " + ++index + "번째 상품 (교환)내역 ----------------------");
+				System.out.println("  카테고리 ▶ 교환");
+				System.out.println("  교환제목 ▶ " + erVo.getErTitle());
+				System.out.println("  교환내용 ▶ " + erVo.getErContent());
+				System.out.println("  교환주소 ▶ " + erVo.getErDi());
+				System.out.println("  교환코드 ▶ " + erVo.getErCode());
+				System.out.println("  신청날짜 ▶ " + erVo.getErRegdate());
+				System.out.println("  주문상세내역 ▶ " + erVo.getOrdersDetailsVo());
+			} else if(erVo.getErCategory() == 2) {
+				System.out.println("---------------------- " + ++index + "번째 상품 (환불)내역 ----------------------");
+				System.out.println("  카테고리 ▶ 환불");
+				System.out.println("  환불제목 ▶ " + erVo.getErTitle());
+				System.out.println("  환불내용 ▶ " + erVo.getErContent());
+				System.out.println("  환불코드 ▶ " + erVo.getErCode());
+				System.out.println("  신청날짜 ▶ " + erVo.getErRegdate());
+				System.out.println("  주문상세내역 ▶ " + erVo.getOrdersDetailsVo());
+			} else {
+				System.out.println("(교환,환불)코드 \"" + erVo.getErCode() + "\"에 해당하는 (교환,환불)카테고리가 잘못 입력 되었습니다.");
+				System.out.println("잘못된 카테고리 값이 입력되었습니다. 관리자에게 문의해주세요.(010-2689-5806)");
+				return;
+			}
+			
+			if(index < size)System.out.println();
+		} // for문 끝.
+	}
+	
+	/**
 	 * (교환,환불) 내역전체조회
 	 * */
 	public static void printSelectAllEr(List<ErVO> list) {
@@ -87,7 +122,8 @@ public class SuccessView {
 				
 				System.out.println("  환불진행상태 ▶ " + erStateMessage);		
 			} else {
-				System.out.println("잘못된 카테고리 값이 입력되었습니다. 관리자에게 문의해주세요.");
+				System.out.println("(교환,환불)코드 \"" + erVo.getErCode() + "\"에 해당하는 (교환,환불)카테고리가 잘못 입력 되었습니다.");
+				System.out.println("잘못된 카테고리 값이 입력되었습니다. 관리자에게 문의해주세요.(010-2689-5806)");
 				return;
 			}
 			

@@ -53,11 +53,13 @@ public class ErView {
 				break;
 			case 3:
 				// (교환,환불)내역조회
-				ErController.selectAllEr(memberVO);
+				printSelectErView(memberVO);
 				break;
 			case 4:
 				// (교환,환불)취소하기
+				printCancelView(memberVO);
 				
+				// (교환,환불) 데이터 입력받기.
 				
 				break;
 			case 5:
@@ -360,14 +362,21 @@ public class ErView {
 		} // while문 끝.
 	}
 	
+	// (교환,환불)가능한 결제목록 조회.
 	public static void printErAllPage(MemberVO memberVO) {
 		System.out.println("\n=== (교환,환불)가능한 결제목록 ===");
 		PaymentController.selectAllErPayment(memberVO);
 	}
 	
-	// 교환, 환불 내역조회
-	public static void selectErView(MemberVO memberVO) {
-		System.out.println("\n=== (교환,환불)전체내역보기===");
-		
+	// (교환,환불)취소목록 전체검색.
+	public static void printCancelView(MemberVO memberVO) {
+		System.out.println("\n=== (교환,환불)취소가능한 결제목록 ===");
+		ErController.selectAllCancelEr(memberVO);
+	}
+	
+	// 교환, 환불 전체내역조회
+	public static void printSelectErView(MemberVO memberVO) {
+		System.out.println("\n=== (교환,환불)전체내역보기 ===");
+		ErController.selectAllEr(memberVO);
 	}
 }
